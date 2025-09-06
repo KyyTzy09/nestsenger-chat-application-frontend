@@ -2,8 +2,8 @@ import HomePage from "~/pages/home.page";
 import type { Route } from "./+types/home";
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Nestsenger" },
+    { name: "Realtime chat application", content: "Realtime chat application" },
   ];
 }
 
