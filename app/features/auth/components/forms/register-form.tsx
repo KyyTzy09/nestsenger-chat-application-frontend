@@ -1,16 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { KeyIcon, MailIcon, TagIcon } from "lucide-react";
+import { KeyIcon, Loader, LoaderIcon, MailIcon, TagIcon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  registerSchema,
-  type registerType,
-} from "~/shared/schemas/auth-schema";
-import { Button } from "~/shared/ui/button";
-import { Input } from "~/shared/ui/input";
-import { Label } from "~/shared/ui/label";
+import { registerSchema, type registerType } from "shared/schemas/auth-schema";
+import { Button } from "shared/shadcn/button";
+import { Input } from "shared/shadcn/input";
+import { Label } from "shared/shadcn/label";
+import { useRegister } from "../../hooks/use-register";
 
-export default function RegisterForm() {
+interface RegisterFormProps {
+  setValue: (value: string) => void;
+}
+
+export default function RegisterForm({ setValue }: RegisterFormProps) {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
   const {
@@ -18,18 +20,20 @@ export default function RegisterForm() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode : "onChange",
+    mode: "onChange",
     defaultValues: {
-      username: "",
+      userName: "",
       email: "",
       password: "",
     },
     resolver: zodResolver(registerSchema),
   });
+  const { mutate: onRegisterPost, isPending } = useRegister(setValue);
 
   const onSubmit = (data: registerType) => {
-    alert("Berhasil mendaftar");
+    onRegisterPost(data);
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -53,15 +57,14 @@ export default function RegisterForm() {
             Username
           </Label>
           <Input
-            {...register("username")}
+            {...register("userName")}
             id="username"
-            name="username"
             className="w-full h-10"
             placeholder="Masukan nama"
           />
-          {errors.username && (
+          {errors.userName && (
             <p className="text-red-600 text-[12px] font-semibold self-start">
-              {errors.username.message}
+              {errors.userName.message}
             </p>
           )}
         </div>
@@ -124,7 +127,11 @@ export default function RegisterForm() {
         type="submit"
         className="flex items-center justify-center mt-3 w-full bg-gradient-to-br from-blue-900 via-blue-600 to-blue-400/75 hover:opacity-70 cursor-pointer transition duration-700"
       >
-        Buat Akun
+        {isPending ? (
+          <LoaderIcon className="w-5 h-5 animate-spin" />
+        ) : (
+          "Buat Akun"
+        )}
       </Button>
     </form>
   );

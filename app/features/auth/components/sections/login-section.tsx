@@ -1,6 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import LoginForm from "../forms/login-form";
-import { Separator } from "~/shared/ui/separator";
+import { Separator } from "shared/shadcn/separator";
 import { KeyIcon } from "lucide-react";
 import { FaUserEdit } from "react-icons/fa";
 

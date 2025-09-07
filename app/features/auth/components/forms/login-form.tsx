@@ -1,11 +1,12 @@
-import { KeyIcon, MailIcon } from "lucide-react";
+import { KeyIcon, LoaderIcon, MailIcon } from "lucide-react";
 import React from "react";
-import { Button } from "~/shared/ui/button";
-import { Input } from "~/shared/ui/input";
-import { Label } from "~/shared/ui/label";
+import { Button } from "shared/shadcn/button";
+import { Input } from "shared/shadcn/input";
+import { Label } from "shared/shadcn/label";
 import { useForm } from "react-hook-form";
-import { loginSchema, type loginType } from "~/shared/schemas/auth-schema";
+import { loginSchema, type loginType } from "shared/schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "../../hooks/use-login";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -23,9 +24,11 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
+  const { mutate: onLoginPost, isPending } = useLogin();
   const onSubmit = (data: loginType) => {
-    alert("Berhasil Masuk");
+    onLoginPost(data);
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -98,7 +101,7 @@ export default function LoginForm() {
         type="submit"
         className="flex items-center justify-center mt-3 w-full bg-gradient-to-br from-blue-900 via-blue-600 to-blue-400/75 hover:opacity-70 cursor-pointer transition duration-700"
       >
-        Login
+        {isPending ? <LoaderIcon className="w-5 h-5 animate-spin" /> : "Login"}
       </Button>
     </form>
   );

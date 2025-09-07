@@ -26,7 +26,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section className="flex flex-col items-center justify-center w-full md:w-[65%] h-full">
+      <section className="flex flex-col items-center justify-center w-full md:w-[65%] h-full relative">
         <AuthTabs />
       </section>
     </div>

@@ -1,10 +1,14 @@
 import React from "react";
 import RegisterForm from "../forms/register-form";
-import { Separator } from "~/shared/ui/separator";
-import { Label } from "~/shared/ui/label";
+import { Separator } from "shared/shadcn/separator";
+import { Label } from "shared/shadcn/label";
 import { KeyIcon, MailIcon, TagIcon } from "lucide-react";
 
-export default function RegisterSection() {
+interface RegisterSectionProps {
+  setValue: (value: string) => void;
+}
+
+export default function RegisterSection({ setValue }: RegisterSectionProps) {
   const registerList = [
     {
       Icon: TagIcon,
@@ -25,7 +29,7 @@ export default function RegisterSection() {
 
   return (
     <div className="flex flex-col lg:flex-row items-start justify-between w-full h-full md:min-h-96 py-6 px-8 gap-10 lg:gap-2">
-      <RegisterForm />
+      <RegisterForm setValue={setValue} />
       <Separator
         orientation="vertical"
         className="hidden lg:flex mx-2 border-black border h-[24rem]"

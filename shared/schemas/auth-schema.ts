@@ -1,7 +1,7 @@
 import * as z from "zod"
 
 export const registerSchema = z.object({
-    username: z.string().min(3, "minimal 3 karakter"),
+    userName: z.string().min(3, "minimal 3 karakter"),
     email: z.email("Email tidak valid").min(1, "Email wajib diisi"),
     password: z.string().min(8, "Password minimal 8 karakter").nonempty("Password wajib diisi")
 })
