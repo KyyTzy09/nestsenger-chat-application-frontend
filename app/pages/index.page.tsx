@@ -2,7 +2,7 @@ import { SendIcon } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import AuthTabs from "~/features/auth/components/auth-tabs";
 
-export default function HomePage() {
+export default function IndexPage() {
   return (
     <div className="p-5 flex flex-col items-center w-full h-full min-h-screen gap-6">
       <div className="flex items-center justify-between w-full">
