@@ -17,7 +17,7 @@ export default function LoginForm() {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      user: "",
+      email: "",
       password: "",
     },
     resolver: zodResolver(loginSchema),
@@ -49,14 +49,14 @@ export default function LoginForm() {
             Email / Username
           </Label>
           <Input
-            {...register("user")}
+            {...register("email")}
             id="email"
             className="w-full h-10"
             placeholder="Masukan email/username"
           />
-          {errors.user && (
+          {errors.email && (
             <p className="text-red-600 text-[12px] font-semibold self-start">
-              {errors.user.message}
+              {errors.email.message}
             </p>
           )}
         </div>
