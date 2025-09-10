@@ -1,5 +1,5 @@
 import HomePage from "~/pages/index.page";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Nestsenger" },
