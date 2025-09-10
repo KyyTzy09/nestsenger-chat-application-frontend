@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import DefaultSideBar from "shared/ui/sidebar/home-sidebar";
+import DefaultSideBar from "shared/ui/sidebar/default-sidebar";
 
 export default function DefaultLayout() {
   return (

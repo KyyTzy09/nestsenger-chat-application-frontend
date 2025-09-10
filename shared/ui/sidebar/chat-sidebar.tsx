@@ -1,11 +1,13 @@
 import { SearchIcon } from "lucide-react";
+import { defaultImage } from "shared/constants/image-default";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
+import ChatCard from "~/features/chat/components/cards/chat-card";
 
 export default function ChatSidebar() {
   return (
-    <aside className="relative flex flex-col w-[30%] h-full bg-[#282828] py-9 px-5 text-white gap-5">
-      <section className="flex flex-col w-full gap-10">
+    <aside className="relative z-10 flex flex-col w-[30%] h-screen bg-[#282828] pt-9 text-white gap-4">
+      <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-10 px-5">
         <Label className="text-white font-semibold text-lg">Chats</Label>
         <div className="relative flex w-full h-full">
           <Input
@@ -17,7 +19,8 @@ export default function ChatSidebar() {
           </div>
         </div>
       </section>
-      <section className="flex flex-col w-full h-full">
+      <section className="flex w-full h-[90%] overflow-y-auto px-1">
+        <ChatCard />
       </section>
     </aside>
   );

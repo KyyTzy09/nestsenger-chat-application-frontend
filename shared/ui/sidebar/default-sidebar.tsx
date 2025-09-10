@@ -18,7 +18,6 @@ export default function DefaultSideBar() {
     },
   ];
 
-  const navigation = useNavigation()
   return (
     <aside className="fixed flex flex-col w-14 bg-[#202020] h-screen py-10 px-2">
       <div className="w-full flex items-center justify-center">
