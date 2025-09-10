@@ -23,7 +23,7 @@ export default function DefaultSideBar() {
       <div className="w-full flex items-center justify-center">
         <Menu className="text-white" />
       </div>
-      <div className="flex flex-col items-center justify-start w-full mt-10 gap-3">
+      <div className="flex flex-col items-center justify-start w-full mt-5 gap-3">
         {sidebarItem.map(({ Icon, name, route }, i) => {
           return (
             <Link to={route} key={i} className={`${location.pathname === route ? "bg-[#45494f]" : "bg-tra"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}>

@@ -6,8 +6,8 @@ import ChatCard from "~/features/chat/components/cards/chat-card";
 
 export default function ChatSidebar() {
   return (
-    <aside className="relative z-10 flex flex-col w-[30%] h-screen bg-[#282828] pt-9 text-white gap-4">
-      <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-10 px-5">
+    <aside className="z-10 flex flex-col w-[30%] h-screen bg-[#282828] pt-9 text-white gap-4">
+      <section className="relative flex flex-col items-start justify-center w-full h-[12%] gap-5 px-5">
         <Label className="text-white font-semibold text-lg">Chats</Label>
         <div className="relative flex w-full h-full">
           <Input
