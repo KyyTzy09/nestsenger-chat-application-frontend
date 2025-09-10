@@ -2,7 +2,7 @@ import { type RouteConfig, index, layout, prefix, route } from "@react-router/de
 
 export default [
     index("routes/index.tsx"),
-    layout("layouts/home.layout.tsx", [
+    layout("layouts/default.layout.tsx", [
         ...prefix("chat", [
             layout("routes/chat/chat.layout.tsx", [
                 index("routes/chat/chat.tsx")

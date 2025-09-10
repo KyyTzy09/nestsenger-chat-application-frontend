@@ -3,7 +3,7 @@ import React from "react";
 import { FaComment } from "react-icons/fa";
 import { Link, useLocation, useNavigation } from "react-router";
 
-export default function SideBarHome() {
+export default function DefaultSideBar() {
     const location = useLocation()
     const sidebarItem = [
     {
