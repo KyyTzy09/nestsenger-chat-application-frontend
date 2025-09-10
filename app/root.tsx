@@ -37,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
-          <div className="min-h-screen bg-[#FDF3E3]">{children}</div>
+          <div className="w-full h-full min-h-screen bg-[#FDF3E3]">{children}</div>
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
