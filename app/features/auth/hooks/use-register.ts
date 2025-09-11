@@ -12,7 +12,7 @@ export const useRegister = (setTabs: (value: string) => void) => {
             setTabs("login")
         },
         onError: (err) => {
-            alert(err.message)
+            alert(err.message || "Login gagal")
         }
     })
 }

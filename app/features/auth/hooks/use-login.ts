@@ -10,7 +10,7 @@ export function useLogin() {
         mutationFn: async (data: loginType) => await AuthService.Login(data),
         onSuccess: (data) => {
             alert(data?.message || "Login berhasil")
-            navigate("/message")
+            navigate("/chat")
         },
         onError: (err) => {
             alert(err.message || "Login gagal")

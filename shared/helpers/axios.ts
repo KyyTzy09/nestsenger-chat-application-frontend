@@ -12,7 +12,7 @@ export const apiClient = async <T>(config: AxiosRequestConfig): Promise<T | unde
         return data
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            throw error.response?.data.message
+            throw new Error( error.response?.data?.message || "Request Failed")
         }
         throw error
     }
