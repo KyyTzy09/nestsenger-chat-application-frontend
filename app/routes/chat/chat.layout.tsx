@@ -1,7 +1,9 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, redirect } from "react-router";
 import { SidebarProvider } from "shared/shadcn/sidebar";
 import ChatSidebar from "shared/components/sidebar/chat-sidebar";
+import type { Route } from "../+types";
+import { getSession } from "~/features/auth/services/get-session";
 
 export default function ChatLayout() {
   return (

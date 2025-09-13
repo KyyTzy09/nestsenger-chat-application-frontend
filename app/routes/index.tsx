@@ -1,5 +1,5 @@
-import HomePage from "~/pages/index.page";
 import type { Route } from "./+types";
+import IndexPage from "~/pages/index.page";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Nestsenger" },
@@ -7,6 +7,6 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function Home() {
-  return <HomePage />;
+export default function IndexRoute() {
+  return <IndexPage />;
 }

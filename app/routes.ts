@@ -7,6 +7,7 @@ export default [
             layout("routes/chat/chat.layout.tsx", [
                 index("routes/chat/chat.tsx")
             ])
-        ])
+        ]),
+        route("status", "routes/status/status.tsx")
     ]),
 ] satisfies RouteConfig;
