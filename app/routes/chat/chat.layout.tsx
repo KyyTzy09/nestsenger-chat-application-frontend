@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
 import { SidebarProvider } from "shared/shadcn/sidebar";
-import ChatSidebar from "shared/ui/sidebar/chat-sidebar";
+import ChatSidebar from "shared/components/sidebar/chat-sidebar";
 
 export default function ChatLayout() {
   return (
