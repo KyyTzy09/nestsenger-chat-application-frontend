@@ -8,11 +8,13 @@ import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const session = await getSession();
+  if (!session) {
+    throw redirect("/")
+  }
   return session;
 }
 
 export default function DefaultLayout() {
-  const { data: profile } = useGetProfile();
   return (
     <SidebarProvider>
       <div className="flex min-w-screen w-full h-full min-h-screen">

@@ -8,8 +8,9 @@ export async function getSession() {
         const response = await axios.get<{ data: UserType }>(`${baseUrl}/auth/session`, {
             withCredentials: true,
         })
-        return await response.data.data
+        return response.data.data;
+
     } catch (error) {
-        throw redirect("/")
+        return;
     }
 }
