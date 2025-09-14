@@ -15,8 +15,12 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
 } from "shared/shadcn/sidebar";
+import type { UserType } from "shared/types/user-type";
+import ProfileDropDown from "~/features/profile/components/profile-dropdown";
+import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 
 export default function DefaultSideBar() {
+  const { data: user } = useGetProfile();
   const location = useLocation();
   const sidebarItem = [
     {
@@ -33,7 +37,7 @@ export default function DefaultSideBar() {
 
   return (
     <Sidebar>
-      <SidebarContent className="w-16 flex flex-col bg-[#202020] h-screen pt-10 pb-2 px-2 z-20 items-center justify-between">
+      <SidebarContent className="w-16 flex flex-col bg-[#202020] h-screen pt-10 pb-5 px-2 z-20 items-center justify-between">
         <SidebarGroupLabel className="w-full flex items-center justify-center">
           <Menu className="text-white" />
         </SidebarGroupLabel>
@@ -56,15 +60,7 @@ export default function DefaultSideBar() {
           >
             <SettingsIcon className={`text-white w-5 h-5`} />
           </div>
-          <Button
-            className={`${location.pathname === "/setting" ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
-          >
-            <img
-              src={defaultImage}
-              alt="defalt"
-              className="w-8 h-8 object-cover rounded-full"
-            />
-          </Button>
+          <ProfileDropDown user={user?.data as UserType} />
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
