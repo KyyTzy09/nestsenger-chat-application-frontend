@@ -55,7 +55,7 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="flex min-w-[600px] min-h-[30rem] bg-[#353535] text-white shadow shadow-black border-0 gap-2 translate-y-12 translate-x-2 p-0"
+        className="flex min-w-[550px] min-h-[30rem] bg-[#353535] text-white shadow shadow-black border-0 translate-y-12 translate-x-2 p-0"
         side="top"
       >
         <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]">
@@ -83,7 +83,7 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
             </Button>
           </div>
         </section>
-        <section className="w-[70%] py-4 p-2">
+        <section className="w-[70%] py-4 px-5">
           <ProfileSection user={user} />
         </section>
       </DropdownMenuContent>

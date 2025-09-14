@@ -3,6 +3,10 @@ import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import type { UserType } from "shared/types/user-type";
 import AvatarDropDown from "../interaction/avatar-dropdown";
+import { Input } from "shared/shadcn/input";
+import { Button } from "shared/shadcn/button";
+import { Label } from "shared/shadcn/label";
+import { Separator } from "shared/shadcn/separator";
 
 interface ProfileSectionProps {
   user: UserType;
@@ -10,7 +14,7 @@ interface ProfileSectionProps {
 
 export default function ProfileSection({ user }: ProfileSectionProps) {
   return (
-    <main className="flex flex-col w-full h-full">
+    <main className="flex flex-col w-full h-full gap-6">
       <section className="group relative flex items-center justify-start w-24 h-24">
         <img
           src={user.Profile.avatar || defaultImage}
@@ -23,7 +27,56 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           </AvatarDropDown>
         </div>
       </section>
-      <section className="flex flex-col w-full"></section>
+      <section className="relative flex flex-col w-full gap-2">
+        <div className="flex flex-col w-full gap-2">
+          <div className="flex items-center w-full gap-1">
+            <Input
+              value={user.Profile.userName}
+              onChange={() => {}}
+              className="md:text-[18px] w-full text-white text-xl border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
+            />
+            <Button className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]">
+              <PencilIcon className="w-full h-full" />
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full">
+          <Label
+            htmlFor="username"
+            className="text-sm text-gray-200 font-normal pl-1"
+          >
+            Info
+          </Label>
+          <div className="flex items-center w-full gap-1">
+            <Input
+              id="username"
+              value={user.Profile.bio}
+              onChange={() => {}}
+              className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
+            />
+            <Button className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]">
+              <PencilIcon className="w-full h-full" />
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full">
+          <Label htmlFor="email" className="text-sm text-gray-200 font-normal pl-1">
+            Email
+          </Label>
+          <div className="flex items-center w-full gap-1">
+            <Input
+              id="email"
+              disabled
+              value={user.email}
+              className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 disabled:opacity-100 shadow-none px-1"
+            />
+          </div>
+        </div>
+      </section>
+      <Separator className="opacity-50"/>
+      <Button className="flex items-center justify-center w-28 bg-[#282828] hover:bg-gray-100/30 text-sm font-normal transition duration-500">
+        Keluar
+      </Button>
     </main>
   );
 }
