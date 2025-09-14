@@ -16,7 +16,7 @@ import {
   SidebarGroupLabel,
 } from "shared/shadcn/sidebar";
 import type { UserType } from "shared/types/user-type";
-import ProfileDropDown from "~/features/profile/components/profile-dropdown";
+import ProfileDropDown from "~/features/profile/components/interaction/profile-dropdown";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 
 export default function DefaultSideBar() {

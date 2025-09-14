@@ -2,6 +2,7 @@ import { PencilIcon } from "lucide-react";
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import type { UserType } from "shared/types/user-type";
+import AvatarDropDown from "../interaction/avatar-dropdown";
 
 interface ProfileSectionProps {
   user: UserType;
@@ -17,7 +18,9 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           className="w-full h-full rounded-full object-cover"
         />
         <div className="absolute flex items-center justify-center w-full h-full rounded-full top-0 bottom-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-500">
-          <PencilIcon />
+          <AvatarDropDown image={user.Profile.avatar}>
+            <PencilIcon className="w-4 h-4" />
+          </AvatarDropDown>
         </div>
       </section>
       <section className="flex flex-col w-full"></section>

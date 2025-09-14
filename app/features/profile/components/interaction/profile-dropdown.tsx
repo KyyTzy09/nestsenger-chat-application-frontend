@@ -1,7 +1,7 @@
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { Button } from "shared/shadcn/button";
-import { useGetProfile } from "../hooks/profile-hook";
+import { useGetProfile } from "../../hooks/profile-hook";
 import type { UserType } from "shared/types/user-type";
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import {
 import { Separator } from "shared/shadcn/separator";
 import { BellIcon, KeyRoundIcon, LaptopIcon, UserIcon } from "lucide-react";
 import { FaComment } from "react-icons/fa";
-import ProfileSection from "./sections/profile-section";
+import ProfileSection from "../sections/profile-section";
 
 interface ProfileDropdownProps {
   user: UserType;
