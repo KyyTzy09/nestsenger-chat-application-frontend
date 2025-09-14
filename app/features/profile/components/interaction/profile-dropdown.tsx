@@ -18,26 +18,31 @@ interface ProfileDropdownProps {
 }
 
 export default function ProfileDropDown({ user }: ProfileDropdownProps) {
+  const [openedTab, setOpenedTab] = React.useState<string>("profile");
   const dropDownItems = [
     {
       Icon: LaptopIcon,
       text: "Umum",
-      onClickEvent: () => "general",
+      tab: "general",
+      onClickEvent: () => setOpenedTab("general"),
     },
     {
       Icon: KeyRoundIcon,
       text: "Akun",
-      onClickEvent: () => "account",
+      tab: "account",
+      onClickEvent: () => setOpenedTab("account"),
     },
     {
       Icon: FaComment,
       text: "Chat",
-      onClickEvent: () => "chat",
+      tab: "chat",
+      onClickEvent: () => setOpenedTab("chat"),
     },
     {
       Icon: BellIcon,
       text: "Notifikasi",
-      onClickEvent: () => "notification",
+      tab: "notification",
+      onClickEvent: () => setOpenedTab("notification"),
     },
   ];
 
@@ -60,11 +65,11 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
       >
         <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]">
           <div className="flex flex-col items-center justify-start w-full">
-            {dropDownItems.map(({ Icon, text, onClickEvent }, i) => {
+            {dropDownItems.map(({ Icon, text, tab, onClickEvent }, i) => {
               return (
                 <Button
                   key={i}
-                  className="flex items-center justify-start w-full h-10 bg-transparent hover:bg-[#353535] gap-3"
+                  className={`${tab === openedTab ? "bg-[#353535]" : "bg-transparent"} flex items-center justify-start w-full h-10 hover:bg-[#353535] gap-3`}
                   onClick={onClickEvent}
                 >
                   <Icon className="w-5 h-5" />
@@ -75,8 +80,8 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
           </div>
           <div className="w-full">
             <Button
-              className="flex items-center justify-start w-full h-10 bg-transparent hover:bg-[#353535] gap-3"
-              onClick={() => {}}
+              className={`${openedTab === "profile" ? "bg-[#353535]" : "bg-transparent"} flex items-center justify-start w-full h-10 hover:bg-[#353535] gap-3`}
+              onClick={() => setOpenedTab('profile')}
             >
               <UserIcon className="w-5 h-5" />
               <p className="font-normal">Profil</p>
@@ -84,7 +89,7 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
           </div>
         </section>
         <section className="w-[70%] py-4 px-5">
-          <ProfileSection user={user} />
+          {openedTab === "profile" && <ProfileSection user={user} />}
         </section>
       </DropdownMenuContent>
     </DropdownMenu>
