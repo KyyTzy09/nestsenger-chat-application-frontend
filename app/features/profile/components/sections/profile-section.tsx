@@ -21,6 +21,10 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
   // State input value
   const [name, setName] = React.useState<string>("");
   const [bio, setBio] = React.useState<string>("");
+  const [isActive, setIsActive] = React.useState<"name" | "bio" | "">("");
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const inputRefName = React.useRef<HTMLInputElement>(null);
+  const inputRefBio = React.useRef<HTMLInputElement>(null);
 
   // Reusable change handle
   const onChangeHandler = (
@@ -31,11 +35,36 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
     setValue(value);
   };
 
+  // Initial data
   React.useEffect(() => {
     setName(userName);
     setBio(info);
   }, [setName, setBio]);
 
+  // Auto Focus
+  React.useEffect(() => {
+    if (isActive === "name" && inputRefName.current) {
+      inputRefName.current.focus();
+    } else if (isActive === "bio" && inputRefBio.current) {
+      inputRefBio.current?.focus();
+    }
+  }, [isActive]);
+
+  // Wrapper handle click
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
+        setName(userName);
+        setBio(info);
+        setIsActive("");
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [setName, setBio]);
   return (
     <main className="flex flex-col w-full h-full gap-6">
       <section className="group relative flex items-center justify-start w-24 h-24">
@@ -50,17 +79,35 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           </AvatarDropDown>
         </div>
       </section>
-      <section className="relative flex flex-col w-full gap-2">
+      <section ref={wrapperRef} className="relative flex flex-col w-full gap-2">
         <div className="flex flex-col w-full gap-2">
-          <div className="flex items-center w-full gap-1">
-            <Input
-              value={name}
-              onChange={(e) => onChangeHandler(e, setName)}
-              className="md:text-[18px] w-full text-white text-xl border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
-            />
-            <Button className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]">
-              <PencilIcon className="w-full h-full" />
-            </Button>
+          <div className="flex flex-col w-full items-end justify-end gap-1">
+            <div className="flex items-center w-full gap-1">
+              <Input
+                ref={inputRefName}
+                value={name}
+                maxLength={25}
+                readOnly={isActive !== "name"}
+                onChange={(e) => onChangeHandler(e, setName)}
+                className="md:text-[18px] w-full text-white text-xl border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
+              />
+              {isActive !== "name" && (
+                <Button
+                  onClick={() => setIsActive("name")}
+                  className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]"
+                >
+                  <PencilIcon className="w-full h-full" />
+                </Button>
+              )}
+            </div>
+            {isActive == "name" && (
+              <button className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700">
+                <span className="flex group-hover:hidden">
+                  {name.length}/25
+                </span>
+                <span className="hidden group-hover:flex">Selesai</span>
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col w-full">
@@ -70,16 +117,34 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           >
             Info
           </Label>
-          <div className="flex items-center w-full gap-1">
-            <Input
-              id="username"
-              value={bio}
-              onChange={(e) => onChangeHandler(e, setBio)}
-              className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
-            />
-            <Button className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]">
-              <PencilIcon className="w-full h-full" />
-            </Button>
+          <div className="flex flex-col w-full items-end justify-end gap-1">
+            <div className="flex items-center w-full gap-1">
+              <Input
+                ref={inputRefBio}
+                id="username"
+                value={bio}
+                maxLength={200}
+                readOnly={isActive !== "bio"}
+                onChange={(e) => onChangeHandler(e, setBio)}
+                className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
+              />
+              {isActive !== "bio" && (
+                <Button
+                  onClick={() => setIsActive("bio")}
+                  className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]"
+                >
+                  <PencilIcon className="w-full h-full" />
+                </Button>
+              )}
+            </div>
+            {isActive == "bio" && (
+              <button className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700">
+                <span className="flex group-hover:hidden">
+                  {bio.length}/200
+                </span>
+                <span className="hidden group-hover:flex">Selesai</span>
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col w-full">
