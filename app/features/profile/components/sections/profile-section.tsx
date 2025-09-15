@@ -13,16 +13,39 @@ interface ProfileSectionProps {
 }
 
 export default function ProfileSection({ user }: ProfileSectionProps) {
+  const {
+    email,
+    Profile: { userName, bio: info, avatar },
+  } = user;
+
+  // State input value
+  const [name, setName] = React.useState<string>("");
+  const [bio, setBio] = React.useState<string>("");
+
+  // Reusable change handle
+  const onChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setValue: (value: string) => void
+  ) => {
+    const value = e.target.value;
+    setValue(value);
+  };
+
+  React.useEffect(() => {
+    setName(userName);
+    setBio(info);
+  }, [setName, setBio]);
+
   return (
     <main className="flex flex-col w-full h-full gap-6">
       <section className="group relative flex items-center justify-start w-24 h-24">
         <img
-          src={user.Profile.avatar || defaultImage}
+          src={avatar || defaultImage}
           alt="foto profil"
           className="w-full h-full rounded-full object-cover"
         />
         <div className="absolute flex items-center justify-center w-full h-full rounded-full top-0 bottom-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-500">
-          <AvatarDropDown image={user.Profile.avatar}>
+          <AvatarDropDown image={avatar}>
             <PencilIcon className="w-4 h-4" />
           </AvatarDropDown>
         </div>
@@ -31,8 +54,8 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
         <div className="flex flex-col w-full gap-2">
           <div className="flex items-center w-full gap-1">
             <Input
-              value={user.Profile.userName}
-              onChange={() => {}}
+              value={name}
+              onChange={(e) => onChangeHandler(e, setName)}
               className="md:text-[18px] w-full text-white text-xl border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
             />
             <Button className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]">
@@ -50,8 +73,8 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           <div className="flex items-center w-full gap-1">
             <Input
               id="username"
-              value={user.Profile.bio}
-              onChange={() => {}}
+              value={bio}
+              onChange={(e) => onChangeHandler(e, setBio)}
               className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
             />
             <Button className="cursor-pointer w-8 h-8 bg-transparent hover:bg-[#282828]">
@@ -60,20 +83,23 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           </div>
         </div>
         <div className="flex flex-col w-full">
-          <Label htmlFor="email" className="text-sm text-gray-200 font-normal pl-1">
+          <Label
+            htmlFor="email"
+            className="text-sm text-gray-200 font-normal pl-1"
+          >
             Email
           </Label>
           <div className="flex items-center w-full gap-1">
             <Input
               id="email"
               disabled
-              value={user.email}
+              value={email}
               className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 disabled:opacity-100 shadow-none px-1"
             />
           </div>
         </div>
       </section>
-      <Separator className="opacity-50"/>
+      <Separator className="opacity-50" />
       <Button className="flex items-center justify-center w-28 bg-[#282828] hover:bg-gray-100/30 text-sm font-normal transition duration-500">
         Keluar
       </Button>
