@@ -8,6 +8,7 @@ import { Button } from "shared/shadcn/button";
 import { Label } from "shared/shadcn/label";
 import { Separator } from "shared/shadcn/separator";
 import { usePatchBio, usePatchName } from "../../hooks/profile-hook";
+import { Textarea } from "shared/shadcn/textarea";
 
 interface ProfileSectionProps {
   user: UserType;
@@ -23,11 +24,13 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
   const [isActive, setIsActive] = React.useState<"name" | "bio" | "">("");
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const inputRefName = React.useRef<HTMLInputElement>(null);
-  const inputRefBio = React.useRef<HTMLInputElement>(null);
+  const inputRefBio = React.useRef<HTMLTextAreaElement>(null);
 
-    // mutationHandler
-  const { mutate: onPatchName, isPending: patchNamePending } = usePatchName(setIsActive);
-  const { mutate: onPatchBio, isPending: patchBioPending } = usePatchBio(setIsActive);
+  // mutationHandler
+  const { mutate: onPatchName, isPending: patchNamePending } =
+    usePatchName(setIsActive);
+  const { mutate: onPatchBio, isPending: patchBioPending } =
+    usePatchBio(setIsActive);
 
   // State input value
   const [name, setName] = React.useState<string>("");
@@ -35,7 +38,7 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
 
   // Reusable change handle
   const onChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     setValue: (value: string) => void
   ) => {
     const value = e.target.value;
@@ -137,14 +140,14 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           </Label>
           <div className="flex flex-col w-full items-end justify-end gap-1">
             <div className="flex items-center w-full gap-1">
-              <Input
+              <Textarea
                 ref={inputRefBio}
                 id="bio"
                 value={bio}
                 maxLength={200}
                 readOnly={isActive !== "bio"}
                 onChange={(e) => onChangeHandler(e, setBio)}
-                className=" w-full text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1"
+                className={`w-full h-full min-h-[60px] resize-none text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1`}
               />
               {isActive !== "bio" && (
                 <Button
