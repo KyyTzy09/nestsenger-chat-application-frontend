@@ -1,14 +1,12 @@
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { Button } from "shared/shadcn/button";
-import { useGetProfile } from "../../hooks/profile-hook";
 import type { UserType } from "shared/types/user-type";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "shared/shadcn/dropdown-menu";
-import { Separator } from "shared/shadcn/separator";
 import { BellIcon, KeyRoundIcon, LaptopIcon, UserIcon } from "lucide-react";
 import { FaComment } from "react-icons/fa";
 import ProfileSection from "../sections/profile-section";
@@ -64,7 +62,7 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
         side="top"
       >
         <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]">
-          <div className="flex flex-col items-center justify-start w-full">
+          <div className="flex flex-col items-center justify-start w-full gap-2">
             {dropDownItems.map(({ Icon, text, tab, onClickEvent }, i) => {
               return (
                 <Button
