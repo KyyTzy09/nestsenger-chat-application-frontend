@@ -1,5 +1,6 @@
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { profileService } from "../service/profile-service"
+import type React from "react"
 
 export const useGetProfile = () => {
     return useQuery({
@@ -9,13 +10,14 @@ export const useGetProfile = () => {
     })
 }
 
-export const usePatchName = () => {
-    const queryClient = new QueryClient()
+export const usePatchName = (setIsActive: React.Dispatch<React.SetStateAction<"" | "name" | "bio">>) => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["patch-name"],
         mutationFn: async (data: { userName: string }) => await profileService.updateName(data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["profile"], exact: true })
+        onSuccess: async () => {
+            queryClient.invalidateQueries({ queryKey: ["profile"], refetchType: "active" })
+            setIsActive("")
         },
         onError: (err) => {
             alert(err.message || "Gagal ubah nama")
@@ -23,16 +25,17 @@ export const usePatchName = () => {
     })
 }
 
-export const usePatchBio = () => {
-    const queryClient = new QueryClient()
+export const usePatchBio = (setIsActive: React.Dispatch<React.SetStateAction<"" | "name" | "bio">>) => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["patch-name"],
         mutationFn: async (data: { bio: string }) => await profileService.updateBio(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["profile"], exact: true })
+            queryClient.invalidateQueries({ queryKey: ["profile"], type: "all" })
+            setIsActive("")
         },
         onError: (err) => {
-            alert(err.message || "Gagal ubah bio")
+            alert(err.message || "Gagal ubah nama")
         }
     })
 }

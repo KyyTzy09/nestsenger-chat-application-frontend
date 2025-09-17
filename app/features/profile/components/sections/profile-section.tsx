@@ -1,4 +1,4 @@
-import { PencilIcon } from "lucide-react";
+import { LoaderIcon, PencilIcon } from "lucide-react";
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import type { UserType } from "shared/types/user-type";
@@ -7,6 +7,7 @@ import { Input } from "shared/shadcn/input";
 import { Button } from "shared/shadcn/button";
 import { Label } from "shared/shadcn/label";
 import { Separator } from "shared/shadcn/separator";
+import { usePatchBio, usePatchName } from "../../hooks/profile-hook";
 
 interface ProfileSectionProps {
   user: UserType;
@@ -18,13 +19,19 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
     Profile: { userName, bio: info, avatar },
   } = user;
 
-  // State input value
-  const [name, setName] = React.useState<string>("");
-  const [bio, setBio] = React.useState<string>("");
+  // FocusHandler
   const [isActive, setIsActive] = React.useState<"name" | "bio" | "">("");
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const inputRefName = React.useRef<HTMLInputElement>(null);
   const inputRefBio = React.useRef<HTMLInputElement>(null);
+
+    // mutationHandler
+  const { mutate: onPatchName, isPending: patchNamePending } = usePatchName(setIsActive);
+  const { mutate: onPatchBio, isPending: patchBioPending } = usePatchBio(setIsActive);
+
+  // State input value
+  const [name, setName] = React.useState<string>("");
+  const [bio, setBio] = React.useState<string>("");
 
   // Reusable change handle
   const onChangeHandler = (
@@ -65,6 +72,7 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setName, setBio]);
+
   return (
     <main className="flex flex-col w-full h-full gap-6">
       <section className="group relative flex items-center justify-start w-24 h-24">
@@ -101,11 +109,21 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
               )}
             </div>
             {isActive == "name" && (
-              <button className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700">
-                <span className="flex group-hover:hidden">
-                  {name.length}/25
-                </span>
-                <span className="hidden group-hover:flex">Selesai</span>
+              <button
+                disabled={patchNamePending}
+                onClick={() => onPatchName({ userName: name })}
+                className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700"
+              >
+                {patchNamePending ? (
+                  <LoaderIcon className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <span className="flex group-hover:hidden">
+                      {name.length}/25
+                    </span>
+                    <span className="hidden group-hover:flex">Selesai</span>
+                  </>
+                )}
               </button>
             )}
           </div>
@@ -121,7 +139,7 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
             <div className="flex items-center w-full gap-1">
               <Input
                 ref={inputRefBio}
-                id="username"
+                id="bio"
                 value={bio}
                 maxLength={200}
                 readOnly={isActive !== "bio"}
@@ -138,11 +156,21 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
               )}
             </div>
             {isActive == "bio" && (
-              <button className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700">
-                <span className="flex group-hover:hidden">
-                  {bio.length}/200
-                </span>
-                <span className="hidden group-hover:flex">Selesai</span>
+              <button
+                disabled={patchBioPending}
+                onClick={() => onPatchBio({ bio })}
+                className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700"
+              >
+                {patchBioPending ? (
+                  <LoaderIcon className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <span className="flex group-hover:hidden">
+                      {bio.length}/200
+                    </span>
+                    <span className="hidden group-hover:flex">Selesai</span>
+                  </>
+                )}
               </button>
             )}
           </div>
