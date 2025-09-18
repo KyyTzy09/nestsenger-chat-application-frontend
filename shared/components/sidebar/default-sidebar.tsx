@@ -36,7 +36,7 @@ export default function DefaultSideBar() {
   ];
 
   return (
-    <Sidebar>
+    <Sidebar className=" border-none">
       <SidebarContent className="w-16 flex flex-col bg-[#202020] h-screen pt-10 pb-5 px-2 z-20 items-center justify-between">
         <SidebarGroupLabel className="w-full flex items-center justify-center">
           <Menu className="text-white" />

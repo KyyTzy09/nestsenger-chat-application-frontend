@@ -9,12 +9,14 @@ import { Label } from "shared/shadcn/label";
 import { Separator } from "shared/shadcn/separator";
 import { usePatchBio, usePatchName } from "../../hooks/profile-hook";
 import { Textarea } from "shared/shadcn/textarea";
+import PreviewImageModal from "shared/components/modals/preview-modal";
 
 interface ProfileSectionProps {
   user: UserType;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ProfileSection({ user }: ProfileSectionProps) {
+export default function ProfileSection({ user, setPreview }: ProfileSectionProps) {
   const {
     email,
     Profile: { userName, bio: info, avatar },
@@ -74,7 +76,7 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [setName, setBio]);
+  }, [setName, setBio, user]);
 
   return (
     <main className="flex flex-col w-full h-full gap-6">
@@ -85,7 +87,7 @@ export default function ProfileSection({ user }: ProfileSectionProps) {
           className="w-full h-full rounded-full object-cover"
         />
         <div className="absolute flex items-center justify-center w-full h-full rounded-full top-0 bottom-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-500">
-          <AvatarDropDown image={avatar}>
+          <AvatarDropDown image={avatar} setPreview={setPreview}>
             <PencilIcon className="w-4 h-4" />
           </AvatarDropDown>
         </div>

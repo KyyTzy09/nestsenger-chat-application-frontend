@@ -12,18 +12,20 @@ import {
 interface AvatarDropDownProps {
   image: string;
   children: React.ReactNode;
+  setPreview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AvatarDropDown({
   image,
   children,
+  setPreview,
 }: AvatarDropDownProps) {
   const items = [
     {
       name: "Lihat Gambar",
       Icon: EyeIcon,
       disabled: image === defaultImage,
-      Action: () => {},
+      Action: () => {setPreview(true)}
     },
     {
       name: "Ubah Gambar",
