@@ -1,6 +1,9 @@
-import { EditIcon, EyeIcon, Trash } from "lucide-react";
+import { EditIcon, EyeIcon, PencilIcon, Trash } from "lucide-react";
 import React from "react";
+import CropperDialog from "~/features/profile/components/cropper-dialog";
+import ImageInput from "shared/components/uploads/image-input";
 import { defaultImage } from "shared/constants/image-default";
+import { useCropper } from "shared/contexts/cropper-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,57 +14,60 @@ import {
 
 interface AvatarDropDownProps {
   image: string;
-  children: React.ReactNode;
   setPreview: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AvatarDropDown({
   image,
-  children,
   setPreview,
 }: AvatarDropDownProps) {
-  const items = [
-    {
-      name: "Lihat Gambar",
-      Icon: EyeIcon,
-      disabled: image === defaultImage,
-      Action: () => {setPreview(true)}
-    },
-    {
-      name: "Ubah Gambar",
-      Icon: EditIcon,
-      disabled: false,
-      Action: () => {},
-    },
-  ];
+  const cropper = useCropper();
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-[#252525] border-none" side="top">
-        <DropdownMenuItem
-          disabled={image === defaultImage}
-          onClick={() => {}}
-          className="flex items-center justify-start gap-2 focus:bg-[#353535] rounded-sm"
+    <>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+        <DropdownMenuTrigger asChild>
+          <PencilIcon className="w-4 h-4" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="flex flex-col bg-[#252525] border-none"
+          side="top"
         >
-          <Trash className="text-white w-4 h-4" strokeWidth={1.5} />
-          <p className="text-white font-normal">Hapus Gambar</p>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="opacity-30" />
-        {items.map((item) => {
-          return (
-            <DropdownMenuItem
-              disabled={item.disabled}
-              onClick={item.Action}
-              key={item.name}
-              className="flex items-center justify-start gap-2 focus:bg-[#353535]"
+          <DropdownMenuItem
+            disabled={image === defaultImage}
+            onClick={() => {}}
+            className="flex items-center justify-start gap-2 focus:bg-[#353535] rounded-sm"
+          >
+            <Trash className="text-white w-4 h-4" strokeWidth={1.5} />
+            <p className="text-white font-normal">Hapus Gambar</p>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="opacity-30" />
+          <DropdownMenuItem
+            disabled={image === defaultImage}
+            onClick={() => {
+              setPreview(true);
+            }}
+            className="flex items-center justify-start gap-2 focus:bg-[#353535]"
+          >
+            <EyeIcon className="text-white w-4 h-4" strokeWidth={1.5} />
+            <p className="text-white font-normal">Lihat Gambar</p>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            asChild
+            onClick={(e) => setIsOpen(false)}
+            className="flex items-center justify-start gap-2 focus:bg-[#353535]"
+          >
+            <ImageInput
+              onClose={() => setIsOpen(false)}
+              className="flex items-center justify-start gap-2 "
             >
-              <item.Icon className="text-white w-4 h-4" strokeWidth={1.5} />
-              <p className="text-white font-normal">{item.name}</p>
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+              <EditIcon className="text-white w-4 h-4" strokeWidth={1.5} />
+              <p className="text-white font-normal">Ubah Gambar</p>
+            </ImageInput>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
