@@ -10,5 +10,10 @@ export const profileService = {
     },
     async updateBio(data: { bio: string }) {
         return await apiClient<{ message: string, statusCode: number }>({ url: "/profile/bio/patch", method: "patch", data, withCredentials: true })
+    },
+    async updateAvatar(data: { file: Blob | null }) {
+        const formData = new FormData()
+        formData.append("file", data.file!, "-avatar.png")
+        return await apiClient<{ message: string }>({ url: "/profile/avatar/patch", data: formData, method: "patch", withCredentials: true })
     }
-} 
+}

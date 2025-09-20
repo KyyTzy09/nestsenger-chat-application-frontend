@@ -39,3 +39,20 @@ export const usePatchBio = (setIsActive: React.Dispatch<React.SetStateAction<"" 
         }
     })
 }
+
+export const usePatchAvatar = (file: Blob | null, setFile: React.Dispatch<React.SetStateAction<Blob | null>>, setIsActive: React.Dispatch<React.SetStateAction<boolean>>) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ["update-avatar"],
+        mutationFn: async () => await profileService.updateAvatar({ file }),
+        onSuccess: () => {
+            setFile(null)
+            setIsActive(false)
+            queryClient.invalidateQueries({ queryKey: ["profile"], type: "all" })
+        },
+        onError: (err) => {
+            setFile(null)
+            alert(err.message || "Gagal ubah avatar")
+        }
+    })
+}

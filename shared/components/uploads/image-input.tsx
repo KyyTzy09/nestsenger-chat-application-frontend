@@ -8,7 +8,7 @@ import { useCropper } from "shared/contexts/cropper-context";
 interface ImageInputProps {
   className: string;
   children: React.ReactNode;
-  onClose: () => void
+  onClose: () => void;
 }
 
 export default function ImageInput({

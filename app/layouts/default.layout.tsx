@@ -5,7 +5,7 @@ import DefaultSideBar from "shared/components/sidebar/default-sidebar";
 import type { Route } from "../+types/root";
 import { getSession } from "~/features/auth/services/get-session";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
-import CropperDialog from "~/features/profile/components/cropper-dialog";
+import AvatarCropper from "~/features/profile/components/cropper-dialog"; "~/features/profile/components/cropper-dialog";
 import { CropperProvider } from "shared/contexts/cropper-context";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
@@ -27,7 +27,7 @@ export default function DefaultLayout() {
           </div>
         </div>
       </SidebarProvider>
-      <CropperDialog />
+      <AvatarCropper />
     </CropperProvider>
   );
 }
