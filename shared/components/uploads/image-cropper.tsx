@@ -5,8 +5,6 @@ import { Button } from "shared/shadcn/button";
 
 interface ImageCropperProps {
   image: string | null;
-  width: number;
-  height: number;
   aspect?: number;
   cropShape?: "rect" | "round";
   isCrop: boolean;
@@ -14,14 +12,12 @@ interface ImageCropperProps {
   onClose: () => void;
   onSuccess?: () => void;
   setimageUpload: React.Dispatch<React.SetStateAction<Blob | null>>;
-  setImage: React.Dispatch<React.SetStateAction<string | null>>;
+  setImage: (image: string) => void| React.Dispatch<React.SetStateAction<string | null>> ;
   setIsCrop: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function ImageCropper({
   image,
-  width,
-  height,
   isLoading = false,
   aspect = 1,
   cropShape = "rect",

@@ -5,8 +5,8 @@ import DefaultSideBar from "shared/components/sidebar/default-sidebar";
 import type { Route } from "../+types/root";
 import { getSession } from "~/features/auth/services/get-session";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
-import AvatarCropper from "~/features/profile/components/cropper-dialog"; "~/features/profile/components/cropper-dialog";
-import { CropperProvider } from "shared/contexts/cropper-context";
+import AvatarCropper from "~/features/profile/components/cropper-dialog";
+("~/features/profile/components/cropper-dialog");
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const session = await getSession();
@@ -18,16 +18,14 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
 
 export default function DefaultLayout() {
   return (
-    <CropperProvider>
-      <SidebarProvider>
-        <div className="flex min-w-screen w-full h-full min-h-screen">
-          <DefaultSideBar />
-          <div className="flex-1 ml-16">
-            <Outlet />
-          </div>
+    <SidebarProvider>
+      <div className="flex min-w-screen w-full h-full min-h-screen">
+        <DefaultSideBar />
+        <div className="flex-1 ml-16">
+          <Outlet />
         </div>
-      </SidebarProvider>
+      </div>
       <AvatarCropper />
-    </CropperProvider>
+    </SidebarProvider>
   );
 }

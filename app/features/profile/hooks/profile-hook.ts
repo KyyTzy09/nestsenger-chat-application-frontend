@@ -40,11 +40,11 @@ export const usePatchBio = (setIsActive: React.Dispatch<React.SetStateAction<"" 
     })
 }
 
-export const usePatchAvatar = (file: Blob | null, setFile: React.Dispatch<React.SetStateAction<Blob | null>>, setIsActive: React.Dispatch<React.SetStateAction<boolean>>) => {
+export const usePatchAvatar = (setFile: React.Dispatch<React.SetStateAction<Blob | null>>, setIsActive:(show: boolean) => void) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["update-avatar"],
-        mutationFn: async () => await profileService.updateAvatar({ file }),
+        mutationFn: async (file: Blob | null, ) => await profileService.updateAvatar({ file }),
         onSuccess: () => {
             setFile(null)
             setIsActive(false)

@@ -3,7 +3,6 @@ import React from "react";
 import CropperDialog from "~/features/profile/components/cropper-dialog";
 import ImageInput from "shared/components/uploads/image-input";
 import { defaultImage } from "shared/constants/image-default";
-import { useCropper } from "shared/contexts/cropper-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "shared/shadcn/dropdown-menu";
+import { useUpdateAvatarStore } from "shared/stores/avatar-store";
 
 interface AvatarDropDownProps {
   image: string;
@@ -21,7 +21,11 @@ export default function AvatarDropDown({
   image,
   setPreview,
 }: AvatarDropDownProps) {
-  const cropper = useCropper();
+  // Selector state
+  const setShowDialog = useUpdateAvatarStore((s) => s.setShowDialog);
+  const setAvatar = useUpdateAvatarStore((s) => s.setAvatar);
+  
+  // Dropdownmenu state
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
@@ -59,6 +63,8 @@ export default function AvatarDropDown({
             className="flex items-center justify-start gap-2 focus:bg-[#353535]"
           >
             <ImageInput
+              setImage={setAvatar}
+              onComplete={() => setShowDialog(true)}
               onClose={() => setIsOpen(false)}
               className="flex items-center justify-start gap-2 "
             >

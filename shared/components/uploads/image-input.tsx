@@ -1,30 +1,30 @@
-import { ImageDownIcon } from "lucide-react";
 import React from "react";
-import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
-import CropperDialog from "../../../app/features/profile/components/cropper-dialog";
-import { useCropper } from "shared/contexts/cropper-context";
 
 interface ImageInputProps {
   className: string;
   children: React.ReactNode;
+  setImage: (show: string) => void;
+  onComplete?: () => void;
   onClose: () => void;
 }
 
 export default function ImageInput({
   className,
   children,
+  setImage,
+  onComplete,
   onClose,
 }: ImageInputProps) {
-  const cropper = useCropper();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onClose();
     const file = e.target.files?.[0];
     if (file) {
       const url = URL.createObjectURL(file);
-      cropper?.setImage(url);
-      cropper?.setIsOpen(true);
+      setImage(url);
+      if (onComplete) onComplete();
+      onClose();
     }
+    e.target.value = "";
   };
 
   return (
