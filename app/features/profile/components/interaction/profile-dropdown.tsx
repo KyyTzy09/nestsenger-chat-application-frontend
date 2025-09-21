@@ -18,7 +18,10 @@ interface ProfileDropdownProps {
 }
 
 export default function ProfileDropDown({ user }: ProfileDropdownProps) {
-  const [openedTab, setOpenedTab] = React.useState<string>("profile");
+  const [openedTab, setOpenedTab] = React.useState<
+    "general" | "account" | "notification" | "chat" | "profile"
+  >("profile");
+  // Preview image
   const [isPreview, setIsPreview] = React.useState<boolean>(false);
 
   const dropDownItems = [
@@ -47,7 +50,6 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
       onClickEvent: () => setOpenedTab("notification"),
     },
   ];
-
   return (
     <>
       <AnimatePresence>

@@ -12,7 +12,9 @@ interface ImageCropperProps {
   onClose: () => void;
   onSuccess?: () => void;
   setimageUpload: React.Dispatch<React.SetStateAction<Blob | null>>;
-  setImage: (image: string) => void| React.Dispatch<React.SetStateAction<string | null>> ;
+  setImage: (
+    image: string
+  ) => void | React.Dispatch<React.SetStateAction<string | null>>;
   setIsCrop: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -86,9 +88,10 @@ export default function ImageCropper({
   return (
     <div className="w-full h-full flex flex-col">
       <section className="bg-[#202020] w-full flex items-center justify-start p-2">
-        {cropperButtons.map(({ action, Icon, iconClass }) => {
+        {cropperButtons.map(({ action, Icon, iconClass }, i) => {
           return (
             <Button
+              key={i}
               onClick={action}
               className="bg-transparent hover:bg-[#303030]"
               type="button"

@@ -1,5 +1,5 @@
 import React from "react";
-import { AlertDialog, AlertDialogContent } from "shared/shadcn/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "shared/shadcn/alert-dialog";
 import ImageCropper from "../../../../shared/components/uploads/image-cropper";
 import { usePatchAvatar } from "../hooks/profile-hook";
 import { useUpdateAvatarStore } from "shared/stores/avatar-store";
@@ -16,6 +16,7 @@ export default function AvatarCropper() {
 
   return (
     <AlertDialog open={showDialog}>
+      <AlertDialogTitle/>
       <AlertDialogContent className="w-[800px] bg-[#101010]/90 p-0 rounded-none md:rounded-none border-x-0 border-y">
         <ImageCropper
           image={avatar || null}
