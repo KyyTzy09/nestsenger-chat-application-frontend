@@ -1,11 +1,6 @@
 import React from "react";
-import { Button } from "shared/shadcn/button";
-import { CheckIcon, CropIcon, Icon, TrashIcon, XIcon } from "lucide-react"
 import { AlertDialog, AlertDialogContent } from "shared/shadcn/alert-dialog";
-import Cropper, { type Area } from "react-easy-crop";
-import { Dialog, DialogClose, DialogContent } from "shared/shadcn/dialog";
 import ImageCropper from "../../../../shared/components/uploads/image-cropper";
-import { defaultImage } from "shared/constants/image-default";
 import { usePatchAvatar } from "../hooks/profile-hook";
 import { useUpdateAvatarStore } from "shared/stores/avatar-store";
 

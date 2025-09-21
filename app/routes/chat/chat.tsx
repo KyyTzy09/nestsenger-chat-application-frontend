@@ -1,10 +1,5 @@
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import type { Route } from "../+types";
-import { profileService } from "~/features/profile/service/profile-service";
-import { redirect, useLoaderData } from "react-router";
-import { getSession } from "~/features/auth/services/get-session";
-import ImageCropper from "shared/components/uploads/image-cropper";
 
 export default function ChatIndex() {
   return (

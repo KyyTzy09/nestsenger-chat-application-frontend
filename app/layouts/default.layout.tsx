@@ -1,10 +1,9 @@
 import React from "react";
-import { Outlet, redirect, useNavigate } from "react-router";
-import { SidebarProvider, SidebarTrigger } from "shared/shadcn/sidebar";
+import { Outlet, redirect } from "react-router";
+import { SidebarProvider } from "shared/shadcn/sidebar";
 import DefaultSideBar from "shared/components/sidebar/default-sidebar";
 import type { Route } from "../+types/root";
 import { getSession } from "~/features/auth/services/get-session";
-import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 import AvatarCropper from "~/features/profile/components/cropper-dialog";
 ("~/features/profile/components/cropper-dialog");
 

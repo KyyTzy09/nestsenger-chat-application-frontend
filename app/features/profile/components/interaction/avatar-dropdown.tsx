@@ -1,6 +1,5 @@
 import { EditIcon, EyeIcon, PencilIcon, Trash } from "lucide-react";
 import React from "react";
-import CropperDialog from "~/features/profile/components/cropper-dialog";
 import ImageInput from "shared/components/uploads/image-input";
 import { defaultImage } from "shared/constants/image-default";
 import {

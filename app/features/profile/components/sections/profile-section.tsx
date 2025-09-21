@@ -1,16 +1,9 @@
-import { LoaderIcon, PencilIcon } from "lucide-react";
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import type { UserType } from "shared/types/user-type";
 import AvatarDropDown from "../interaction/avatar-dropdown";
-import { Input } from "shared/shadcn/input";
 import { Button } from "shared/shadcn/button";
-import { Label } from "shared/shadcn/label";
 import { Separator } from "shared/shadcn/separator";
-import { usePatchBio, usePatchName } from "../../hooks/profile-hook";
-import { Textarea } from "shared/shadcn/textarea";
-import PreviewImageModal from "shared/components/modals/preview-modal";
-import CropperDialog from "~/features/profile/components/cropper-dialog";
 import ProfileForm from "../forms/profile-form";
 
 interface ProfileSectionProps {
