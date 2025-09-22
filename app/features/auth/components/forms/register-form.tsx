@@ -6,7 +6,7 @@ import { registerSchema, type registerType } from "shared/schemas/auth-schema";
 import { Button } from "shared/shadcn/button";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
-import { useRegister } from "../../hooks/use-register";
+import { useRegister } from "../../hooks/auth-hook";
 
 interface RegisterFormProps {
   setValue: (value: string) => void;

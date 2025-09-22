@@ -6,7 +6,7 @@ import { Label } from "shared/shadcn/label";
 import { useForm } from "react-hook-form";
 import { loginSchema, type loginType } from "shared/schemas/auth-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "../../hooks/use-login";
+import { useLogin } from "../../hooks/auth-hook";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);

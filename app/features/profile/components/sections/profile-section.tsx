@@ -5,6 +5,8 @@ import AvatarDropDown from "../interaction/avatar-dropdown";
 import { Button } from "shared/shadcn/button";
 import { Separator } from "shared/shadcn/separator";
 import ProfileForm from "../forms/profile-form";
+import { useLogout } from "~/features/auth/hooks/auth-hook";
+import AlertModal from "shared/components/modals/alert-modal";
 
 interface ProfileSectionProps {
   user: UserType;
@@ -18,8 +20,19 @@ export default function ProfileSection({
   const {
     Profile: { avatar },
   } = user;
+
+  const { mutate: logout, isPending } = useLogout();
+  const [showConfirm, setShowConfirm] = React.useState<boolean>(false);
+
   return (
     <>
+      <AlertModal
+        alertTitle="Konfirmasi Keluar"
+        alertDesc="Anda yakin ingin logout?"
+        onOpen={showConfirm}
+        setOnOpen={setShowConfirm}
+        onConfirm={() => logout()}
+      />
       <main className="flex flex-col w-full h-full gap-6">
         <section className="group relative flex items-center justify-start w-24 h-24">
           <img
@@ -33,7 +46,11 @@ export default function ProfileSection({
         </section>
         <ProfileForm user={user} />
         <Separator className="opacity-50" />
-        <Button className="flex items-center justify-center w-28 bg-[#282828] hover:bg-gray-100/30 text-sm font-normal transition duration-500">
+        <Button
+          disabled={isPending}
+          onClick={() => setShowConfirm(true)}
+          className="flex items-center justify-center w-28 bg-[#282828] hover:bg-gray-100/30 text-sm font-normal transition duration-500"
+        >
           Keluar
         </Button>
       </main>
