@@ -8,9 +8,9 @@ export default function ChatCard() {
         return (
           <div
             key={index}
-            className="flex items-center justify-start w-full h-[70px] rounded-sm p-2 gap-2 hover:bg-[#45494f] transition duration-700"
+            className="flex items-center justify-start w-full h-[70px] rounded-sm p-2 gap-2 hover:bg-[#45494f]"
           >
-            <section className="w-[15%] h-full">
+            <section className="w-[60px] h-full">
               <img
                 src={defaultImage}
                 alt="Default"
