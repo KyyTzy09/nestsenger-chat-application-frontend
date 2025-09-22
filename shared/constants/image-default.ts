@@ -1,1 +1,1 @@
-export const defaultImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Microsoft_Account_Logo.svg/1200px-Microsoft_Account_Logo.svg.png"
+export const defaultImage = "https://static.vecteezy.com/system/resources/thumbnails/047/733/682/small_2x/grey-avatar-icon-user-avatar-photo-icon-social-media-user-icon-vector.jpg"

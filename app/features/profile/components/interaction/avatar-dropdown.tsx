@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "shared/shadcn/dropdown-menu";
-import { useUpdateAvatarStore } from "shared/stores/avatar-store";
+import { useUpdateAvatarStore } from "~/features/profile/stores/profile-store";
 
 interface AvatarDropDownProps {
   image: string;

@@ -2,7 +2,7 @@ import React from "react";
 import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "shared/shadcn/alert-dialog";
 import ImageCropper from "../../../../shared/components/uploads/image-cropper";
 import { usePatchAvatar } from "../hooks/profile-hook";
-import { useUpdateAvatarStore } from "shared/stores/avatar-store";
+import { useUpdateAvatarStore } from "~/features/profile/stores/profile-store";
 
 export default function AvatarCropper() {
   const avatar = useUpdateAvatarStore((s) => s.avatar);

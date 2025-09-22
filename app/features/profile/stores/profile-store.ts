@@ -1,6 +1,7 @@
 import type React from "react"
 import { create } from "zustand"
 
+// Update Avatar Store
 interface updateAvatarStore {
     showDialog: boolean
     avatar: string | null
