@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "shared/shadcn/dropdown-menu";
 import { useUpdateAvatarStore } from "~/features/profile/stores/profile-store";
+import { useDeleteAvatar } from "../../hooks/profile-hook";
 
 interface AvatarDropDownProps {
   image: string;
@@ -20,10 +21,13 @@ export default function AvatarDropDown({
   image,
   setPreview,
 }: AvatarDropDownProps) {
+  // Mutation deleteAvatar
+  const { mutate: deleteAvatar, isPending } = useDeleteAvatar();
+
   // Selector state
   const setShowDialog = useUpdateAvatarStore((s) => s.setShowDialog);
   const setAvatar = useUpdateAvatarStore((s) => s.setAvatar);
-  
+
   // Dropdownmenu state
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
@@ -38,8 +42,8 @@ export default function AvatarDropDown({
           side="top"
         >
           <DropdownMenuItem
-            disabled={image === defaultImage}
-            onClick={() => {}}
+            disabled={image === defaultImage || isPending}
+            onClick={() => deleteAvatar()}
             className="flex items-center justify-start gap-2 focus:bg-[#353535] rounded-sm"
           >
             <Trash className="text-white w-4 h-4" strokeWidth={1.5} />
@@ -58,7 +62,7 @@ export default function AvatarDropDown({
           </DropdownMenuItem>
           <DropdownMenuItem
             asChild
-            onClick={(e) => setIsOpen(false)}
+            onClick={() => setIsOpen(false)}
             className="flex items-center justify-start gap-2 focus:bg-[#353535]"
           >
             <ImageInput

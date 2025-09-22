@@ -40,11 +40,11 @@ export const usePatchBio = (setIsActive: React.Dispatch<React.SetStateAction<"" 
     })
 }
 
-export const usePatchAvatar = (setFile: React.Dispatch<React.SetStateAction<Blob | null>>, setIsActive:(show: boolean) => void) => {
+export const usePatchAvatar = (setFile: React.Dispatch<React.SetStateAction<Blob | null>>, setIsActive: (show: boolean) => void) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["update-avatar"],
-        mutationFn: async (file: Blob | null, ) => await profileService.updateAvatar({ file }),
+        mutationFn: async (file: Blob | null,) => await profileService.updateAvatar({ file }),
         onSuccess: () => {
             setFile(null)
             setIsActive(false)
@@ -53,6 +53,20 @@ export const usePatchAvatar = (setFile: React.Dispatch<React.SetStateAction<Blob
         onError: (err) => {
             setFile(null)
             alert(err.message || "Gagal ubah avatar")
+        }
+    })
+}
+
+export const useDeleteAvatar = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ["delete-avatar"],
+        mutationFn: async () => await profileService.deleteAvatar(),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["profile"], type: "all" })
+        },
+        onError: (err) => {
+            console.log(err.message)
         }
     })
 }

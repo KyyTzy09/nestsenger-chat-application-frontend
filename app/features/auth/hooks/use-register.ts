@@ -8,7 +8,6 @@ export const useRegister = (setTabs: (value: string) => void) => {
         mutationKey: ["register"],
         mutationFn: async (data: registerType) => await AuthService.Register(data),
         onSuccess: (data) => {
-            alert("Akun berhasil dibuat")
             setTabs("login")
         },
         onError: (err) => {

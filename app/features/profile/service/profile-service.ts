@@ -15,5 +15,8 @@ export const profileService = {
         const formData = new FormData()
         formData.append("file", data.file!, "-avatar.png")
         return await apiClient<{ message: string }>({ url: "/profile/avatar/patch", data: formData, method: "patch", withCredentials: true })
+    },
+    async deleteAvatar() {
+        return await apiClient<{ message: string }>({ url: "/profile/avatar/delete", method: "delete", withCredentials: true })
     }
 }
