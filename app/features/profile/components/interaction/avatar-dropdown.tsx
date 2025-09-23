@@ -42,7 +42,7 @@ export default function AvatarDropDown({
           side="top"
         >
           <DropdownMenuItem
-            disabled={image === defaultImage || isPending}
+            disabled={image === defaultImage || isPending || !image}
             onClick={() => deleteAvatar()}
             className="flex items-center justify-start gap-2 focus:bg-[#353535] rounded-sm"
           >
@@ -51,7 +51,7 @@ export default function AvatarDropDown({
           </DropdownMenuItem>
           <DropdownMenuSeparator className="opacity-30" />
           <DropdownMenuItem
-            disabled={image === defaultImage}
+            disabled={image === defaultImage || !image}
             onClick={() => {
               setPreview(true);
             }}

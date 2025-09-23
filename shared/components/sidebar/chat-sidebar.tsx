@@ -10,7 +10,7 @@ import AddFriendDropdown from "~/features/friends/components/interactions/add-fr
 export default function ChatSidebar() {
   return (
     <aside className="relative z-0 flex flex-col w-[30%] h-screen bg-[#282828] pt-10 text-white gap-3">
-      <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-7 px-5">
+      <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-6 px-5">
         <div className="flex items-center justify-between w-full">
           <Label className="text-white font-semibold text-lg">Chats</Label>
           <AddFriendDropdown/>
