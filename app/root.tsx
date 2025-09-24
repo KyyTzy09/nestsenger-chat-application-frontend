@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -36,8 +37,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
+          <Toaster position="top-right" />
           <ReactQueryDevtools />
-          <div className="w-full h-full min-h-screen bg-[#FDF3E3]">{children}</div>
+          <div className="w-full h-full min-h-screen bg-[#FDF3E3]">
+            {children}
+          </div>
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
