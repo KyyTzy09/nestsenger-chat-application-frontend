@@ -37,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <Toaster position="top-right" />
+          <Toaster position="top-right" richColors />
           <ReactQueryDevtools />
           <div className="w-full h-full min-h-screen bg-[#FDF3E3]">
             {children}
