@@ -18,7 +18,7 @@ export default function ProfileSection({
   setPreview,
 }: ProfileSectionProps) {
   const {
-    Profile: { avatar },
+    profile: { avatar },
   } = user;
 
   const { mutate: logout, isPending } = useLogout();

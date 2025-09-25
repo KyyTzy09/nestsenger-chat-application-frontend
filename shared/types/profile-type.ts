@@ -6,5 +6,5 @@ export type ProfileType = {
     avatar: string
     bio: string
 
-    User: UserType
+    user: UserType
 }

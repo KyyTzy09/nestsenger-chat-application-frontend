@@ -55,7 +55,7 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
       <AnimatePresence>
         {isPreview && (
           <PreviewImageModal
-            image={user.Profile.avatar}
+            image={user.profile.avatar}
             setIsPreviewAction={setIsPreview}
             width={700}
             height={700}
@@ -69,7 +69,7 @@ export default function ProfileDropDown({ user }: ProfileDropdownProps) {
             className={`${location.pathname === "/setting" ? "bg-[#45494f]" : "bg-transparent"} z-0 flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2 focus-visible:ring-0`}
           >
             <img
-              src={user?.Profile?.avatar || defaultImage}
+              src={user?.profile?.avatar || defaultImage}
               alt="default"
               className="w-8 h-8 object-cover rounded-full"
             />

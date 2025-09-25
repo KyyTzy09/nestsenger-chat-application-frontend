@@ -4,7 +4,7 @@ export type UserType = {
     userId: string
     email: string
     password: string
-    Profile: ProfileType
+    profile: ProfileType
 
     createdAt: Date
     updatedAt: Date

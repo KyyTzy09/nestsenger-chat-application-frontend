@@ -16,7 +16,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   // Instance user
   const {
     email,
-    Profile: { userName, bio: info },
+    profile: { userName, bio: info },
   } = user;
 
   const [isActive, setIsActive] = React.useState<"name" | "bio" | "">("");
