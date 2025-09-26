@@ -4,7 +4,7 @@ import { Button } from "shared/shadcn/button";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
 import { Sidebar, SidebarContent } from "shared/shadcn/sidebar";
-import ChatCard from "~/features/chat/components/cards/chat-card";
+import RoomCard from "~/features/room/components/cards/room-card";
 import AddFriendDropdown from "~/features/friends/components/interactions/add-friend-dropdown";
 
 export default function ChatSidebar() {
@@ -26,7 +26,7 @@ export default function ChatSidebar() {
         </div>
       </section>
       <section className="flex w-full h-[90%] overflow-y-scroll custom-scrollbar px-1">
-        <ChatCard />
+        <RoomCard />
       </section>
     </aside>
   );

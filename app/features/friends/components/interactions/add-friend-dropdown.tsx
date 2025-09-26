@@ -8,7 +8,7 @@ import {
 } from "shared/shadcn/dropdown-menu";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
-import ChatCard from "~/features/chat/components/cards/chat-card";
+import RoomCard from "~/features/room/components/cards/room-card";
 
 interface AddFriendDropdownProps {}
 
@@ -46,7 +46,7 @@ export default function AddFriendDropdown({}: AddFriendDropdownProps) {
               <Label className="font-semibold text-white">Tambah Teman</Label>
             </Button>
           </div>
-          <ChatCard />
+          <RoomCard />
         </section>
       </DropdownMenuContent>
     </DropdownMenu>

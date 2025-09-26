@@ -1,7 +1,7 @@
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 
-export default function ChatCard() {
+export default function RoomCard() {
   return (
     <div className="flex flex-col w-full h-full gap-2">
       {Array.from({ length: 15 }).map((v, index) => {
