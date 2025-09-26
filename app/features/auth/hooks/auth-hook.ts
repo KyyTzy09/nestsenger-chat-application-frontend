@@ -56,6 +56,7 @@ export const useLogout = () => {
                 style: { color: "green", }
             })
             queryClient.invalidateQueries({ queryKey: ['profile'], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ["user-room"], type: "all" })
             navigate("/")
         },
         onError: (err) => {

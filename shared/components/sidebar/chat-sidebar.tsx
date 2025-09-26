@@ -6,14 +6,16 @@ import { Label } from "shared/shadcn/label";
 import { Sidebar, SidebarContent } from "shared/shadcn/sidebar";
 import RoomCard from "~/features/room/components/cards/room-card";
 import AddFriendDropdown from "~/features/friends/components/interactions/add-friend-dropdown";
+import { useGetUserRoom } from "~/features/room/hooks/room-hooks";
 
 export default function ChatSidebar() {
+  const { data: userRoomResponse } = useGetUserRoom();
   return (
     <aside className="relative z-0 flex flex-col w-[30%] h-screen bg-[#282828] pt-10 text-white gap-3">
       <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-6 px-5">
         <div className="flex items-center justify-between w-full">
           <Label className="text-white font-semibold text-lg">Chats</Label>
-          <AddFriendDropdown/>
+          <AddFriendDropdown room={userRoomResponse?.data!} />
         </div>
         <div className="relative flex w-full h-full">
           <Input
@@ -26,7 +28,7 @@ export default function ChatSidebar() {
         </div>
       </section>
       <section className="flex w-full h-[90%] overflow-y-scroll custom-scrollbar px-1">
-        <RoomCard />
+        <RoomCard data={userRoomResponse?.data!} />
       </section>
     </aside>
   );

@@ -8,11 +8,22 @@ import {
 } from "shared/shadcn/dropdown-menu";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
+import type { FriendType } from "shared/types/friend-type";
+import type { RoomType } from "shared/types/room-type";
+import type { UserType } from "shared/types/user-type";
 import RoomCard from "~/features/room/components/cards/room-card";
+import { useGetUserRoom } from "~/features/room/hooks/room-hooks";
 
-interface AddFriendDropdownProps {}
+interface AddFriendDropdownProps {
+  room:
+    | {
+        room: RoomType;
+        alias?: FriendType | UserType | null;
+      }[]
+    | [];
+}
 
-export default function AddFriendDropdown({}: AddFriendDropdownProps) {
+export default function AddFriendDropdown({ room }: AddFriendDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,16 +48,14 @@ export default function AddFriendDropdown({}: AddFriendDropdownProps) {
             </div>
           </div>
         </section>
-        <section className="flex flex-col w-full h-full overflow-y-scroll custom-scrollbar gap-1">
-          <div className="flex flex-col w-full h-full gap-1">
-            <Button className="flex item-center justify-start w-full min-h-14 h-full bg-transparent px-2 gap-3 hover:bg-[#45494f]">
-              <div className="flex items-center justify-center w-12 h-12 bg-[#353535] rounded-full">
-                <UserPlus2Icon className="w-5 h-5" />
-              </div>
-              <Label className="font-semibold text-white">Tambah Teman</Label>
-            </Button>
-          </div>
-          <RoomCard />
+        <section className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll custom-scrollbar gap-1">
+          <Button className="flex item-center justify-start w-full h-14 bg-transparent px-2 gap-3 hover:bg-[#45494f]">
+            <div className="flex items-center justify-center w-12 h-12 bg-[#353535] rounded-full">
+              <UserPlus2Icon className="w-5 h-5" />
+            </div>
+            <Label className="font-semibold text-white">Tambah Teman</Label>
+          </Button>
+          <RoomCard data={room} />
         </section>
       </DropdownMenuContent>
     </DropdownMenu>
