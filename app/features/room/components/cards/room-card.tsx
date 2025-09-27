@@ -18,7 +18,7 @@ interface RoomCardProps {
 export default function RoomCard({ data }: RoomCardProps) {
   const params = useParams<{ chatId: string }>();
   return (
-    <div className="flex flex-col items-center justify-start w-full h-full gap-2 ">
+    <div className="flex flex-col items-center justify-start w-full h-full gap-2">
       {data?.map(({ room, alias }, index) => {
         return (
           <Link

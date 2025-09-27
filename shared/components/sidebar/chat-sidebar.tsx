@@ -11,7 +11,7 @@ import { useGetUserRoom } from "~/features/room/hooks/room-hooks";
 export default function ChatSidebar() {
   const { data: userRoomResponse } = useGetUserRoom();
   return (
-    <aside className="relative z-0 flex flex-col w-[30%] h-screen bg-[#282828] pt-10 text-white gap-3">
+    <aside className="relative z-0 flex flex-col w-[30%] h-screen bg-[#252525] pt-10 text-white gap-3">
       <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-6 px-5">
         <div className="flex items-center justify-between w-full">
           <Label className="text-white font-semibold text-lg">Chats</Label>
@@ -27,7 +27,7 @@ export default function ChatSidebar() {
           </div>
         </div>
       </section>
-      <section className="flex w-full h-[90%] overflow-y-scroll custom-scrollbar px-1">
+      <section className="flex w-full h-[90%] overflow-y-scroll custom-scrollbar px-5">
         <RoomCard data={userRoomResponse?.data!} />
       </section>
     </aside>
