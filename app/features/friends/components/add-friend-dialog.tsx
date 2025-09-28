@@ -8,6 +8,7 @@ import { useGetUser, useGetUserById } from "~/features/user/hooks/user-hook";
 import PickFriendSection from "./sections/pick-friend-section";
 import AddFriendForm from "./forms/add-friend-form";
 import type { UserType } from "shared/types/user-type";
+import { useGetNonFriendUsers } from "../hooks/friend-hook";
 
 interface AddFriendDialogProps {
   isOpen: boolean;
@@ -21,11 +22,9 @@ export default function AddFriendDialog({
   const [tab, setTab] = React.useState<"pick" | "form">("pick");
   const [selectedUser, setSelectedUser] = React.useState<string>("");
 
-  const { data: userResponse } = useGetUser();
-  const {
-    data: selectedUserResponse,
-    isPending: selectUserLoad,
-  } = useGetUserById({ userId: selectedUser });
+  const { data: nonFriendUsersResponse } = useGetNonFriendUsers();
+  const { data: confirmedUserResponse, isPending: confirmedUserLoad } = useGetUserById({ userId: selectedUser });
+  
   React.useEffect(() => {
     setSelectedUser("");
   }, [isOpen, setSelectedUser]);
@@ -36,15 +35,15 @@ export default function AddFriendDialog({
         <DialogTitle>Tambah Teman</DialogTitle>
         <Separator />
         <div className="flex w-full h-full max-h-[26rem]">
-          {tab === "pick" && !selectedUserResponse?.data ? (
+          {tab === "pick" && !confirmedUserResponse?.data ? (
             <PickFriendSection
-              data={userResponse?.data!}
+              data={nonFriendUsersResponse?.data!}
               setSelectedUserId={setSelectedUser}
             />
           ) : (
             <AddFriendForm
-              data={selectedUserResponse?.data as UserType}
-              isLoading={selectUserLoad}
+              data={confirmedUserResponse?.data as UserType}
+              isLoading={confirmedUserLoad}
               setIsOpen={setIsOpen}
             />
           )}

@@ -43,17 +43,28 @@ export default function PickFriendSection({
             value={search}
             onChange={handleChange}
             className="flex w-full bg-[#404040] border-blue-600 border-b-2 border-t-0 border-x-0 pl-8"
-            placeholder="Cari chat atau mulai chat baru"
+            placeholder="Cari seseorang yang ingin anda tambahkan"
           />
           <div className="absolute top-0 left-0 flex items-center justify-center w-6 h-full pl-2">
             <SearchIcon className="w-4 h-full" />
           </div>
         </div>
+        <p className="flex items-start justify-start w-full text-sm">
+          Ditemukan ( {filteredUser?.length || 0} )
+        </p>
         <div className="flex w-full overflow-y-auto custom-scrollbar">
-          <SelectUserCard
-            data={filteredUser!}
-            setConfirmedUser={setSelectedUserId}
-          />
+          {filteredUser?.length! > 0 ? (
+            <SelectUserCard
+              data={filteredUser!}
+              setConfirmedUser={setSelectedUserId}
+            />
+          ) : (
+            <div className="flex items-center justify-center w-full">
+              <p className=" text-gray-300">
+                Tidak ada pengguna yang ditemukan
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>
