@@ -39,7 +39,7 @@ export default function ChatNavbar({ data }: ChatNavbarProps) {
             {type === RoomTypeEnum.GROUP
               ? roomName
               : (alias && (alias as UserType)?.email) ||
-                (alias as FriendType)?.friend?.userName}
+                (alias as FriendType)?.alias}
           </Label>
           <Label className="text-[10px] text-gray-300 font-normal">
             Klik untuk info {type === RoomTypeEnum.GROUP ? "Kontak" : "Grup"}
