@@ -1,15 +1,11 @@
 import React from "react";
+import ChatDetailPage from "~/pages/chat-detail.page";
 
 interface ChatDetailProps {
   params: { chatId: string };
 }
 
 export default function ChatDetail({ params }: ChatDetailProps) {
-  const { chatId } = params;
 
-  return (
-    <div className="w-full">
-      <p>{chatId}</p>
-    </div>
-  );
+  return <ChatDetailPage {...params} />;
 }

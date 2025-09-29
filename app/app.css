@@ -140,6 +140,15 @@ body {
   }
 }
 
+.bg-chat-pattern {
+  background-image: url("/image/default-bg.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 3px;
 }
