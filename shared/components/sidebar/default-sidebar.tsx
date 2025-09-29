@@ -47,7 +47,7 @@ export default function DefaultSideBar() {
               <Link
                 to={route}
                 key={i}
-                className={`${location.pathname === route ? "bg-[#45494f]" : "bg-tra"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
+                className={`${location.pathname.startsWith(route) ? "bg-[#45494f]" : "bg-tra"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
               >
                 <Icon className={`text-white w-5 h-5`} />
               </Link>
