@@ -5,7 +5,7 @@ export type RoomType = {
     roomId: string
     roomName: string
     type: RoomTypeEnum
-    member: MemberType[]
+    members: MemberType[]
 
     createdAt: Date
     updatedAt: Date
