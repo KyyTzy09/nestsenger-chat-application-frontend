@@ -8,3 +8,12 @@ export const useGetUserRoom = () => {
         staleTime: 1000 * 60 * 1
     })
 }
+
+export const useGetRoomById = (data: { roomId: string }) => {
+    return useQuery({
+        queryKey: ['room', data.roomId],
+        queryFn: async () => await RoomService.getRoomById(data),
+        staleTime: 1000 * 60 * 2,
+        enabled: !!data.roomId
+    })
+}
