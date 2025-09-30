@@ -1,19 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { FriendService } from "../services/friend-service"
 import { toast } from "sonner"
+import { useNavigate } from "react-router"
 
 export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
     return useMutation({
         mutationKey: ["add-friend"],
         mutationFn: async (data: { alias: string, friendId: string }) => await FriendService.addFriend(data),
         onSuccess: (data) => {
             toast.success("Sukses menambahkan teman")
             setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ['friend'] })
-            queryClient.invalidateQueries({ queryKey: ['non-friend'] })
-            queryClient.invalidateQueries({ queryKey: ['user-room'] })
-            queryClient.invalidateQueries({ queryKey: ['room'] })
+            navigate(`/chat/${data?.data.room.roomId}`)
+            
+            queryClient.invalidateQueries({ queryKey: ['friend'], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ['user-room'], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ['room'], type: "all" })
+            queryClient.refetchQueries({ queryKey: ['non-friends'], type: "all" })
         },
         onError: ({ message }) => {
             toast.error(message || "Gagal menambahkan teman")
@@ -23,7 +27,7 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
 
 export const useGetNonFriendUsers = () => {
     return useQuery({
-        queryKey: ["non-friend"],
+        queryKey: ["non-friends"],
         queryFn: async () => await FriendService.getNonFriendUsers(),
         staleTime: 1000 * 60 * 2
     })
