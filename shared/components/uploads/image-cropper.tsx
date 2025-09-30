@@ -4,31 +4,31 @@ import Cropper, { type Area } from "react-easy-crop";
 import { Button } from "shared/shadcn/button";
 
 interface ImageCropperProps {
-  image: string | null;
+  preview: string | null;
   aspect?: number;
   cropShape?: "rect" | "round";
-  isCrop: boolean;
+  isCroped?: boolean;
   isLoading?: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-  setimageUpload: React.Dispatch<React.SetStateAction<Blob | null>>;
-  setImage: (
+  setFile: React.Dispatch<React.SetStateAction<Blob | null>>;
+  setPreview: (
     image: string
   ) => void | React.Dispatch<React.SetStateAction<string | null>>;
-  setIsCrop: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsCroped?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function ImageCropper({
-  image,
+  preview,
   isLoading = false,
   aspect = 1,
   cropShape = "rect",
-  isCrop,
+  isCroped,
   onSuccess = () => {},
   onClose,
-  setImage,
-  setimageUpload,
-  setIsCrop,
+  setPreview,
+  setFile,
+  setIsCroped,
 }: ImageCropperProps) {
   const [crop, setCrop] = React.useState({ x: 0, y: 0 });
   const [zoom, setZoom] = React.useState(1);
@@ -45,10 +45,10 @@ export default function ImageCropper({
   );
 
   const getCroppedBlob = async (): Promise<Blob | null> => {
-    if (!image || !croppedAreaPixels) return null;
+    if (!preview || !croppedAreaPixels) return null;
 
     const img = new Image();
-    img.src = image;
+    img.src = preview;
     await new Promise((res) => (img.onload = res));
 
     const canvas = document.createElement("canvas");
@@ -66,11 +66,11 @@ export default function ImageCropper({
   const handleCrop = React.useCallback(async () => {
     const blob = await getCroppedBlob();
     if (!blob) return;
-    setimageUpload(blob);
+    setFile(blob);
     const url = URL.createObjectURL(blob);
-    setImage(url);
+    setPreview(url);
     onSuccess();
-  }, [image, croppedAreaPixels]);
+  }, [preview, croppedAreaPixels]);
 
   const cropperButtons = [
     {
@@ -104,10 +104,10 @@ export default function ImageCropper({
       <section
         className={`flex items-center justify-center w-full h-full bg-black`}
       >
-        {image && !isCrop && (
+        {preview && !isCroped && (
           <div className={`relative w-full h-full min-h-[300px]`}>
             <Cropper
-              image={image}
+              image={preview}
               crop={crop}
               zoom={zoom}
               zoomSpeed={0.2}

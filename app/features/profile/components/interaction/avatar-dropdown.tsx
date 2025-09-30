@@ -25,8 +25,7 @@ export default function AvatarDropDown({
   const { mutate: deleteAvatar, isPending } = useDeleteAvatar();
 
   // Selector state
-  const setShowDialog = useUpdateAvatarStore((s) => s.setShowDialog);
-  const setAvatar = useUpdateAvatarStore((s) => s.setAvatar);
+  const { setAvatar, setShowDialog } = useUpdateAvatarStore();
 
   // Dropdownmenu state
   const [isOpen, setIsOpen] = React.useState<boolean>(false);

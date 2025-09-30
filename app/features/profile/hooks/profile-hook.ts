@@ -46,12 +46,11 @@ export const usePatchAvatar = (setFile: React.Dispatch<React.SetStateAction<Blob
         mutationKey: ["update-avatar"],
         mutationFn: async (file: Blob | null,) => await profileService.updateAvatar({ file }),
         onSuccess: () => {
-            setFile(null)
             setIsActive(false)
+            setFile(null)
             queryClient.invalidateQueries({ queryKey: ["profile"], type: "all" })
         },
         onError: (err) => {
-            setFile(null)
             alert(err.message || "Gagal ubah avatar")
         }
     })
