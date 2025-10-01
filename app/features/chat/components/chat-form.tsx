@@ -2,11 +2,17 @@ import React from "react";
 import { Button } from "shared/shadcn/button";
 import { cn } from "~/lib/utils";
 import TextAreaAutoSize from "react-textarea-autosize";
-import { PaperclipIcon, SendIcon, SmileIcon } from "lucide-react";
+import { LoaderIcon, PaperclipIcon, SendIcon, SmileIcon } from "lucide-react";
 import { useCreateChat } from "../hooks/chat-hook";
 
-export default function ChatForm() {
-  const { mutate: createChatMutate, isPending: onCreateChatLoad } = useCreateChat();
+interface ChatFormProps {
+  roomId: string;
+}
+
+export default function ChatForm({ roomId }: ChatFormProps) {
+  const [message, setMessage] = React.useState<string>("");
+  const { mutate: createChatMutate, isPending: onCreateChatLoad } =
+    useCreateChat();
 
   const formButtonIcon = [
     {
@@ -16,9 +22,18 @@ export default function ChatForm() {
       Icon: PaperclipIcon,
     },
   ];
-  
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    createChatMutate({ message, roomId });
+    setMessage("");
+  };
+
   return (
-    <form className="flex items-end justify-between w-full h-full p-3 gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className="flex items-end justify-between w-full h-full p-3 gap-4"
+    >
       <div className="flex items-end justify-center h-full gap-2">
         {formButtonIcon.map(({ Icon }) => {
           return (
@@ -29,17 +44,26 @@ export default function ChatForm() {
         })}
       </div>
       <TextAreaAutoSize
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
         minRows={1}
         maxRows={5}
+        required
         placeholder="Ketik Pesan"
         className={cn(
           "w-full min-h-7 text-white resize-none no-scrollbar text-justify p-2 text-sm",
           "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring"
         )}
       />
-      <Button type="button" className="w-8 h-8 p-1 bg-transparent">
-        <SendIcon />
-      </Button>
+      {message.length > 0 && (
+        <Button type="submit" className="w-8 h-8 p-1 bg-transparent">
+          {onCreateChatLoad ? (
+            <LoaderIcon className="animate-spin" />
+          ) : (
+            <SendIcon />
+          )}
+        </Button>
+      )}
     </form>
   );
 }

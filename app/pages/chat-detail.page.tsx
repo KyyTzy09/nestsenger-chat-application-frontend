@@ -16,7 +16,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
         <p>{chatId}</p>
       </section>
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
-        <ChatForm />
+        <ChatForm roomId={chatId} />
       </section>
     </div>
   );
