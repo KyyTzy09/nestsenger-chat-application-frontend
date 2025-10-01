@@ -1,3 +1,4 @@
+import ChatForm from "~/features/chat/components/chat-form";
 import ChatNavbar from "~/features/chat/components/chat-navbar";
 import { useGetRoomById } from "~/features/room/hooks/room-hooks";
 
@@ -6,16 +7,16 @@ interface ChatDetailPageProps {
 }
 
 export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
-  const { data: roomInfoResponse, isPending: isRoomInfoLoading } =
-    useGetRoomById({ roomId: chatId });
+  const { data: roomInfoResponse, isPending: isRoomInfoLoading } = useGetRoomById({ roomId: chatId });
+
   return (
-    <div className="flex flex-col  w-full h-screen bg-chat-pattern bg-black">
+    <div className="flex flex-col  w-full h-screen max-h-screen bg-chat-pattern bg-black">
       {!isRoomInfoLoading && <ChatNavbar data={roomInfoResponse?.data!} />}
       <section className="w-full h-full p-5 text-white overflow-hidden">
         <p>{chatId}</p>
       </section>
-      <section className="flex w-full min-h-14 max-h-52 bg-[#252525] border border-black transition">
-        
+      <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
+        <ChatForm />
       </section>
     </div>
   );
