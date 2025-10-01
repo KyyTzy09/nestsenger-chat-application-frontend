@@ -3,8 +3,11 @@ import { Button } from "shared/shadcn/button";
 import { cn } from "~/lib/utils";
 import TextAreaAutoSize from "react-textarea-autosize";
 import { PaperclipIcon, SendIcon, SmileIcon } from "lucide-react";
+import { useCreateChat } from "../hooks/chat-hook";
 
 export default function ChatForm() {
+  const { mutate: createChatMutate, isPending: onCreateChatLoad } = useCreateChat();
+
   const formButtonIcon = [
     {
       Icon: SmileIcon,
