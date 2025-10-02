@@ -1,5 +1,5 @@
 import { RoomTypeEnum } from "shared/enums/room-type";
-import ChatCard from "~/features/chat/components/cards/chat-card";
+import PrivateChatCard from "~/features/chat/components/cards/private-chat-card";
 import GroupChatCard from "~/features/chat/components/cards/group-chat-card";
 import ChatForm from "~/features/chat/components/chat-form";
 import ChatNavbar from "~/features/chat/components/chat-navbar";
@@ -24,7 +24,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
       {!isRoomInfoLoading && <ChatNavbar data={roomInfoResponse?.data!} />}
       <section className="w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
         {roomInfoResponse?.data.room.type === RoomTypeEnum.PRIVATE ? (
-          <ChatCard
+          <PrivateChatCard
             userId={profileResponse?.data.userId!}
             data={chatResponse?.data!}
           />

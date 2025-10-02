@@ -3,12 +3,12 @@ import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
 
-interface ChatCardProps {
+interface PrivateChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
   userId: string;
 }
 
-export default function ChatCard({ data, userId }: ChatCardProps) {
+export default function PrivateChatCard({ data, userId }: PrivateChatCardProps) {
   const [selectedIndex, setSelectedIndex] = React.useState<number[]>([]);
   const bottomRef = React.useRef<HTMLDivElement>(null);
 
