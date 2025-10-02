@@ -1,8 +1,10 @@
 import React from "react";
 import type { ChatType } from "shared/types/chat-type";
+import type { FriendType } from "shared/types/friend-type";
+import type { UserType } from "shared/types/user-type";
 
 interface ChatCardProps {
-  data: ChatType[] | [];
+  data: {chat : ChatType , alias: FriendType | UserType}[] | [];
   userId: string;
 }
 
@@ -12,13 +14,14 @@ export default function ChatCard({ data, userId }: ChatCardProps) {
   React.useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [data]);
+
   return (
     <div className="flex flex-col w-full h-full gap-3">
-      {data?.map(({ chatId, message, userId: senderId, createdAt }, i) => {
+      {data?.map(({ chat : { chatId, message, userId: senderId, createdAt } }) => {
         return (
           <div
             className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[30%] min-w-20 h-auto text-white p-2 rounded-sm gap-1 shadow`}
-            key={i}
+            key={chatId}
           >
             <p className="text-[14px] break-all">{message}</p>
             <div className="flex items-center justify-end w-full">
