@@ -10,7 +10,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   const { data: roomInfoResponse, isPending: isRoomInfoLoading } = useGetRoomById({ roomId: chatId });
 
   return (
-    <div className="flex flex-col  w-full h-screen max-h-screen bg-chat-pattern bg-black">
+    <div className="relative flex flex-col  w-full h-screen max-h-screen bg-chat-pattern bg-black">
       {!isRoomInfoLoading && <ChatNavbar data={roomInfoResponse?.data!} />}
       <section className="w-full h-full p-5 text-white overflow-hidden">
         <p>{chatId}</p>
