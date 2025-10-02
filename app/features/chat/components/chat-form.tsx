@@ -16,7 +16,7 @@ export default function ChatForm({ roomId }: ChatFormProps) {
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
 
   const { mutate: createChatMutate, isPending: onCreateChatLoad } =
-    useCreateChat();
+    useCreateChat(roomId);
 
   const formButtonIcon = [
     {
@@ -31,7 +31,7 @@ export default function ChatForm({ roomId }: ChatFormProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createChatMutate({ message, roomId });
+    createChatMutate({ message });
     setMessage("");
   };
 

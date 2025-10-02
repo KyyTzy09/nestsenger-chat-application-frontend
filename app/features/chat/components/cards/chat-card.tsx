@@ -17,7 +17,7 @@ export default function ChatCard({ data, userId }: ChatCardProps) {
       {data?.map(({ chatId, message, userId: senderId, createdAt }, i) => {
         return (
           <div
-            className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[30%] h-auto text-white p-2 rounded-sm gap-1`}
+            className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[30%] min-w-20 h-auto text-white p-2 rounded-sm gap-1 shadow`}
             key={i}
           >
             <p className="text-[14px] break-all">{message}</p>
