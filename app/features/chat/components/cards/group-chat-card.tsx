@@ -3,6 +3,7 @@ import { defaultImage } from "shared/constants/image-default";
 import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
+import { useCreateOrGetRoom } from "~/features/room/hooks/room-hooks";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
@@ -10,6 +11,9 @@ interface GroupChatCardProps {
 }
 
 export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
+  const { mutate: createOrGetRoomMutate, isPending: onCreateOrGetRoomLoading } =
+    useCreateOrGetRoom();
+
   const [selectedIndex, setSelectedIndex] = React.useState<number[]>([]);
   const bottomRef = React.useRef<HTMLDivElement>(null);
 
@@ -47,7 +51,11 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
               className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} flex items-start w-full h-auto gap-2`}
             >
               {senderId !== userId && (
-                <section className="w-10 h-10 rounded-full overflow-hidden">
+                <button
+                  onClick={() => createOrGetRoomMutate({ userIdB: senderId })}
+                  title="btn-img"
+                  className="group w-10 h-10 rounded-full overflow-hidden"
+                >
                   <img
                     src={
                       alias
@@ -55,10 +63,10 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                           (alias as UserType)?.profile?.avatar
                         : defaultImage
                     }
-                    className="w-full h-full"
+                    className="w-full h-full group-hover:opacity-80"
                     alt=""
                   />
-                </section>
+                </button>
               )}
               <section
                 className={`${senderId === userId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-24 h-auto text-white p-2 rounded-sm shadow`}

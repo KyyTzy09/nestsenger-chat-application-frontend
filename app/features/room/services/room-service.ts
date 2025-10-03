@@ -1,9 +1,13 @@
 import { apiClient } from "shared/helpers/axios"
 import type { FriendType } from "shared/types/friend-type"
+import type { MemberType } from "shared/types/member-type"
 import type { RoomType } from "shared/types/room-type"
 import type { UserType } from "shared/types/user-type"
 
 export const RoomService = {
+    async createOrGetRoom(data: { userIdB: string }) {
+        return await apiClient<{ data: { room: RoomType, member: MemberType[] } }>({ url: `/room/get-create/${data.userIdB}/get`, withCredentials: true })
+    },
     async getUserRoom() {
         return await apiClient<{ statusCode: number, data: { room: RoomType, alias: FriendType | UserType | null }[] | [] }>({ url: '/room/user/get', withCredentials: true })
     },

@@ -1,5 +1,21 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { RoomService } from "../services/room-service"
+import { useNavigate } from "react-router"
+import { toast } from "sonner"
+
+export const useCreateOrGetRoom = () => {
+    const navigate = useNavigate()
+    return useMutation({
+        mutationKey: ['get-create-room'],
+        mutationFn: async (data: { userIdB: string }) => await RoomService.createOrGetRoom(data),
+        onSuccess: async (data) => {
+            navigate(`/chat/${data?.data?.room.roomId}`)
+        },
+        onError: (err) => {
+            toast.error(err.message)
+        }
+    })
+}
 
 export const useGetUserRoom = () => {
     return useQuery({

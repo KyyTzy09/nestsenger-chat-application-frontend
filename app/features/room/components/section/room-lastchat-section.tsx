@@ -41,7 +41,7 @@ export default function RoomLastChatSection({
       } else if (profileResponse?.data.userId === senderId) {
         result = "Anda :";
       } else {
-        result = senderEmail + ": ";
+        result = "~" +senderEmail + ": ";
       }
     } else {
       result = "";
