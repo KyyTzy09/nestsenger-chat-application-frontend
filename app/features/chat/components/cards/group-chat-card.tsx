@@ -42,14 +42,17 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
           i
         ) => {
           return (
-            <div key={chatId} className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} flex items-start w-full h-auto gap-2`}>
+            <div
+              key={chatId}
+              className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} flex items-start w-full h-auto gap-2`}
+            >
               {senderId !== userId && (
                 <section className="w-10 h-10 rounded-full overflow-hidden">
                   <img
                     src={
                       alias
-                        ? (alias as FriendType).friend.avatar ||
-                          (alias as UserType).profile.avatar
+                        ? (alias as FriendType)?.friend?.avatar ||
+                          (alias as UserType)?.profile?.avatar
                         : defaultImage
                     }
                     className="w-full h-full"
@@ -65,13 +68,13 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                     <p className={"text-blue-500 text-[12px] font-semibold"}>
                       {alias
                         ? (alias as FriendType)?.alias ||
-                          (alias as UserType).email
+                          "~" + (alias as UserType).email
                         : "Pengguna"}
                     </p>
                   </div>
                 )}
                 <p
-                  className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-all`}
+                  className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
                 >
                   {message}
                 </p>

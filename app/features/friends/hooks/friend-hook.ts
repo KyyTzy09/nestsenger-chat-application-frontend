@@ -3,6 +3,14 @@ import { FriendService } from "../services/friend-service"
 import { toast } from "sonner"
 import { useNavigate } from "react-router"
 
+export const useGetFriendById = (data: { friendId: string }) => {
+    return useQuery({
+        queryKey: ['friend-byId', data.friendId],
+        queryFn: async () => await FriendService.getFriendById(data),
+        staleTime: 1000 * 60 * 1
+    })
+}
+
 export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
@@ -13,7 +21,7 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
             toast.success("Sukses menambahkan teman")
             setIsOpen(false)
             navigate(`/chat/${data?.data.room.roomId}`)
-            
+
             queryClient.invalidateQueries({ queryKey: ['friend'], type: "all" })
             queryClient.invalidateQueries({ queryKey: ['user-room'], type: "all" })
             queryClient.invalidateQueries({ queryKey: ['room'], type: "all" })
