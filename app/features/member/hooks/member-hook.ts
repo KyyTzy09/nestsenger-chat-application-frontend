@@ -6,6 +6,5 @@ export const useGetRoomMember = (data: { roomId: string }) => {
         queryKey: ['member', data.roomId],
         queryFn: async () => await MemberService.getMemberRoom(data),
         staleTime: 1000 * 60 * 2,
-        enabled: !!data.roomId
     })
 }

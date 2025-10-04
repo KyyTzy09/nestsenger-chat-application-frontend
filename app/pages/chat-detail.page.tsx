@@ -6,6 +6,7 @@ import ChatNavbar from "~/features/chat/components/chat-navbar";
 import { useGetChats } from "~/features/chat/hooks/chat-hook";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 import { useGetRoomById } from "~/features/room/hooks/room-hooks";
+import { useGetRoomMember } from "~/features/member/hooks/member-hook";
 
 interface ChatDetailPageProps {
   chatId: string;
@@ -18,10 +19,17 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
     roomId: chatId,
   });
   const { data: profileResponse } = useGetProfile();
+  const { data: memberResponse } = useGetRoomMember({ roomId: chatId });
 
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">
-      {!isRoomInfoLoading && <ChatNavbar data={roomInfoResponse?.data!} />}
+      {!isRoomInfoLoading && (
+        <ChatNavbar
+          currentUserId={profileResponse?.data.userId || ''}
+          roomInfo={roomInfoResponse?.data!}
+          memberInfo={memberResponse?.data as []}
+        />
+      )}
       <section className="w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
         {roomInfoResponse?.data.room.type === RoomTypeEnum.PRIVATE ? (
           <PrivateChatCard

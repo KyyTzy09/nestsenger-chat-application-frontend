@@ -5,6 +5,6 @@ import type { UserType } from "shared/types/user-type"
 
 export const MemberService = {
     async getMemberRoom(data: { roomId: string }) {
-        return await apiClient<{ data: ({ member: MemberType, alias: FriendType | UserType | null }[] | []) | (MemberType | null) }>({ url: `/member/${data.roomId}/get`, withCredentials: true })
+        return await apiClient<{ data: ({ member: MemberType, alias: FriendType | UserType | null }[] | []) | (MemberType | null) }>({ url: `/member/${data.roomId}/room/get`, withCredentials: true })
     }
 }

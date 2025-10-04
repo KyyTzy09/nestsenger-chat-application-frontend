@@ -2,27 +2,31 @@ import { ImagesIcon, InfoIcon, UserIcon, UsersRoundIcon } from "lucide-react";
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { Button } from "shared/shadcn/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "shared/shadcn/dropdown-menu";
-import { Separator } from "shared/shadcn/separator";
 import type { FriendType } from "shared/types/friend-type";
 import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
 import RoomInfoSection from "../section/room-info-section";
-import { data } from "react-router";
 import { RoomTypeEnum } from "shared/enums/room-type";
+import RoomMemberSection from "../section/room-member-section";
+import type { MemberType } from "shared/types/member-type";
 
 interface RoomInfoDropDownProps {
-  data: {
+  info: {
     room: RoomType;
     alias: FriendType | UserType | null;
   };
+  member: {
+    member: MemberType;
+    alias: FriendType | UserType | null;
+  }[];
+  currentUserId: string;
 }
 
-export default function RoomInfoDropdown({ data }: RoomInfoDropDownProps) {
+export default function RoomInfoDropdown({
+  info,
+  member,
+  currentUserId,
+}: RoomInfoDropDownProps) {
   const [openedTab, setOpenedTab] = React.useState<"info" | "media" | "member">(
     "info"
   );
@@ -36,7 +40,7 @@ export default function RoomInfoDropdown({ data }: RoomInfoDropDownProps) {
       onClickEvent: () => setOpenedTab("info"),
     },
     {
-      enable: data.room.type === RoomTypeEnum.GROUP,
+      enable: info.room.type === RoomTypeEnum.GROUP,
       Icon: UsersRoundIcon,
       text: "member",
       tab: "member",
@@ -78,7 +82,10 @@ export default function RoomInfoDropdown({ data }: RoomInfoDropDownProps) {
         </div>
       </section>
       <section className="w-[70%] h-full bg-[#303030] py-4 px-5 overflow-y-auto">
-        {openedTab === "info" && <RoomInfoSection data={data} />}
+        {openedTab === "info" && <RoomInfoSection data={info} />}
+        {openedTab === "member" && Array.isArray(member) && (
+          <RoomMemberSection data={member} currentUserId={currentUserId} />
+        )}
       </section>
     </aside>
   );
