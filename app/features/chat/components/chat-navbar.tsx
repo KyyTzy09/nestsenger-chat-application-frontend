@@ -21,6 +21,7 @@ interface ChatNavbarProps {
 }
 
 export default function ChatNavbar({ roomInfo, memberInfo, currentUserId }: ChatNavbarProps) {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const {
     room: { roomName, type },
     alias,
@@ -28,10 +29,10 @@ export default function ChatNavbar({ roomInfo, memberInfo, currentUserId }: Chat
 
   return (
     <>
-      <RoomInfoDropdown info={roomInfo} member={memberInfo} currentUserId={currentUserId} />
+      <RoomInfoDropdown open={isOpen} onOpenChange={setIsOpen} info={roomInfo} member={memberInfo} currentUserId={currentUserId} />
       <nav className="flex items-center justify-between w-full h-[70px] bg-[#252525] border border-black p-5">
-        <section className="group flex items-center justify-start w-full h-full max-w-[80%] gap-5">
-          <button className="w-10 h-10">
+        <button onClick={() => setIsOpen(true)} className="group flex items-center justify-start w-full h-full max-w-[80%] gap-5">
+          <div className="w-10 h-10">
             <img
               src={
                 alias
@@ -42,8 +43,8 @@ export default function ChatNavbar({ roomInfo, memberInfo, currentUserId }: Chat
               alt="yaya"
               className="w-full h-full rounded-full group-hover:opacity-75"
             />
-          </button>
-          <div className="flex flex-col font-semibold text-white gap-1">
+          </div>
+          <div className="flex flex-col items-start font-semibold text-white gap-1">
             <Label className="">
               {type === RoomTypeEnum.GROUP
                 ? roomName
@@ -54,7 +55,7 @@ export default function ChatNavbar({ roomInfo, memberInfo, currentUserId }: Chat
               Klik untuk info {type === RoomTypeEnum.GROUP ? "Grup" : "Kontak"}
             </Label>
           </div>
-        </section>
+        </button>
       </nav>
     </>
   );
