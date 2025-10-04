@@ -25,7 +25,7 @@ export default function RoomCard({ data }: RoomCardProps) {
           <Link
             to={`/chat/${room.roomId}`}
             key={index}
-            className={`${params.chatId === room.roomId ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-start w-full h-[70px] rounded-sm p-2 gap-2 hover:bg-[#45494f]`}
+            className={`${params.chatId === room.roomId ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-start w-full h-[70px] rounded-sm p-2 gap-2 hover:bg-[#45494f]/50`}
           >
             <section className="w-[65px] h-full rounded-full overflow-hidden">
               <img

@@ -68,7 +68,7 @@ export default function RoomInfoDropdown({
 
   React.useEffect(() => {
     setOpenedTab("info");
-  }, [setOpenedTab]);
+  }, [ open, onOpenChange,info, setOpenedTab]);
 
   return (
     <AnimatePresence>
