@@ -1,5 +1,6 @@
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
+import { linkify } from "shared/helpers/linkify";
 import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
@@ -84,7 +85,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                 <p
                   className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
                 >
-                  {message}
+                  {linkify(message)}
                 </p>
                 <div
                   className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}

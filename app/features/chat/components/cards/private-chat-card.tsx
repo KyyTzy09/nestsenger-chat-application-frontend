@@ -1,4 +1,5 @@
 import React from "react";
+import { linkify } from "shared/helpers/linkify";
 import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
@@ -8,7 +9,10 @@ interface PrivateChatCardProps {
   userId: string;
 }
 
-export default function PrivateChatCard({ data, userId }: PrivateChatCardProps) {
+export default function PrivateChatCard({
+  data,
+  userId,
+}: PrivateChatCardProps) {
   const [selectedIndex, setSelectedIndex] = React.useState<number[]>([]);
   const bottomRef = React.useRef<HTMLDivElement>(null);
 
@@ -29,7 +33,7 @@ export default function PrivateChatCard({ data, userId }: PrivateChatCardProps) 
   };
 
   React.useEffect(() => {
-    setSelectedIndex([])
+    setSelectedIndex([]);
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [data, setSelectedIndex]);
 
@@ -45,7 +49,7 @@ export default function PrivateChatCard({ data, userId }: PrivateChatCardProps) 
               <p
                 className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-all`}
               >
-                {message}
+                {linkify(message)}
               </p>
               <div
                 className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
