@@ -17,6 +17,10 @@ export default function RoomMemberSection({
   data,
   currentUserId,
 }: RoomMemberSectionProps) {
+  const sortedMemberData = data?.sort((a) => {
+    return a?.member?.userId === currentUserId ? -1 : 0;
+  });
+
   return (
     <section className="flex flex-col w-full h-full gap-5">
       <div className="flex items-center justify-between w-full">
@@ -26,7 +30,7 @@ export default function RoomMemberSection({
       </div>
       <Separator />
       <div className="flex w-full h-full">
-        <MemberCard data={data} currentUserId={currentUserId} />
+        <MemberCard data={sortedMemberData} currentUserId={currentUserId} />
       </div>
     </section>
   );

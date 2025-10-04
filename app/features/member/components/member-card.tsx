@@ -25,6 +25,7 @@ export default function MemberCard({ data, currentUserId }: MemberCardData) {
 
     return result;
   };
+
   return (
     <div className="flex flex-col w-full h-full gap-1">
       {data?.map(({ member: { userId }, alias }) => {
@@ -59,9 +60,11 @@ export default function MemberCard({ data, currentUserId }: MemberCardData) {
                   )}
                 </p>
                 <p className="text-[10px] text-gray-300 font-normal">
-                  {alias && (alias as FriendType)?.friend?.userName
+                  {alias && (alias as FriendType).friend
                     ? (alias as FriendType)?.friend?.bio
-                    : (alias as UserType)?.profile?.bio}
+                    : currentUserId === userId
+                      ? (alias as UserType)?.profile?.bio
+                      : "~" + (alias as UserType)?.profile?.userName}
                 </p>
               </div>
             </section>
