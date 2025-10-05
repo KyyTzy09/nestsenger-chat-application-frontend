@@ -4,15 +4,18 @@ import { Label } from "shared/shadcn/label";
 import RoomCard from "~/features/room/components/cards/room-card";
 import AddFriendDropdown from "~/features/friends/components/interactions/add-friend-dropdown";
 import { useGetCurrentUserRoom } from "~/features/room/hooks/room-hooks";
+import { useGetUserFriends } from "~/features/friends/hooks/friend-hook";
 
 export default function ChatSidebar() {
   const { data: currentUserRoomResponse } = useGetCurrentUserRoom();
+  const { data: userFriendsResponse } = useGetUserFriends()
+  
   return (
     <aside className="relative z-0 flex flex-col w-[30%] h-screen bg-[#252525] pt-10 text-white gap-3">
       <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-6 px-5">
         <div className="flex items-center justify-between w-full">
           <Label className="text-white font-semibold text-lg">Chats</Label>
-          <AddFriendDropdown friends={[]} />
+          <AddFriendDropdown friends={userFriendsResponse?.data as []} />
         </div>
         <div className="relative flex w-full h-full">
           <Input

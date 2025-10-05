@@ -3,6 +3,14 @@ import { FriendService } from "../services/friend-service"
 import { toast } from "sonner"
 import { useNavigate } from "react-router"
 
+export const useGetUserFriends = () => {
+    return useQuery({
+        queryKey: ['user-friend'],
+        queryFn: async () => await FriendService.getUserFriends(),
+        staleTime: 1000 * 60 * 2
+    })
+}
+
 export const useGetFriendById = (data: { friendId: string }) => {
     return useQuery({
         queryKey: ['friend-byId', data.friendId],

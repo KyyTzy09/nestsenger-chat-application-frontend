@@ -4,8 +4,12 @@ import type { RoomType } from "shared/types/room-type"
 import type { UserType } from "shared/types/user-type"
 
 export const FriendService = {
+    async getUserFriends() {
+        return await apiClient<{ statusCode: number, data: FriendType[] }>({ url: '/friend/user/get', withCredentials: true })
+    },
+
     async getFriendById(data: { friendId: string }) {
-        return await apiClient<{ data : FriendType }>({ url: `/friend/${data.friendId}/by-id/get`, withCredentials: true })
+        return await apiClient<{ data: FriendType }>({ url: `/friend/${data.friendId}/by-id/get`, withCredentials: true })
     },
 
     async addFriend(data: { alias: string, friendId: string }) {
