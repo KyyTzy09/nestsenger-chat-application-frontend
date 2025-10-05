@@ -10,6 +10,14 @@ export const useGetChats = (data: { roomId: string }) => {
     })
 }
 
+export const useGetChatParent = (data: { chatId: string }) => {
+    return useQuery({
+        queryKey: ['chat-parent', data.chatId],
+        queryFn: async () => await ChatService.getChatParent(data),
+        staleTime: 1000 * 60 * 2,
+    })
+}
+
 export const useCreateChat = (roomId: string,) => {
     const queryClient = useQueryClient()
     return useMutation({

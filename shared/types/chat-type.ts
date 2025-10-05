@@ -6,10 +6,13 @@ export type ChatType = {
 
     userId: string
     roomId: string
+    parentId: string
     message: string
     createdAt: Date
     updatedAt: Date
 
+    parent: ChatType
+    replies: ChatType[]
     sender: UserType
     room: RoomType
     lastChatOf: RoomType[]

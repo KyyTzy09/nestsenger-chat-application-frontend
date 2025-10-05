@@ -3,6 +3,7 @@ import { linkify } from "shared/helpers/linkify";
 import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
+import ChatParentSection from "../sections/chat-parent-section";
 
 interface PrivateChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
@@ -40,12 +41,18 @@ export default function PrivateChatCard({
   return (
     <div className="flex flex-col w-full h-full gap-2">
       {data?.map(
-        ({ chat: { chatId, message, userId: senderId, createdAt } }, i) => {
+        (
+          { chat: { chatId, message, userId: senderId, createdAt, parent } },
+          i
+        ) => {
           return (
             <div
               className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-20 h-auto text-white p-2 rounded-sm gap-1 shadow`}
               key={chatId}
             >
+              {parent && (
+                <ChatParentSection chatId={chatId}/>
+              )}
               <p
                 className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-all`}
               >

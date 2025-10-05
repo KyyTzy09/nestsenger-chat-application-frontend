@@ -5,6 +5,7 @@ import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
 import { useCreateOrGetRoom } from "~/features/room/hooks/room-hooks";
+import ChatParentSection from "../sections/chat-parent-section";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
@@ -43,7 +44,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
     <div className="flex flex-col w-full h-full gap-2">
       {data?.map(
         (
-          { chat: { chatId, message, userId: senderId, createdAt }, alias },
+          { chat: { chatId, message, userId: senderId, createdAt, parent }, alias },
           i
         ) => {
           return (
@@ -82,6 +83,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                     </p>
                   </div>
                 )}
+                {parent && <ChatParentSection chatId={chatId} />}
                 <p
                   className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
                 >
