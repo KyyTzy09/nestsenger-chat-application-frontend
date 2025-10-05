@@ -12,7 +12,7 @@ export default function ChatSidebar() {
       <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-6 px-5">
         <div className="flex items-center justify-between w-full">
           <Label className="text-white font-semibold text-lg">Chats</Label>
-          <AddFriendDropdown room={currentUserRoomResponse?.data!} />
+          <AddFriendDropdown friends={[]} />
         </div>
         <div className="relative flex w-full h-full">
           <Input

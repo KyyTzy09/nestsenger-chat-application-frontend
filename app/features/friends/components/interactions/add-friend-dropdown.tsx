@@ -13,17 +13,13 @@ import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
 import RoomCard from "~/features/room/components/cards/room-card";
 import AddFriendDialog from "../add-friend-dialog";
+import FriendCard from "../cards/friend-card";
 
 interface AddFriendDropdownProps {
-  room:
-    | {
-        room: RoomType;
-        alias?: FriendType | UserType | null;
-      }[]
-    | [];
+  friends: FriendType[];
 }
 
-export default function AddFriendDropdown({ room }: AddFriendDropdownProps) {
+export default function AddFriendDropdown({ friends }: AddFriendDropdownProps) {
   const [showDialog, setShowDialog] = React.useState<boolean>(false);
   return (
     <>
@@ -61,7 +57,7 @@ export default function AddFriendDropdown({ room }: AddFriendDropdownProps) {
               </div>
               <Label className="font-semibold text-white">Tambah Teman</Label>
             </Button>
-            <RoomCard data={room} />
+            <FriendCard data={friends} />
           </section>
         </DropdownMenuContent>
       </DropdownMenu>
