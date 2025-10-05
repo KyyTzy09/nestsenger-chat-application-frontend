@@ -38,12 +38,12 @@ export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
             />
           </div>
           <div className="flex flex-col items-center justify-center w-full text-white">
-            <p className="font-bold text-xl">
+            <p className="font-bold text-xl text-center">
               {alias
                 ? (alias as UserType)?.email || (alias as FriendType)?.alias
                 : ""}
             </p>
-            <p className="text-sm font-sans">
+            <p className="text-sm text-center font-sans">
               ~
               {alias
                 ? (alias as UserType)?.profile?.userName ||
@@ -84,7 +84,7 @@ export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
             />
           </div>
           <div className="flex items-center justify-center w-full text-white gap-2">
-            <p className="font-bold text-xl">{roomName}</p>
+            <p className="font-bold text-xl text-center">{roomName}</p>
             <Button className="flex items-center justify-center w-7 h-7 bg-transparent hover:bg-[#202020] p-1">
               <PencilIcon className="w-full h-full" />
             </Button>

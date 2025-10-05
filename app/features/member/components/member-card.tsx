@@ -49,8 +49,8 @@ export default function MemberCard({ data, currentUserId }: MemberCardData) {
               />
             </section>
             <section className="flex flex-col items-center justify-start w-full h-full p-1">
-              <div className="flex flex-col items-start justify-between w-full text-sm text-white">
-                <p>
+              <div className="flex flex-col items-start justify-start w-full text-sm text-white">
+                <p className="text-start line-clamp-1">
                   {generateMemberName(
                     userId,
                     alias

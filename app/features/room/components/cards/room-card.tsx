@@ -39,7 +39,7 @@ export default function RoomCard({ data }: RoomCardProps) {
                 className="w-full h-full"
               />
             </section>
-            <RoomLastChatSection room={room} alias={alias!} />
+            <RoomLastChatSection room={room!} alias={alias!} />
           </Link>
         );
       })}

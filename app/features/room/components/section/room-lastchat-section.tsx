@@ -16,19 +16,10 @@ export default function RoomLastChatSection({
   room,
   alias,
 }: RoomLastChatSectionProps) {
-  const {
-    roomName,
-    type: roomType,
-    lastChat: {
-      updatedAt,
-      message,
-      userId: senderId,
-      sender: { email: senderEmail },
-    },
-  } = room;
+  const { roomName, type: roomType } = room;
 
   const { data: friendResponse, isPending: onFriendLoading } = useGetFriendById(
-    { friendId: senderId }
+    { friendId: room.lastChat?.userId }
   );
   const { data: profileResponse, isPending: onProfileLoading } =
     useGetProfile();
@@ -38,10 +29,10 @@ export default function RoomLastChatSection({
     if (roomType === RoomTypeEnum.GROUP) {
       if (friendResponse?.data) {
         result = friendResponse.data.alias + ": ";
-      } else if (profileResponse?.data.userId === senderId) {
+      } else if (profileResponse?.data.userId === room?.lastChat?.userId) {
         result = "Anda :";
       } else {
-        result = "~" +senderEmail + ": ";
+        result =  room?.lastChat?.sender?.email ? "~" + room?.lastChat?.sender?.email + ": " : "";
       }
     } else {
       result = "";
@@ -51,18 +42,20 @@ export default function RoomLastChatSection({
 
   return (
     <section className="flex flex-col items-center justify-start w-full h-full p-1">
-      <div className="flex w-full items-center justify-between text-sm text-white font-semibold">
-        <p>
+      <div className="flex w-full items-start justify-between text-sm text-white font-semibold">
+        <p className="max-w-40 truncate">
           {roomType === RoomTypeEnum.PRIVATE && alias
             ? (alias as FriendType).alias || (alias as UserType).email
             : roomName}
         </p>
         <p className="text-[12px] font-normal">
-          {room.lastChat ? new Date(updatedAt).toLocaleTimeString() : ""}
+          {room?.lastChat
+            ? new Date(room.lastChat?.updatedAt!).toLocaleTimeString()
+            : ""}
         </p>
       </div>
       <div className="flex items-center justify-start w-full text-[14px] text-gray-300 gap-1">
-        <p className="line-clamp-1">{`${displayLastChatData()} ${message}`}</p>
+        <p className="line-clamp-1">{`${displayLastChatData()} ${room?.lastChat?.message || ""}`}</p>
       </div>
     </section>
   );
