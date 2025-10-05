@@ -32,7 +32,9 @@ export default function RoomLastChatSection({
       } else if (profileResponse?.data.userId === room?.lastChat?.userId) {
         result = "Anda :";
       } else {
-        result =  room?.lastChat?.sender?.email ? "~" + room?.lastChat?.sender?.email + ": " : "";
+        result = room?.lastChat?.sender?.email
+          ? "~" + room?.lastChat?.sender?.email + ": "
+          : "";
       }
     } else {
       result = "";

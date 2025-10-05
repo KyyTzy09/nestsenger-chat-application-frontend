@@ -17,6 +17,14 @@ export const useCreateOrGetRoom = () => {
     })
 }
 
+export const useGetCurrentUserRoom = () => {
+    return useQuery({
+        queryKey: ['current-room'],
+        queryFn: async () => await RoomService.getCurrentUserRoom(),
+        staleTime: 1000 * 60 * 2
+    })
+}
+
 export const useGetUserRoom = () => {
     return useQuery({
         queryKey: ['user-room'],
