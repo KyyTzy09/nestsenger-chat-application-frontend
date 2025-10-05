@@ -13,9 +13,13 @@ interface RoomInfoSectionProps {
     room: RoomType;
     alias: FriendType | UserType | null;
   };
+  showImagePreviewChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
+export default function RoomInfoSection({
+  data,
+  showImagePreviewChange,
+}: RoomInfoSectionProps) {
   const {
     room: { type: roomType, createdAt, members, roomName },
     alias,
@@ -25,7 +29,10 @@ export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
       {roomType === RoomTypeEnum.PRIVATE ? (
         // Private
         <>
-          <div className="flex w-full items-center justify-center">
+          <button
+            onClick={() => showImagePreviewChange(true)}
+            className="flex w-full items-center justify-center"
+          >
             <img
               src={
                 alias
@@ -36,7 +43,7 @@ export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
               alt="profil"
               className="w-24 h-24 rounded-full"
             />
-          </div>
+          </button>
           <div className="flex flex-col items-center justify-center w-full text-white">
             <p className="font-bold text-xl text-center">
               {alias
@@ -76,13 +83,16 @@ export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
       ) : (
         // Group
         <>
-          <div className="flex w-full items-center justify-center">
+          <button
+            onClick={() => showImagePreviewChange(true)}
+            className="flex w-full items-center justify-center"
+          >
             <img
               src={defaultImage}
               alt="avatar"
               className="w-24 h-24 rounded-full"
             />
-          </div>
+          </button>
           <div className="flex items-center justify-center w-full text-white gap-2">
             <p className="font-bold text-xl text-center">{roomName}</p>
             <Button className="flex items-center justify-center w-7 h-7 bg-transparent hover:bg-[#202020] p-1">
@@ -99,16 +109,12 @@ export default function RoomInfoSection({ data }: RoomInfoSectionProps) {
             </div>
             <div className="flex flex-col items-start justify-center w-full">
               <p className="text-gray-300">Deskripsi :</p>
-              <p className="text-white">
-                {"Deskripsi grup"}
-              </p>
+              <p className="text-white">{"Deskripsi grup"}</p>
             </div>
           </div>
           <Separator />
           <div className="flex self-end-safe w-full">
-            <Button className="bg-[#252525]">
-                Keluar dari grup
-            </Button>
+            <Button className="bg-[#252525]">Keluar dari grup</Button>
           </div>
         </>
       )}

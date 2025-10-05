@@ -1,4 +1,6 @@
+import { AnimatePresence } from "motion/react";
 import React from "react";
+import PreviewImageModal from "shared/components/modals/preview-modal";
 import { defaultImage } from "shared/constants/image-default";
 import { RoomTypeEnum } from "shared/enums/room-type";
 import { Label } from "shared/shadcn/label";
@@ -20,18 +22,65 @@ interface ChatNavbarProps {
   currentUserId: string;
 }
 
-export default function ChatNavbar({ roomInfo, memberInfo, currentUserId }: ChatNavbarProps) {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false)
+export default function ChatNavbar({
+  roomInfo,
+  memberInfo,
+  currentUserId,
+}: ChatNavbarProps) {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [showPreview, setShowPreview] = React.useState<boolean>(false);
+
   const {
     room: { roomName, type },
     alias,
   } = roomInfo;
 
+  const previewImageUrl = (): string => {
+    let result = "";
+    if (type === RoomTypeEnum.GROUP) {
+      result = defaultImage;
+    } else {
+      if (alias && (alias as FriendType)) {
+        result = (alias as FriendType)?.friend?.avatar;
+      } else {
+        result = (alias as UserType)?.profile?.avatar;
+      }
+    }
+    return result;
+  };
+
+  React.useEffect(() => {
+    if (defaultImage === previewImageUrl()) {
+      setShowPreview(false);
+    }
+  }, [setShowPreview, previewImageUrl, isOpen]);
+
   return (
     <>
-      <RoomInfoDropdown open={isOpen} onOpenChange={setIsOpen} info={roomInfo} member={memberInfo} currentUserId={currentUserId} />
+      <AnimatePresence>
+        {showPreview && defaultImage !== previewImageUrl() && (
+          <PreviewImageModal
+            isOpen={showPreview}
+            setIsPreviewAction={setShowPreview}
+            image={previewImageUrl()}
+            width={700}
+            height={700}
+          />
+        )}
+      </AnimatePresence>
+      <RoomInfoDropdown
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        showImagePreviewChange={setShowPreview}
+        info={roomInfo}
+        member={memberInfo}
+        currentUserId={currentUserId}
+      />
       <nav className="flex items-center justify-between w-full h-[70px] bg-[#252525] border border-black p-5">
-        <button onClick={() => setIsOpen(true)} className="group flex items-center justify-start w-full h-full max-w-[80%] gap-5">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="group flex items-center justify-start w-full h-full max-w-[80%] gap-5"
+        >
           <div className="w-10 h-10">
             <img
               src={

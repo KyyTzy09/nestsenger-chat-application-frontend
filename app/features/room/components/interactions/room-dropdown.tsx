@@ -29,6 +29,7 @@ interface RoomInfoDropDownProps {
     alias: FriendType | UserType | null;
   }[];
   currentUserId: string;
+  showImagePreviewChange : React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function RoomInfoDropdown({
@@ -37,6 +38,7 @@ export default function RoomInfoDropdown({
   info,
   member,
   currentUserId,
+  showImagePreviewChange
 }: RoomInfoDropDownProps) {
   const [openedTab, setOpenedTab] = React.useState<"info" | "media" | "member">(
     "info"
@@ -113,7 +115,7 @@ export default function RoomInfoDropdown({
             >
               <XIcon className="w-full h-full" />
             </Button>
-            {openedTab === "info" && <RoomInfoSection data={info} />}
+            {openedTab === "info" && <RoomInfoSection data={info} showImagePreviewChange={showImagePreviewChange} />}
             {openedTab === "member" && Array.isArray(member) && (
               <RoomMemberSection data={member} currentUserId={currentUserId} />
             )}
