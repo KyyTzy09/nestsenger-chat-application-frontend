@@ -100,7 +100,7 @@ export default function RoomInfoDropdown({
           }}
           className="absolute flex min-w-[480px] h-[30rem] z-10 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
         >
-          <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]/90">
+          <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]/70 backdrop-blur">
             <div className="flex flex-col items-center justify-start w-full gap-2">
               {dropDownItems.map(
                 ({ Icon, text, tab, onClickEvent, enable }, i) => {

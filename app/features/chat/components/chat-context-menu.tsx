@@ -1,4 +1,4 @@
-import { CopyIcon, ReplyIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, PlusIcon, ReplyIcon, Trash2Icon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { Button } from "shared/shadcn/button";
@@ -21,8 +21,8 @@ export default function ChatContextMenu({
   position,
   setPosition,
 }: ChatContextMenuProps) {
+  // Chat context handle
   const chatContextMenuRef = React.useRef<HTMLDivElement>(null);
-
   React.useEffect(() => {
     if (open && position && chatContextMenuRef.current) {
       const { innerWidth, innerHeight } = window;
@@ -54,6 +54,8 @@ export default function ChatContextMenu({
     document.addEventListener("mousedown", handleClickOutSide);
   }, [onClose]);
 
+  // Menu Item Handle
+  const reactionEmojiItems = ["👍", "❤", "😂", "😮", "😢", "🙏"];
   return (
     <AnimatePresence>
       {open && (
@@ -77,6 +79,22 @@ export default function ChatContextMenu({
               left: position?.x,
             }}
           >
+            <section className="flex items-center justify-between">
+              {reactionEmojiItems.map((e, i) => {
+                return (
+                  <Button
+                    className="flex items-center text-xl justify-center w-10 h-10 bg-transparent p-0"
+                    key={i}
+                  >
+                    {e}
+                  </Button>
+                );
+              })}
+              <Button className="flex items-center text-xl justify-center w-10 h-10 bg-transparent p-0">
+                <PlusIcon />
+              </Button>
+            </section>
+            <Separator className="opacity-70" />
             <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
               <ReplyIcon />
               Reply
@@ -85,10 +103,10 @@ export default function ChatContextMenu({
               <CopyIcon />
               Copy
             </Button>
-            <Separator />
+            <Separator className="opacity-70" />
             <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
-                <Trash2Icon/>
-                Hapus 
+              <Trash2Icon />
+              Hapus
             </Button>
           </motion.div>
         </>
