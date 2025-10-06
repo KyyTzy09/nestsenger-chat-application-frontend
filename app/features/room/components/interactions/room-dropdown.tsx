@@ -29,7 +29,7 @@ interface RoomInfoDropDownProps {
     alias: FriendType | UserType | null;
   }[];
   currentUserId: string;
-  showImagePreviewChange : React.Dispatch<React.SetStateAction<boolean>>
+  showImagePreviewChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function RoomInfoDropdown({
@@ -38,8 +38,9 @@ export default function RoomInfoDropdown({
   info,
   member,
   currentUserId,
-  showImagePreviewChange
+  showImagePreviewChange,
 }: RoomInfoDropDownProps) {
+  const roomDropDownRef = React.useRef<HTMLDivElement>(null);
   const [openedTab, setOpenedTab] = React.useState<"info" | "media" | "member">(
     "info"
   );
@@ -70,12 +71,26 @@ export default function RoomInfoDropdown({
 
   React.useEffect(() => {
     setOpenedTab("info");
-  }, [ open, onOpenChange,info, setOpenedTab]);
+  }, [open, onOpenChange, info, setOpenedTab]);
+
+  React.useEffect(() => {
+    const handleClickOutSide = (e: MouseEvent) => {
+      if (
+        roomDropDownRef.current &&
+        !roomDropDownRef.current.contains(e.target as Node)
+      ) {
+        onOpenChange(false);
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutSide);
+  }, [onOpenChange]);
 
   return (
     <AnimatePresence>
       {open && (
-        <motion.aside
+        <motion.div
+          ref={roomDropDownRef}
           initial={{ opacity: 0, translateY: -100 }}
           animate={{ opacity: 100, translateY: 0 }}
           exit={{ opacity: 0, translateY: -100 }}
@@ -108,19 +123,17 @@ export default function RoomInfoDropdown({
             </div>
           </section>
           <section className="relative w-[70%] h-full bg-[#303030] py-4 px-5 overflow-y-auto">
-            <Button
-              onClick={() => onOpenChange(false)}
-              className="absolute w-4 h-5 top-1 right-1 bg-transparent"
-              title="close"
-            >
-              <XIcon className="w-full h-full" />
-            </Button>
-            {openedTab === "info" && <RoomInfoSection data={info} showImagePreviewChange={showImagePreviewChange} />}
+            {openedTab === "info" && (
+              <RoomInfoSection
+                data={info}
+                showImagePreviewChange={showImagePreviewChange}
+              />
+            )}
             {openedTab === "member" && Array.isArray(member) && (
               <RoomMemberSection data={member} currentUserId={currentUserId} />
             )}
           </section>
-        </motion.aside>
+        </motion.div>
       )}
     </AnimatePresence>
   );

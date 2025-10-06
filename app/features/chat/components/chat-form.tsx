@@ -37,7 +37,7 @@ export default function ChatForm({ roomId }: ChatFormProps) {
 
   return (
     <>
-      <ChatEmojiPicker isOpen={showEmoji} onSelect={setMessage} />
+      <ChatEmojiPicker isOpen={showEmoji} onClose={() => setShowEmoji(false)} onSelect={setMessage} />
       <form
         onSubmit={handleSubmit}
         className="flex items-end justify-between w-full h-full p-3 gap-4"
