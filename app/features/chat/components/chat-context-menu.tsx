@@ -1,0 +1,98 @@
+import { CopyIcon, ReplyIcon, Trash2Icon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import React from "react";
+import { Button } from "shared/shadcn/button";
+import { Separator } from "shared/shadcn/separator";
+
+interface ChatContextMenuProps {
+  open: boolean;
+  chatId: string;
+  position: { x: number; y: number };
+  setPosition: React.Dispatch<
+    React.SetStateAction<{ x: number; y: number } | null>
+  >;
+  onClose: () => void;
+}
+
+export default function ChatContextMenu({
+  chatId,
+  onClose,
+  open,
+  position,
+  setPosition,
+}: ChatContextMenuProps) {
+  const chatContextMenuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (open && position && chatContextMenuRef.current) {
+      const { innerWidth, innerHeight } = window;
+      const menuRect = chatContextMenuRef.current.getBoundingClientRect();
+      let x = position.x;
+      let y = position.y;
+
+      if (x + menuRect.width > innerWidth) {
+        x = innerWidth - menuRect.width - 8;
+      }
+
+      if (y + menuRect.height > innerHeight) {
+        y = innerHeight - menuRect.height - 8;
+      }
+
+      setPosition({ x, y });
+    }
+  }, [open, position]);
+
+  React.useEffect(() => {
+    const handleClickOutSide = (e: MouseEvent) => {
+      if (
+        chatContextMenuRef.current &&
+        !chatContextMenuRef.current.contains(e.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutSide);
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            className="fixed inset-0 z-40 bg-transparent"
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+          <motion.div
+            ref={chatContextMenuRef}
+            initial={{ opacity: 0, translateY: -20 }}
+            animate={{ opacity: 1, scale: 1, translateY: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.15 }}
+            className="fixed z-50 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur p-2 gap-1"
+            style={{
+              top: position?.y,
+              left: position?.x,
+            }}
+          >
+            <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
+              <ReplyIcon />
+              Reply
+            </Button>
+            <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
+              <CopyIcon />
+              Copy
+            </Button>
+            <Separator />
+            <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
+                <Trash2Icon/>
+                Hapus 
+            </Button>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
