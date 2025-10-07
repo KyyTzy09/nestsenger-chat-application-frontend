@@ -101,7 +101,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                     </p>
                   </div>
                 )}
-                {parent && <ChatParentSection chatId={chatId} />}
+                {parent && <ChatParentSection currentUserId={userId} chatId={chatId} />}
                 <p
                   className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
                 >

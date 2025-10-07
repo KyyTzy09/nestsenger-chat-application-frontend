@@ -72,7 +72,7 @@ export default function PrivateChatCard({
                 className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-20 h-auto text-white p-2 rounded-sm gap-1 shadow`}
                 key={chatId}
               >
-                {parent && <ChatParentSection chatId={chatId} />}
+                {parent && <ChatParentSection currentUserId={userId} chatId={chatId} />}
                 <p
                   className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-all`}
                 >
