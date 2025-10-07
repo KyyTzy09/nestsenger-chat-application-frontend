@@ -4,8 +4,7 @@ import type { ChatType } from "shared/types/chat-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
 import ChatParentSection from "../sections/chat-parent-section";
-import ChatContextMenu from "../chat-context-menu";
-import { toast } from "sonner";
+import ChatMenu from "../chat-menu";
 
 interface PrivateChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
@@ -16,7 +15,7 @@ export default function PrivateChatCard({
   data,
   userId,
 }: PrivateChatCardProps) {
-  // Chat context menu handle
+  // Chat menu handle
   const [showMenu, setShowMenu] = React.useState<string>("");
   const [menuPosition, setMenuPosition] = React.useState<{
     x: number;
@@ -103,7 +102,7 @@ export default function PrivateChatCard({
                   className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
               </div>
-              <ChatContextMenu
+              <ChatMenu
                 open={showMenu === chatId}
                 chatParent={{
                   parentId: chatId,

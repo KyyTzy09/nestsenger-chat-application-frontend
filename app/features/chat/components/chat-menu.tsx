@@ -1,11 +1,11 @@
 import { CopyIcon, PlusIcon, ReplyIcon, Trash2Icon } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m, motion } from "motion/react";
 import React from "react";
 import { Button } from "shared/shadcn/button";
 import { Separator } from "shared/shadcn/separator";
 import { useChatParentDataStore } from "../stores/chat-store";
 
-interface ChatContextMenuProps {
+interface ChatMenuProps {
   open: boolean;
   chatParent: {
     parentId: string;
@@ -20,19 +20,19 @@ interface ChatContextMenuProps {
   onClose: () => void;
 }
 
-export default function ChatContextMenu({
+export default function ChatMenu({
   chatParent,
   onClose,
   open,
   position,
   setPosition,
-}: ChatContextMenuProps) {
+}: ChatMenuProps) {
   // Chat context handle
-  const chatContextMenuRef = React.useRef<HTMLDivElement>(null);
+  const chatMenuRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
-    if (open && position && chatContextMenuRef.current) {
+    if (open && position && chatMenuRef.current) {
       const { innerWidth, innerHeight } = window;
-      const menuRect = chatContextMenuRef.current.getBoundingClientRect();
+      const menuRect = chatMenuRef.current.getBoundingClientRect();
       let x = position.x;
       let y = position.y;
 
@@ -51,8 +51,8 @@ export default function ChatContextMenu({
   React.useEffect(() => {
     const handleClickOutSide = (e: MouseEvent) => {
       if (
-        chatContextMenuRef.current &&
-        !chatContextMenuRef.current.contains(e.target as Node)
+        chatMenuRef.current &&
+        !chatMenuRef.current.contains(e.target as Node)
       ) {
         onClose();
       }
@@ -63,10 +63,31 @@ export default function ChatContextMenu({
   // Menu Item Handle
   const { setParent } = useChatParentDataStore();
   const reactionEmojiItems = ["👍", "❤", "😂", "😮", "😢", "🙏"];
-  const handleReply = () => {
-    setParent({ parent: chatParent });
-    onClose();
-  };
+  const chatButtonMenuItems = [
+    {
+      Icon: ReplyIcon,
+      text: "Balas",
+      action: () => {
+        setParent({ parent: chatParent });
+        onClose();
+      },
+    },
+    {
+      Icon: CopyIcon,
+      text: "Salin",
+      action: () => {
+        navigator.clipboard.writeText(chatParent?.message);
+        onClose();
+      },
+    },
+    {
+      Icon: Trash2Icon,
+      text: "Hapus Pesan",
+      action: () => {
+        onClose();
+      },
+    },
+  ];
 
   return (
     <AnimatePresence>
@@ -80,7 +101,7 @@ export default function ChatContextMenu({
             exit={{ opacity: 0 }}
           />
           <motion.div
-            ref={chatContextMenuRef}
+            ref={chatMenuRef}
             initial={{ opacity: 0, translateY: -20 }}
             animate={{ opacity: 1, scale: 1, translateY: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -107,22 +128,18 @@ export default function ChatContextMenu({
               </Button>
             </section>
             <Separator className="opacity-70" />
-            <Button
-              onClick={handleReply}
-              className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
-            >
-              <ReplyIcon />
-              Reply
-            </Button>
-            <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
-              <CopyIcon />
-              Copy
-            </Button>
-            <Separator className="opacity-70" />
-            <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
-              <Trash2Icon />
-              Hapus
-            </Button>
+            {chatButtonMenuItems.map(({ Icon, action, text }, i) => {
+              return (
+                <Button
+                  key={i}
+                  onClick={action}
+                  className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+                >
+                  <Icon />
+                  {text}
+                </Button>
+              );
+            })}
           </motion.div>
         </>
       )}

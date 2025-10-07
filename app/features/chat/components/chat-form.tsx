@@ -69,12 +69,12 @@ export default function ChatForm({ roomId }: ChatFormProps) {
         </div>
         <div className="flex flex-col items-center justify-start w-full h-auto">
           {chatParentState?.parentId && (
-            <section className="flex items-start justify-between w-full h-auto p-2 bg-gray-500/40 rounded-md border-l-[5px] border-blue-700 break-words">
-              <div className="flex flex-col items-start justify-between w-full h-auto text-start">
+            <section className="flex items-center justify-between w-full h-auto p-2 bg-gray-500/40 rounded-md border-l-[5px] border-blue-700 gap-1">
+              <div className="flex flex-col items-start justify-between w-full text-start">
                 <p className="flex items-center justify-start w-full text-[12px] text-blue-500 font-semibold">
                   {chatParentState?.alias}
                 </p>
-                <p className="line-clamp- text-sm text-gray-300">
+                <p className="text-sm text-gray-300 break-all line-clamp-2">
                   {chatParentState?.message}
                 </p>
               </div>
