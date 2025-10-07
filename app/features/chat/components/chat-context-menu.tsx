@@ -3,10 +3,16 @@ import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { Button } from "shared/shadcn/button";
 import { Separator } from "shared/shadcn/separator";
+import { useChatParentDataStore } from "../stores/chat-store";
 
 interface ChatContextMenuProps {
   open: boolean;
-  chatId: string;
+  chatParent: {
+    parentId: string;
+    content?: string | null;
+    alias: string;
+    message: string;
+  };
   position: { x: number; y: number };
   setPosition: React.Dispatch<
     React.SetStateAction<{ x: number; y: number } | null>
@@ -15,7 +21,7 @@ interface ChatContextMenuProps {
 }
 
 export default function ChatContextMenu({
-  chatId,
+  chatParent,
   onClose,
   open,
   position,
@@ -55,7 +61,13 @@ export default function ChatContextMenu({
   }, [onClose]);
 
   // Menu Item Handle
+  const { setParent } = useChatParentDataStore();
   const reactionEmojiItems = ["👍", "❤", "😂", "😮", "😢", "🙏"];
+  const handleReply = () => {
+    setParent({ parent: chatParent });
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -95,7 +107,10 @@ export default function ChatContextMenu({
               </Button>
             </section>
             <Separator className="opacity-70" />
-            <Button className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm">
+            <Button
+              onClick={handleReply}
+              className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+            >
               <ReplyIcon />
               Reply
             </Button>

@@ -58,7 +58,10 @@ export default function PrivateChatCard({
     <div className="flex flex-col w-full h-full gap-2">
       {data?.map(
         (
-          { chat: { chatId, message, userId: senderId, createdAt, parent } },
+          {
+            chat: { chatId, message, userId: senderId, createdAt, parent },
+            alias,
+          },
           i
         ) => {
           return (
@@ -102,7 +105,15 @@ export default function PrivateChatCard({
               </div>
               <ChatContextMenu
                 open={showMenu === chatId}
-                chatId={chatId}
+                chatParent={{
+                  parentId: chatId,
+                  alias:
+                    alias && userId === senderId
+                      ? "Anda"
+                      : (alias as FriendType)?.alias ||
+                        (alias as UserType)?.email,
+                  message,
+                }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}
                 onClose={() => setShowMenu("")}
