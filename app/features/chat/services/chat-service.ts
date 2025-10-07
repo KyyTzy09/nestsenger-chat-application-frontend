@@ -10,7 +10,7 @@ export const ChatService = {
     async getChatParent(data: { chatId: string }) {
         return await apiClient<{ data: { chat: ChatType, alias: FriendType | UserType } }>({ url: `/chat/${data.chatId}/parent/get`, withCredentials: true })
     },
-    async createChat(data: { roomId: string, message: string }) {
+    async createChat(data: { roomId: string, message: string, parentId?: string }) {
         return await apiClient<{ data: ChatType }>({ url: '/chat/create/post', data, method: "post", withCredentials: true })
     }
 }

@@ -22,7 +22,7 @@ export const useCreateChat = (roomId: string,) => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['create-chat'],
-        mutationFn: async (data: { message: string }) => await ChatService.createChat({ message: data.message, roomId }),
+        mutationFn: async (data: { message: string, parentId?: string }) => await ChatService.createChat({ message: data.message, roomId, parentId: data.parentId }),
         onSuccess: () => {
             toast.success('Berhasil mengirim chat')
             queryClient.invalidateQueries({ queryKey: ['chat', roomId], refetchType: "all" })
