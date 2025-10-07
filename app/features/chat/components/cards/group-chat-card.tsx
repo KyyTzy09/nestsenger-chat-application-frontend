@@ -6,6 +6,7 @@ import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
 import { useCreateOrGetRoom } from "~/features/room/hooks/room-hooks";
 import ChatParentSection from "../sections/chat-parent-section";
+import ChatMenu from "../chat-menu";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
@@ -13,6 +14,19 @@ interface GroupChatCardProps {
 }
 
 export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
+  // Chat menu handle
+  const [showMenu, setShowMenu] = React.useState<string>("");
+  const [menuPosition, setMenuPosition] = React.useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const handleShowContextMenu = (e: React.MouseEvent, chatId: string) => {
+    e.preventDefault();
+    setMenuPosition({ x: e.clientX, y: e.clientY });
+    setShowMenu(chatId);
+  };
+
   const { mutate: createOrGetRoomMutate, isPending: onCreateOrGetRoomLoading } =
     useCreateOrGetRoom();
 
@@ -44,13 +58,16 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
     <div className="flex flex-col w-full h-full gap-2">
       {data?.map(
         (
-          { chat: { chatId, message, userId: senderId, createdAt, parent }, alias },
+          {
+            chat: { chatId, message, userId: senderId, createdAt, parent },
+            alias,
+          },
           i
         ) => {
           return (
             <div
               key={chatId}
-              className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} flex items-start w-full h-auto gap-2`}
+              className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2`}
             >
               {senderId !== userId && (
                 <button
@@ -71,6 +88,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                 </button>
               )}
               <section
+                onContextMenu={(e) => handleShowContextMenu(e, chatId)}
                 className={`${senderId === userId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-24 h-auto text-white p-2 rounded-sm shadow`}
               >
                 {senderId !== userId && (
@@ -113,6 +131,21 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                   className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
               </section>
+              <ChatMenu
+                open={showMenu === chatId}
+                chatParent={{
+                  parentId: chatId,
+                  alias:
+                    alias && userId === senderId
+                      ? "Anda"
+                      : (alias as FriendType)?.alias ||
+                        (alias as UserType)?.email,
+                  message,
+                }}
+                position={menuPosition!}
+                setPosition={setMenuPosition}
+                onClose={() => setShowMenu("")}
+              />
             </div>
           );
         }
