@@ -104,7 +104,9 @@ export default function RoomInfoSection({
             <div className="flex flex-col items-start justify-center w-full">
               <p className="text-gray-300">Dibuat </p>
               <p className="text-white break-words">
-                {new Date(createdAt).toLocaleString()}
+                {new Date(createdAt).toLocaleString('id-ID', {
+                  dateStyle : "full"
+                })}
               </p>
             </div>
             <div className="flex flex-col items-start justify-center w-full">
