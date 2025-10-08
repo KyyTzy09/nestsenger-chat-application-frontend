@@ -40,7 +40,6 @@ export default function RoomInfoDropdown({
   currentUserId,
   showImagePreviewChange,
 }: RoomInfoDropDownProps) {
-  const roomDropDownRef = React.useRef<HTMLDivElement>(null);
   const [openedTab, setOpenedTab] = React.useState<"info" | "media" | "member">(
     "info"
   );
@@ -73,67 +72,65 @@ export default function RoomInfoDropdown({
     setOpenedTab("info");
   }, [open, onOpenChange, info, setOpenedTab]);
 
-  React.useEffect(() => {
-    const handleClickOutSide = (e: MouseEvent) => {
-      if (
-        roomDropDownRef.current &&
-        !roomDropDownRef.current.contains(e.target as Node)
-      ) {
-        onOpenChange(false);
-      }
-    };
-    
-    document.addEventListener("mousedown", handleClickOutSide);
-  }, [onOpenChange]);
-
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
-          ref={roomDropDownRef}
-          initial={{ opacity: 0, translateY: -100 }}
-          animate={{ opacity: 100, translateY: 0 }}
-          exit={{ opacity: 0, translateY: -100 }}
-          transition={{
-            duration: 0.2,
-            ease: "easeInOut",
-          }}
-          className="absolute flex min-w-[480px] h-[30rem] z-10 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
-        >
-          <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]/70 backdrop-blur">
-            <div className="flex flex-col items-center justify-start w-full gap-2">
-              {dropDownItems.map(
-                ({ Icon, text, tab, onClickEvent, enable }, i) => {
-                  return (
-                    <>
-                      {enable && (
-                        <Button
-                          key={i}
-                          className={`${tab === openedTab ? "bg-[#353535]" : "bg-transparent"} flex items-center justify-start w-full h-10 hover:bg-[#353535] gap-3`}
-                          onClick={onClickEvent}
-                        >
-                          <Icon className="w-5 h-5" />
-                          <p className="font-normal">{text}</p>
-                        </Button>
-                      )}
-                    </>
-                  );
-                }
+        <>
+          <motion.div
+            className="fixed inset-0 z-40 bg-transparent"
+            onClick={() => onOpenChange(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
+          <motion.div
+            initial={{ opacity: 0, translateY: -100 }}
+            animate={{ opacity: 100, translateY: 0 }}
+            exit={{ opacity: 0, translateY: -100 }}
+            transition={{
+              duration: 0.2,
+              ease: "easeInOut",
+            }}
+            className="absolute flex min-w-[480px] h-[30rem] z-50 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
+          >
+            <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]/70 backdrop-blur">
+              <div className="flex flex-col items-center justify-start w-full gap-2">
+                {dropDownItems.map(
+                  ({ Icon, text, tab, onClickEvent, enable }, i) => {
+                    return (
+                      <>
+                        {enable && (
+                          <Button
+                            key={i}
+                            className={`${tab === openedTab ? "bg-[#353535]" : "bg-transparent"} flex items-center justify-start w-full h-10 hover:bg-[#353535] gap-3`}
+                            onClick={onClickEvent}
+                          >
+                            <Icon className="w-5 h-5" />
+                            <p className="font-normal">{text}</p>
+                          </Button>
+                        )}
+                      </>
+                    );
+                  }
+                )}
+              </div>
+            </section>
+            <section className="relative w-[70%] h-full bg-[#303030] py-4 px-5 overflow-y-auto">
+              {openedTab === "info" && (
+                <RoomInfoSection
+                  data={info}
+                  showImagePreviewChange={showImagePreviewChange}
+                />
               )}
-            </div>
-          </section>
-          <section className="relative w-[70%] h-full bg-[#303030] py-4 px-5 overflow-y-auto">
-            {openedTab === "info" && (
-              <RoomInfoSection
-                data={info}
-                showImagePreviewChange={showImagePreviewChange}
-              />
-            )}
-            {openedTab === "member" && Array.isArray(member) && (
-              <RoomMemberSection data={member} currentUserId={currentUserId} />
-            )}
-          </section>
-        </motion.div>
+              {openedTab === "member" && Array.isArray(member) && (
+                <RoomMemberSection
+                  data={member}
+                  currentUserId={currentUserId}
+                />
+              )}
+            </section>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );
