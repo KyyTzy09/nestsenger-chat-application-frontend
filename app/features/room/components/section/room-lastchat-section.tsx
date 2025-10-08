@@ -52,7 +52,10 @@ export default function RoomLastChatSection({
         </p>
         <p className="text-[12px] font-normal">
           {room?.lastChat
-            ? new Date(room.lastChat?.updatedAt!).toLocaleTimeString()
+            ? new Date(room?.lastChat?.createdAt).toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
             : ""}
         </p>
       </div>

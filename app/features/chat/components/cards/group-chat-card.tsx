@@ -101,7 +101,9 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                     </p>
                   </div>
                 )}
-                {parent && <ChatParentSection currentUserId={userId} chatId={chatId} />}
+                {parent && (
+                  <ChatParentSection currentUserId={userId} chatId={chatId} />
+                )}
                 <p
                   className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
                 >
@@ -124,7 +126,10 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                     ></button>
                   )}
                   <p className="text-gray-300">
-                    {new Date(createdAt).toLocaleTimeString()}
+                    {new Date(createdAt).toLocaleTimeString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </p>
                 </div>
                 <span
