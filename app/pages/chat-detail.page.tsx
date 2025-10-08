@@ -25,23 +25,34 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">
       {!isRoomInfoLoading && (
         <ChatNavbar
-          currentUserId={profileResponse?.data.userId || ''}
+          currentUserId={profileResponse?.data.userId || ""}
           roomInfo={roomInfoResponse?.data!}
           memberInfo={memberResponse?.data as []}
         />
       )}
-      <section className="w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
-        {roomInfoResponse?.data.room.type === RoomTypeEnum.PRIVATE ? (
-          <PrivateChatCard
-            userId={profileResponse?.data.userId!}
-            data={chatResponse?.data!}
-          />
-        ) : (
-          <GroupChatCard
-            userId={profileResponse?.data.userId!}
-            data={chatResponse?.data!}
-          />
-        )}
+      <section className="relative w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
+        {chatResponse?.data?.length! > 0 && chatResponse?.data.map(({ chats, date }) => {
+            return (
+              <div className="flex flex-col items-center w-full h-auto gap-5">
+                <div className="flex items-center justify-center w-full">
+                  <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
+                    {date}
+                  </p>
+                </div>
+                {roomInfoResponse?.data?.room?.type === RoomTypeEnum.PRIVATE ? (
+                  <PrivateChatCard
+                    userId={profileResponse?.data.userId!}
+                    data={chats}
+                  />
+                ) : (
+                  <GroupChatCard
+                    userId={profileResponse?.data.userId!}
+                    data={chats}
+                  />
+                )}
+              </div>
+            );
+          })}
       </section>
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
         <ChatForm roomId={chatId} />
