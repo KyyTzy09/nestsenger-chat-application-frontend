@@ -7,6 +7,7 @@ import { useGetChats } from "~/features/chat/hooks/chat-hook";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 import { useGetRoomById } from "~/features/room/hooks/room-hooks";
 import { useGetRoomMember } from "~/features/member/hooks/member-hook";
+import { generateDateText } from "shared/helpers/generate-date";
 
 interface ChatDetailPageProps {
   chatId: string;
@@ -36,7 +37,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
               <div className="flex flex-col items-center w-full h-auto gap-5">
                 <div className="flex items-center justify-center w-full">
                   <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
-                    {date}
+                    {generateDateText(date)}
                   </p>
                 </div>
                 {roomInfoResponse?.data?.room?.type === RoomTypeEnum.PRIVATE ? (
