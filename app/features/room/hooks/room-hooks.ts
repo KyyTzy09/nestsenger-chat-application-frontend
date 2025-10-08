@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { RoomService } from "../services/room-service"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
@@ -39,5 +39,22 @@ export const useGetRoomById = (data: { roomId: string }) => {
         queryFn: async () => await RoomService.getRoomById(data),
         staleTime: 1000 * 60 * 2,
         enabled: !!data.roomId
+    })
+}
+
+export const useOutGroup = () => {
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ['out-group'],
+        mutationFn: async (data: { roomId: string }) => await RoomService.outGroup(data),
+        onSuccess: () => {
+            toast.success("Berhasil keluar dari grup")
+            queryClient.invalidateQueries({ queryKey: ['room'], refetchType: "all" })
+            navigate('/chat')
+        },
+        onError: (err) => {
+            toast.error(err.message || "Gagal keluar grup")
+        }
     })
 }

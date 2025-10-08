@@ -19,5 +19,8 @@ export const RoomService = {
     },
     async createPrivateRoom(data: { userIdB: string }) {
         return await apiClient<{ statusCode: number, data: RoomType }>({ url: "/room/private-room/post", data, withCredentials: true, method: "post" })
+    },
+    async outGroup(data: { roomId: string }) {
+        return await apiClient<{ message: string, data: MemberType }>({ url: `/room/${data.roomId}/out-group/delete`, withCredentials: true, method: "delete" })
     }
 }
