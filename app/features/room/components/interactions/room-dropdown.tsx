@@ -77,7 +77,7 @@ export default function RoomInfoDropdown({
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-40 bg-transparent"
+            className="fixed inset-0 z-30 bg-transparent"
             onClick={() => onOpenChange(false)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -91,7 +91,7 @@ export default function RoomInfoDropdown({
               duration: 0.2,
               ease: "easeInOut",
             }}
-            className="absolute flex min-w-[480px] h-[30rem] z-50 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
+            className="absolute flex min-w-[480px] h-[30rem] z-40 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
           >
             <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]/70 backdrop-blur">
               <div className="flex flex-col items-center justify-start w-full gap-2">
