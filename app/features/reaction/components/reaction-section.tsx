@@ -23,24 +23,23 @@ export default function ReactionSection({
 
   return (
     <section className="flex items-center justify-between">
-      {userReactionResponse?.data &&
-        reactionEmojiItems.map((e, i) => {
-          return (
-            <Button
-              onClick={() => {
-                createReactionMutate({
-                  chatId,
-                  content: e,
-                });
-                onClose();
-              }}
-              className={`${e === userReactionResponse?.data?.content ? "bg-gray-500/70" : "bg-transparent"} flex items-center text-xl justify-center w-10 h-10 hover:bg-gray-500/50 p-0`}
-              key={i}
-            >
-              {e}
-            </Button>
-          );
-        })}
+      {reactionEmojiItems.map((e, i) => {
+        return (
+          <Button
+            onClick={() => {
+              createReactionMutate({
+                chatId,
+                content: e,
+              });
+              onClose();
+            }}
+            className={`${userReactionResponse?.data! && e === userReactionResponse?.data?.content ? "bg-gray-500/70" : "bg-transparent"} flex items-center text-xl justify-center w-10 h-10 hover:bg-gray-500/50 p-0`}
+            key={i}
+          >
+            {e}
+          </Button>
+        );
+      })}
       <Button className="flex items-center text-xl justify-center w-10 h-10 bg-transparent p-0">
         <PlusIcon />
       </Button>

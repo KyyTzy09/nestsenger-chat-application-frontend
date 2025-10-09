@@ -1,13 +1,15 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ReactionService } from "../services/reaction-service"
 import { toast } from "sonner"
 
 export const useCreateReaction = () => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['create-reaction'],
         mutationFn: async (data: { chatId: string, content: string }) => await ReactionService.createReaction(data),
-        onSuccess: () => {
-
+        onSuccess: (data, v) => {
+            queryClient.invalidateQueries({ queryKey: ['user-reaction', v.chatId], refetchType: 'all' })
+            queryClient.invalidateQueries({ queryKey: ['reaction', v.chatId], refetchType: 'all' })
         },
         onError: () => {
             toast.error("Gagal mengirim reaksi")
