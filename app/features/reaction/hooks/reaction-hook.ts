@@ -22,3 +22,11 @@ export const useGetChatReactions = (data: { chatId: string }) => {
         staleTime: 1000 * 60 * 1
     })
 }
+
+export const useGetUserReaction = (data: { chatId: string }) => {
+    return useQuery({
+        queryKey: ['user-reaction', data.chatId],
+        queryFn: async () => await ReactionService.getUserReaction(data),
+        staleTime: 1000 * 60 * 1
+    })
+}

@@ -8,5 +8,8 @@ export const ReactionService = {
     },
     async getChatReactions(data: { chatId: string }) {
         return await apiClient<{ statusCode: string, data: { reaction: any, alias: FriendType | UserType | null }[] | [] }>({ url: `/reaction/${data.chatId}/chat/get`, withCredentials: true })
+    },
+    async getUserReaction(data: { chatId: string }) {
+        return await apiClient<{ statusCode: string, data: any }>({ url: `/reaction/${data.chatId}/user/get`, withCredentials: true })
     }
 }
