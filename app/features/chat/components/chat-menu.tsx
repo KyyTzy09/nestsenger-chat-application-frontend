@@ -4,6 +4,8 @@ import React from "react";
 import { Button } from "shared/shadcn/button";
 import { Separator } from "shared/shadcn/separator";
 import { useChatParentDataStore } from "../stores/chat-store";
+import { useCreateReaction } from "~/features/reaction/hooks/reaction-hook";
+import ReactionSection from "~/features/reaction/components/reaction-section";
 
 interface ChatMenuProps {
   open: boolean;
@@ -112,21 +114,7 @@ export default function ChatMenu({
               left: position?.x,
             }}
           >
-            <section className="flex items-center justify-between">
-              {reactionEmojiItems.map((e, i) => {
-                return (
-                  <Button
-                    className="flex items-center text-xl justify-center w-10 h-10 bg-transparent p-0"
-                    key={i}
-                  >
-                    {e}
-                  </Button>
-                );
-              })}
-              <Button className="flex items-center text-xl justify-center w-10 h-10 bg-transparent p-0">
-                <PlusIcon />
-              </Button>
-            </section>
+            <ReactionSection chatId={chatParent.parentId} onClose={onClose} />
             <Separator className="opacity-70" />
             {chatButtonMenuItems.map(({ Icon, action, text }, i) => {
               return (
