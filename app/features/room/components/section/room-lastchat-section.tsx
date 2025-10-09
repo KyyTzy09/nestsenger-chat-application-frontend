@@ -1,5 +1,6 @@
 import React from "react";
 import { RoomTypeEnum } from "shared/enums/room-type";
+import { generateDateText2 } from "shared/helpers/generate-date";
 import type { FriendType } from "shared/types/friend-type";
 import type { ProfileType } from "shared/types/profile-type";
 import type { RoomType } from "shared/types/room-type";
@@ -52,10 +53,7 @@ export default function RoomLastChatSection({
         </p>
         <p className="text-[12px] font-normal">
           {room?.lastChat
-            ? new Date(room?.lastChat?.createdAt).toLocaleTimeString("id-ID", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
+            ? generateDateText2({ date: new Date(room.lastChat.createdAt) })
             : ""}
         </p>
       </div>
