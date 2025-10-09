@@ -91,7 +91,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
               )}
               <section
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === userId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-24 h-auto text-white p-2 rounded-sm shadow`}
+                className={`${senderId === userId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
               >
                 {senderId !== userId && (
                   <div className="flex items-center w-full">

@@ -70,7 +70,7 @@ export default function PrivateChatCard({
             >
               <div
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-20 h-auto text-white p-2 rounded-sm gap-1 shadow`}
+                className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm gap-1 shadow`}
               >
                 {parent && (
                   <ChatParentSection currentUserId={userId} chatId={chatId} />
@@ -96,7 +96,7 @@ export default function PrivateChatCard({
                       className=" text-white underline text-[12px] hover:opacity-70"
                     ></button>
                   )}
-                  <p className="text-gray-300">
+                  <p className="text-gray-300 text-[0.6rem]">
                     {new Date(createdAt).toLocaleTimeString("id-ID", {
                       hour: "2-digit",
                       minute: "2-digit",
