@@ -59,7 +59,14 @@ export default function PrivateChatCard({
       {data?.map(
         (
           {
-            chat: { chatId, message, userId: senderId, createdAt, parent },
+            chat: {
+              chatId,
+              message,
+              userId: senderId,
+              createdAt,
+              parent,
+              reactions,
+            },
             alias,
           },
           i
@@ -67,7 +74,7 @@ export default function PrivateChatCard({
           return (
             <div
               key={chatId}
-              className={`${senderId === userId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto`}
+              className={`${senderId === userId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto ${reactions?.length > 0 ? "mb-5" : "mb-0"}`}
             >
               <div
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
@@ -107,7 +114,7 @@ export default function PrivateChatCard({
                 <span
                   className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
-                <ReactionModal chatId={chatId} />
+                {reactions?.length > 0 && <ReactionModal chatId={chatId} />}
               </div>
               <ChatMenu
                 open={showMenu === chatId}

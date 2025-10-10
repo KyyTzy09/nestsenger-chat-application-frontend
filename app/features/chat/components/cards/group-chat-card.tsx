@@ -62,7 +62,14 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
       {data?.map(
         (
           {
-            chat: { chatId, message, userId: senderId, createdAt, parent },
+            chat: {
+              chatId,
+              message,
+              userId: senderId,
+              createdAt,
+              parent,
+              reactions,
+            },
             alias,
           },
           i
@@ -70,7 +77,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
           return (
             <div
               key={chatId}
-              className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2`}
+              className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
             >
               {senderId !== userId && (
                 <button
