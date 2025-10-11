@@ -1,5 +1,8 @@
 import React from "react";
-import { useGetChatReactions } from "../hooks/reaction-hook";
+import {
+  useDeleteReactionById,
+  useGetChatReactions,
+} from "../hooks/reaction-hook";
 import { fa } from "zod/v4/locales";
 import { motion } from "motion/react";
 import { Button } from "shared/shadcn/button";
@@ -16,16 +19,13 @@ export default function ReactionModal({
   chatId,
   currentUserId,
 }: ReactionModalProps) {
+  // Display
   const reactionModalRef = React.useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = React.useState(false);
   const [modalPosition, setModalPosition] = React.useState<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
-
-  const { data: chatReactionResponse, isPending } = useGetChatReactions({
-    chatId,
-  });
 
   const handleShowModal = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -54,6 +54,14 @@ export default function ReactionModal({
       setModalPosition({ x, y });
     }
   }, [showModal, setModalPosition]);
+
+  // Query
+
+  const { data: chatReactionResponse, isPending } = useGetChatReactions({
+    chatId,
+  });
+  const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
+    useDeleteReactionById({ chatId });
 
   return (
     <>
@@ -130,9 +138,13 @@ export default function ReactionModal({
                 </section>
                 <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
                   {chatReactionResponse?.data.map(
-                    ({ reaction: { userId }, alias }) => {
+                    ({ reaction: { reactionId, userId }, alias }) => {
                       return (
                         <button
+                          onClick={() => {
+                            deleteReactionMutation({ reactionId });
+                            handleCloseModal()
+                          }}
                           disabled={currentUserId !== userId}
                           className={`${currentUserId === userId && "hover:bg-[#45494f]/50"} flex items-center justify-start-full h-14 p-2 gap-2 rounded-sm`}
                         >

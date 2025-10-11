@@ -40,8 +40,12 @@ export const useDeleteReactionById = (data: { chatId: string }) => {
         mutationKey: ['delete-reaction'],
         mutationFn: async (data: { reactionId: string }) => await ReactionService.deleteReactionById(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['reaction', data.chatId] })
-            queryClient.invalidateQueries({ queryKey: ['user-reaction', data.chatId] })
+            queryClient.invalidateQueries({ queryKey: ['chat'], refetchType: 'all' })
+            queryClient.refetchQueries({ queryKey: ['user-reaction', data.chatId], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ['reaction', data.chatId], refetchType: "all" })
+        },
+        onError: (err) => {
+            toast.error(err.message || "Gagal menghapus reaksi")
         }
     })
 }
