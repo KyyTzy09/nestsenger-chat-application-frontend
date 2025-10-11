@@ -10,6 +10,7 @@ import type { UserType } from "shared/types/user-type";
 import { defaultImage } from "shared/constants/image-default";
 import type { FriendType } from "shared/types/friend-type";
 import { reactionGroupper } from "shared/helpers/group-emoji";
+import type { ReactionType } from "shared/types/reaction-type";
 
 interface ReactionModalProps {
   chatId: string;
@@ -63,8 +64,22 @@ export default function ReactionModal({
   });
   const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
     useDeleteReactionById({ chatId });
-
+  // Groupping
   const grouppedReaction = reactionGroupper(chatReactionResponse?.data as []);
+
+  // Filtering
+  const [currentEmoji, setCurrentEmoji] = React.useState<string>("");
+
+  const filteredReaction = chatReactionResponse?.data?.filter(
+    ({ reaction }) => {
+      if (currentEmoji !== "") {
+        return reaction.content.includes(currentEmoji);
+      } else {
+        return true;
+      }
+    }
+  );
+
   return (
     <>
       {chatReactionResponse?.data! && !isPending && (
@@ -76,7 +91,7 @@ export default function ReactionModal({
           >
             <div className="flex items-center justify-center">
               {grouppedReaction?.length > 0 &&
-                grouppedReaction?.map(({ emoji, count }, i) => {
+                grouppedReaction?.map(({ emoji }, i) => {
                   return (
                     <p key={i} className="text-sm">
                       {emoji}
@@ -115,14 +130,18 @@ export default function ReactionModal({
                 }}
               >
                 <section className="flex items-center justify-start w-full min-h-10 overflow-x-auto custom-scrollbar gap-1">
-                  <Button className="flex items-center text-sm justify-center h-10 bg-transparent hover:bg-transparent p-1 px-2 font-normal">
+                  <Button
+                    onClick={() => setCurrentEmoji("")}
+                    className={`${currentEmoji === "" ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center h-10 bg-transparent rounded-b-none hover:bg-transparent p-1 px-2 font-normal transition-all`}
+                  >
                     <p>Semua {chatReactionResponse?.data?.length}</p>
                   </Button>
                   {grouppedReaction?.map(({ emoji, count }) => {
                     return (
                       <Button
+                        onClick={() => setCurrentEmoji(emoji)}
                         key={emoji}
-                        className="flex items-center text-sm justify-center w-10 h-10 bg-transparent hover:bg-transparent p-0 rounded-b-none"
+                        className={`${currentEmoji === emoji ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center w-10 h-10 bg-transparent hover:bg-transparent p-0 rounded-b-none transition-all`}
                       >
                         <p>
                           {emoji} {count}
@@ -132,10 +151,10 @@ export default function ReactionModal({
                   })}
                 </section>
                 <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
-                  {chatReactionResponse?.data.map(
+                  {filteredReaction?.map(
                     ({ reaction: { reactionId, userId }, alias }) => {
                       return (
-                        <button
+                        <motion.button
                           onClick={() => {
                             deleteReactionMutation({ reactionId });
                             handleCloseModal();
@@ -169,7 +188,7 @@ export default function ReactionModal({
                               </p>
                             )}
                           </div>
-                        </button>
+                        </motion.button>
                       );
                     }
                   )}
