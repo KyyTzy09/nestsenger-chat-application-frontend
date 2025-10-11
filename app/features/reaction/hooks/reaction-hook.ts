@@ -8,8 +8,9 @@ export const useCreateReaction = () => {
         mutationKey: ['create-reaction'],
         mutationFn: async (data: { chatId: string, content: string }) => await ReactionService.createReaction(data),
         onSuccess: (data, v) => {
-            queryClient.invalidateQueries({ queryKey: ['user-reaction', v.chatId], refetchType: 'all' })
+            queryClient.invalidateQueries({ queryKey: ['chat'], refetchType: 'all' })
             queryClient.invalidateQueries({ queryKey: ['reaction', v.chatId], refetchType: 'all' })
+            queryClient.invalidateQueries({ queryKey: ['user-reaction', v.chatId], refetchType: 'all' })
         },
         onError: () => {
             toast.error("Gagal mengirim reaksi")

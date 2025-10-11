@@ -145,7 +145,7 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
                 <span
                   className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
-                <ReactionModal chatId={chatId} />
+                <ReactionModal currentUserId={userId} chatId={chatId} />
               </section>
               <ChatMenu
                 open={showMenu === chatId}

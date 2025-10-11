@@ -114,7 +114,9 @@ export default function PrivateChatCard({
                 <span
                   className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
-                {reactions?.length > 0 && <ReactionModal chatId={chatId} />}
+                {reactions?.length > 0 && (
+                  <ReactionModal currentUserId={userId} chatId={chatId} />
+                )}
               </div>
               <ChatMenu
                 open={showMenu === chatId}
