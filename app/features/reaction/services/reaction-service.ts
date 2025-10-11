@@ -12,5 +12,8 @@ export const ReactionService = {
     },
     async getUserReaction(data: { chatId: string }) {
         return await apiClient<{ statusCode: string, data: ReactionType }>({ url: `/reaction/${data.chatId}/user/get`, withCredentials: true })
+    },
+    async deleteReactionById(data: { reactionId: string }) {
+        return await apiClient<{ statusCode: number }>({ url: `/reaction/${data.reactionId}/delete`, withCredentials: true, method: 'delete' })
     }
 }

@@ -33,3 +33,15 @@ export const useGetUserReaction = (data: { chatId: string }) => {
         staleTime: 1000 * 60 * 1
     })
 }
+
+export const useDeleteReactionById = (data: { chatId: string }) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ['delete-reaction'],
+        mutationFn: async (data: { reactionId: string }) => await ReactionService.deleteReactionById(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['reaction', data.chatId] })
+            queryClient.invalidateQueries({ queryKey: ['user-reaction', data.chatId] })
+        }
+    })
+}
