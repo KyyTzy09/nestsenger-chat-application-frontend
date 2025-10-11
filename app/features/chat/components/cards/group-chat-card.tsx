@@ -15,6 +15,7 @@ interface GroupChatCardProps {
 }
 
 export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
+  const prevChatLength = React.useRef<number>(0);
   // Chat menu handle
   const [showMenu, setShowMenu] = React.useState<string>("");
   const [menuPosition, setMenuPosition] = React.useState<{
@@ -54,7 +55,12 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
 
   React.useEffect(() => {
     setSelectedIndex([]);
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (data) {
+      if (data.length > prevChatLength.current) {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }
+      prevChatLength.current = data.length;
+    }
   }, [data, setSelectedIndex]);
 
   return (
