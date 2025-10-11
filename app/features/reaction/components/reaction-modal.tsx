@@ -4,7 +4,7 @@ import {
   useGetChatReactions,
 } from "../hooks/reaction-hook";
 import { fa } from "zod/v4/locales";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { Button } from "shared/shadcn/button";
 import type { UserType } from "shared/types/user-type";
 import { defaultImage } from "shared/constants/image-default";
@@ -103,99 +103,112 @@ export default function ReactionModal({
               {chatReactionResponse?.data?.length || 0}
             </p>
           </button>
-          {showModal && (
-            <>
-              {/* Modal Content */}
-              <motion.div
-                className="fixed inset-0 z-40 bg-transparent"
-                onClick={handleCloseModal}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              />
-              <motion.div
-                ref={reactionModalRef}
-                className="fixed z-50 flex flex-col w-[300px] max-h-[250px] bg-[#252525] text-white rounded-md shadow-lg p-2 gap-1 -translate-y-16 overflow-hidden"
-                initial={{
-                  opacity: 0,
-                  translateY: -50,
-                }}
-                animate={{
-                  opacity: 1,
-                  translateY: 0,
-                }}
-                style={{
-                  top: modalPosition.y,
-                  left: modalPosition.x,
-                }}
-              >
-                <section className="flex items-center justify-start w-full min-h-10 overflow-x-auto custom-scrollbar gap-1">
-                  <Button
-                    onClick={() => setCurrentEmoji("")}
-                    className={`${currentEmoji === "" ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center h-10 bg-transparent rounded-b-none hover:bg-transparent p-1 px-2 font-normal transition-all`}
-                  >
-                    <p>Semua {chatReactionResponse?.data?.length}</p>
-                  </Button>
-                  {grouppedReaction?.map(({ emoji, count }) => {
-                    return (
-                      <Button
-                        onClick={() => setCurrentEmoji(emoji)}
-                        key={emoji}
-                        className={`${currentEmoji === emoji ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center w-10 h-10 bg-transparent hover:bg-transparent p-0 rounded-b-none transition-all`}
-                      >
-                        <p>
-                          {emoji} {count}
-                        </p>
-                      </Button>
-                    );
-                  })}
-                </section>
-                <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
-                  {filteredReaction?.map(
-                    ({ reaction: { reactionId, userId }, alias }) => {
+          <AnimatePresence>
+            {showModal && (
+              <>
+                <motion.div
+                  className="fixed inset-0 z-40 bg-transparent"
+                  onClick={handleCloseModal}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                <motion.div
+                  ref={reactionModalRef}
+                  className="fixed z-50 flex flex-col w-[300px] max-h-[250px] bg-[#252525] text-white rounded-md shadow-lg p-2 gap-1 -translate-y-16 overflow-hidden"
+                  initial={{
+                    opacity: 0,
+                    translateY: -50,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    translateY: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    translateY: -50,
+                  }}
+                  style={{
+                    top: modalPosition.y,
+                    left: modalPosition.x,
+                  }}
+                >
+                  <section className="flex items-center justify-start w-full min-h-10 overflow-x-auto custom-scrollbar gap-1">
+                    <Button
+                      onClick={() => setCurrentEmoji("")}
+                      className={`${currentEmoji === "" ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center h-10 bg-transparent rounded-b-none hover:bg-transparent p-1 px-2 font-normal transition-all`}
+                    >
+                      <p>Semua {chatReactionResponse?.data?.length}</p>
+                    </Button>
+                    {grouppedReaction?.map(({ emoji, count }) => {
                       return (
-                        <motion.button
-                          onClick={() => {
-                            deleteReactionMutation({ reactionId });
-                            handleCloseModal();
-                          }}
-                          disabled={currentUserId !== userId}
-                          className={`${currentUserId === userId && "hover:bg-[#45494f]/50"} flex items-center justify-start-full h-14 p-2 gap-2 rounded-sm`}
+                        <Button
+                          onClick={() => setCurrentEmoji(emoji)}
+                          key={emoji}
+                          className={`${currentEmoji === emoji ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center w-10 h-10 bg-transparent hover:bg-transparent p-0 rounded-b-none transition-all`}
                         >
-                          <div className="min-w-10 h-10">
-                            <img
-                              src={
-                                alias
-                                  ? (alias as UserType)?.profile?.avatar ||
-                                    (alias as FriendType)?.friend?.avatar
-                                  : defaultImage
-                              }
-                              className="w-full h-full rounded-full"
-                              alt="avatar"
-                            />
-                          </div>
-                          <div className="flex flex-col items-start justify-start h-full">
-                            <p className="text-sm line-clamp-1">
-                              {alias && currentUserId === userId
-                                ? "Anda"
-                                : (alias as FriendType)?.alias ||
-                                  (alias as UserType)?.email ||
-                                  ""}
-                            </p>
-                            {currentUserId === userId && (
-                              <p className="text-[12px] text-gray-400">
-                                Pilih untuk menghapus
-                              </p>
-                            )}
-                          </div>
-                        </motion.button>
+                          <p>
+                            {emoji} {count}
+                          </p>
+                        </Button>
                       );
-                    }
-                  )}
-                </section>
-              </motion.div>
-            </>
-          )}
+                    })}
+                  </section>
+                  <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
+                    {filteredReaction?.map(
+                      (
+                        { reaction: { reactionId, userId, content }, alias },
+                        i
+                      ) => {
+                        return (
+                          <motion.button
+                            initial={{ translateY: 20 }}
+                            whileInView={{ translateY: 0 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{
+                              ease: "easeOut",
+                            }}
+                            onClick={() => {
+                              deleteReactionMutation({ reactionId });
+                            }}
+                            disabled={currentUserId !== userId}
+                            className={`${currentUserId === userId && "hover:bg-[#45494f]/50"} flex items-center justify-start h-14 p-2 gap-2 rounded-sm`}
+                          >
+                            <div className="min-w-10 h-10">
+                              <img
+                                src={
+                                  alias
+                                    ? (alias as UserType)?.profile?.avatar ||
+                                      (alias as FriendType)?.friend?.avatar
+                                    : defaultImage
+                                }
+                                className="w-full h-full rounded-full"
+                                alt="avatar"
+                              />
+                            </div>
+                            <div className="flex flex-col items-start justify-start self-start h-full">
+                              <p className="text-sm line-clamp-1 text-start">
+                                {alias && currentUserId === userId
+                                  ? "Anda"
+                                  : (alias as FriendType)?.alias ||
+                                    (alias as UserType)?.email ||
+                                    ""}
+                              </p>
+                              {currentUserId === userId && (
+                                <p className="text-[12px] text-gray-400">
+                                  Pilih untuk menghapus
+                                </p>
+                              )}
+                            </div>
+                          </motion.button>
+                        );
+                      }
+                    )}
+                  </section>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </>
       )}
     </>
