@@ -9,6 +9,7 @@ import { Button } from "shared/shadcn/button";
 import type { UserType } from "shared/types/user-type";
 import { defaultImage } from "shared/constants/image-default";
 import type { FriendType } from "shared/types/friend-type";
+import { reactionGroupper } from "shared/helpers/group-emoji";
 
 interface ReactionModalProps {
   chatId: string;
@@ -63,6 +64,7 @@ export default function ReactionModal({
   const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
     useDeleteReactionById({ chatId });
 
+  const grouppedReaction = reactionGroupper(chatReactionResponse?.data as []);
   return (
     <>
       {chatReactionResponse?.data! && !isPending && (
@@ -73,16 +75,14 @@ export default function ReactionModal({
             className="absolute flex items-center justify-center min-w-6 h-6 right-1 -bottom-4 bg-[#353535] rounded-full cursor-pointer p-2 overflow-hidden"
           >
             <div className="flex items-center justify-center">
-              {chatReactionResponse?.data.length > 0 &&
-                chatReactionResponse?.data.map(
-                  ({ reaction: { content } }, i) => {
-                    return (
-                      <p key={i} className="text-sm">
-                        {content}
-                      </p>
-                    );
-                  }
-                )}
+              {grouppedReaction?.length > 0 &&
+                grouppedReaction?.map(({ emoji, count }, i) => {
+                  return (
+                    <p key={i} className="text-sm">
+                      {emoji}
+                    </p>
+                  );
+                })}
             </div>
             <p className="text-sm text-gray-400">
               {chatReactionResponse?.data?.length || 0}
@@ -118,23 +118,18 @@ export default function ReactionModal({
                   <Button className="flex items-center text-sm justify-center h-10 bg-transparent hover:bg-transparent p-1 px-2 font-normal">
                     <p>Semua {chatReactionResponse?.data?.length}</p>
                   </Button>
-                  {chatReactionResponse?.data.map(
-                    ({ reaction: { content, reactionId } }) => {
-                      return (
-                        <Button className="flex items-center text-sm justify-center w-10 h-10 bg-transparent hover:bg-transparent p-0 rounded-b-none">
-                          <p key={reactionId}>
-                            {content}{" "}
-                            {
-                              chatReactionResponse?.data?.filter(
-                                ({ reaction }) =>
-                                  reaction.content.includes(content)
-                              )?.length
-                            }
-                          </p>
-                        </Button>
-                      );
-                    }
-                  )}
+                  {grouppedReaction?.map(({ emoji, count }) => {
+                    return (
+                      <Button
+                        key={emoji}
+                        className="flex items-center text-sm justify-center w-10 h-10 bg-transparent hover:bg-transparent p-0 rounded-b-none"
+                      >
+                        <p>
+                          {emoji} {count}
+                        </p>
+                      </Button>
+                    );
+                  })}
                 </section>
                 <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
                   {chatReactionResponse?.data.map(
@@ -143,7 +138,7 @@ export default function ReactionModal({
                         <button
                           onClick={() => {
                             deleteReactionMutation({ reactionId });
-                            handleCloseModal()
+                            handleCloseModal();
                           }}
                           disabled={currentUserId !== userId}
                           className={`${currentUserId === userId && "hover:bg-[#45494f]/50"} flex items-center justify-start-full h-14 p-2 gap-2 rounded-sm`}
