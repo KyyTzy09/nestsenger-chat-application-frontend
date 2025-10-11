@@ -32,9 +32,9 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
         />
       )}
       <section className="relative w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
-        {chatResponse?.data?.length! > 0 && chatResponse?.data.map(({ chats, date }) => {
+        {chatResponse?.data?.length! > 0 && chatResponse?.data.map(({ chats, date },i) => {
             return (
-              <div className="flex flex-col items-center w-full h-auto gap-5">
+              <div key={i} className="flex flex-col items-center w-full h-auto gap-5">
                 <div className="flex items-center justify-center w-full">
                   <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
                     {generateDateText(date)}

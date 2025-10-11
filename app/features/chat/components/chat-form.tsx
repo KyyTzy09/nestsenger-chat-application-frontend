@@ -56,9 +56,10 @@ export default function ChatForm({ roomId }: ChatFormProps) {
         className="flex items-end justify-between w-full h-full p-3 gap-4"
       >
         <div className="flex items-end justify-center h-full gap-2">
-          {formButtonIcon.map(({ Icon, action }) => {
+          {formButtonIcon.map(({ Icon, action }, i) => {
             return (
               <Button
+                key={i}
                 onClick={action}
                 type="button"
                 className="w-8 h-8 p-1 bg-transparent"
