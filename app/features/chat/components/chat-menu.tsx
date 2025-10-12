@@ -6,6 +6,8 @@ import { Separator } from "shared/shadcn/separator";
 import { useChatParentDataStore } from "../stores/chat-store";
 import { useCreateReaction } from "~/features/reaction/hooks/reaction-hook";
 import ReactionSection from "~/features/reaction/components/reaction-section";
+import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
+import { cn } from "~/lib/utils";
 
 interface ChatMenuProps {
   open: boolean;
@@ -29,8 +31,13 @@ export default function ChatMenu({
   position,
   setPosition,
 }: ChatMenuProps) {
+  const [display, setDisplay] = React.useState<"menu" | "picker">("menu");
   // Chat context handle
   const chatMenuRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    setDisplay("menu");
+  }, [open, setDisplay]);
+
   React.useEffect(() => {
     if (open && position && chatMenuRef.current) {
       const { innerWidth, innerHeight } = window;
@@ -50,21 +57,8 @@ export default function ChatMenu({
     }
   }, [open, position]);
 
-  React.useEffect(() => {
-    const handleClickOutSide = (e: MouseEvent) => {
-      if (
-        chatMenuRef.current &&
-        !chatMenuRef.current.contains(e.target as Node)
-      ) {
-        onClose();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutSide);
-  }, [onClose]);
-
   // Menu Item Handle
   const { setParent } = useChatParentDataStore();
-  const reactionEmojiItems = ["👍", "❤", "😂", "😮", "😢", "🙏"];
   const chatButtonMenuItems = [
     {
       Icon: ReplyIcon,
@@ -91,6 +85,10 @@ export default function ChatMenu({
     },
   ];
 
+  // Reaction
+  const { mutate: createReactionMutate, isPending: isCreateReactionLoading } =
+    useCreateReaction();
+
   return (
     <AnimatePresence>
       {open && (
@@ -108,26 +106,50 @@ export default function ChatMenu({
             animate={{ opacity: 1, scale: 1, translateY: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="fixed z-50 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur p-2 gap-1"
+            className="fixed z-50 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur"
             style={{
               top: position?.y,
               left: position?.x,
             }}
           >
-            <ReactionSection chatId={chatParent.parentId} onClose={onClose} />
-            <Separator className="opacity-70" />
-            {chatButtonMenuItems.map(({ Icon, action, text }, i) => {
-              return (
-                <Button
-                  key={i}
-                  onClick={action}
-                  className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
-                >
-                  <Icon />
-                  {text}
-                </Button>
-              );
-            })}
+            {display === "menu" ? (
+              <motion.div className="flex flex-col w-full h-full gap-1 p-2">
+                <ReactionSection
+                  setDisplay={setDisplay}
+                  chatId={chatParent.parentId}
+                  onClose={onClose}
+                />
+                <Separator className="opacity-70" />
+                {chatButtonMenuItems.map(({ Icon, action, text }, i) => {
+                  return (
+                    <Button
+                      key={i}
+                      onClick={action}
+                      className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+                    >
+                      <Icon />
+                      {text}
+                    </Button>
+                  );
+                })}
+              </motion.div>
+            ) : (
+              <motion.div className="flex w-full max-w-full h-full gap-1">
+                <EmojiPicker
+                  onEmojiClick={(emoji) => {
+                    createReactionMutate({
+                      chatId: chatParent?.parentId,
+                      content: emoji.emoji,
+                    });
+                    onClose();
+                  }}
+                  lazyLoadEmojis={false}
+                  theme={Theme.DARK}
+                  className={cn(`bg-transparent relative`)}
+                  emojiStyle={EmojiStyle.NATIVE}
+                />
+              </motion.div>
+            )}
           </motion.div>
         </>
       )}

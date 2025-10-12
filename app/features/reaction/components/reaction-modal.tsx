@@ -174,7 +174,7 @@ export default function ReactionModal({
                             disabled={currentUserId !== userId}
                             className={`${currentUserId === userId && "hover:bg-[#45494f]/50"} flex items-center justify-start h-14 p-2 gap-2 rounded-sm`}
                           >
-                            <div className="min-w-10 h-10">
+                            <div className="min-w-10 max-w-[15%] h-10">
                               <img
                                 src={
                                   alias
@@ -186,7 +186,7 @@ export default function ReactionModal({
                                 alt="avatar"
                               />
                             </div>
-                            <div className="flex flex-col items-start justify-start self-start h-full">
+                            <div className="flex flex-col items-start justify-start self-start w-[70%] h-full">
                               <p className="text-sm line-clamp-1 text-start">
                                 {alias && currentUserId === userId
                                   ? "Anda"
@@ -199,6 +199,9 @@ export default function ReactionModal({
                                   Pilih untuk menghapus
                                 </p>
                               )}
+                            </div>
+                            <div className="w-[10%]">
+                              <p>{content}</p>
                             </div>
                           </motion.button>
                         );

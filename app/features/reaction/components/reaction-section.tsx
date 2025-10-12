@@ -6,11 +6,13 @@ import { PlusIcon } from "lucide-react";
 interface ReactionSectionProps {
   chatId: string;
   onClose: () => void;
+  setDisplay: React.Dispatch<React.SetStateAction<"menu" | "picker">>;
 }
 
 export default function ReactionSection({
   chatId,
   onClose,
+  setDisplay,
 }: ReactionSectionProps) {
   // Chat Reaction Handle
   const { mutate: createReactionMutate, isPending: isCreateReactionLoading } =
@@ -20,6 +22,9 @@ export default function ReactionSection({
   const { data: userReactionResponse, isPending: onUserReactionLoading } =
     useGetUserReaction({ chatId });
   const reactionEmojiItems = ["👍", "❤", "😂", "😮", "😢", "🙏"];
+  const filteredUserEmoji = reactionEmojiItems.filter((v) => {
+    return v === userReactionResponse?.data?.content;
+  });
 
   return (
     <section className="flex items-center justify-between">
@@ -40,8 +45,15 @@ export default function ReactionSection({
           </Button>
         );
       })}
-      <Button className="flex items-center text-xl justify-center w-10 h-10 bg-transparent p-0">
-        <PlusIcon />
+      <Button
+        onClick={() => setDisplay("picker")}
+        className={`${userReactionResponse?.data! && filteredUserEmoji.length === 0 ? "bg-gray-500/70" : "bg-transparent"} flex items-center text-xl justify-center w-10 h-10 hover:bg-gray-500/50 p-0`}
+      >
+        {userReactionResponse?.data && filteredUserEmoji.length === 0 ? (
+          <p>{userReactionResponse?.data?.content}</p>
+        ) : (
+          <PlusIcon />
+        )}
       </Button>
     </section>
   );
