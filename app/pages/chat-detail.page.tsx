@@ -8,6 +8,8 @@ import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 import { useGetRoomById } from "~/features/room/hooks/room-hooks";
 import { useGetRoomMember } from "~/features/member/hooks/member-hook";
 import { generateDateText } from "shared/helpers/generate-date";
+import React from "react";
+import { socket } from "shared/configs/socket";
 
 interface ChatDetailPageProps {
   chatId: string;
@@ -32,9 +34,13 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
         />
       )}
       <section className="relative w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
-        {chatResponse?.data?.length! > 0 && chatResponse?.data.map(({ chats, date },i) => {
+        {chatResponse?.data?.length! > 0 &&
+          chatResponse?.data.map(({ chats, date }, i) => {
             return (
-              <div key={i} className="flex flex-col items-center w-full h-auto gap-5">
+              <div
+                key={i}
+                className="flex flex-col items-center w-full h-auto gap-5"
+              >
                 <div className="flex items-center justify-center w-full">
                   <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
                     {generateDateText(date)}

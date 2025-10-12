@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ChatService } from "../services/chat-service"
 import { toast } from "sonner"
+import { socket } from "shared/configs/socket"
+import type { ChatType } from "shared/types/chat-type"
 
 export const useGetChats = (data: { roomId: string }) => {
     return useQuery({
@@ -24,8 +26,12 @@ export const useCreateChat = (roomId: string,) => {
         mutationKey: ['create-chat'],
         mutationFn: async (data: { message: string, parentId?: string }) => await ChatService.createChat({ message: data.message, roomId, parentId: data.parentId }),
         onSuccess: () => {
-            toast.success('Berhasil mengirim chat')
-            queryClient.invalidateQueries({ queryKey: ['chat', roomId], refetchType: "all" })
+            socket.on("newMessage", (newChat: ChatType) => {
+                if (newChat.roomId) {
+                    queryClient.invalidateQueries({ queryKey: ['chat', newChat.roomId], refetchType: "all" })
+                    queryClient.invalidateQueries({ queryKey: ['current-room'], refetchType: "all" })
+                }
+            })
         },
         onError: (err) => {
             toast.error(err.message || "Gagal mengirim chat")
