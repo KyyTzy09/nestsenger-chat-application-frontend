@@ -69,7 +69,6 @@ export default function ReactionModal({
 
   // Filtering
   const [currentEmoji, setCurrentEmoji] = React.useState<string>("");
-
   const filteredReaction = chatReactionResponse?.data?.filter(
     ({ reaction }) => {
       if (currentEmoji !== "") {
@@ -79,6 +78,9 @@ export default function ReactionModal({
       }
     }
   );
+  const sortedReactionsData = filteredReaction?.sort((a) => {
+    return a?.reaction?.userId === currentUserId ? -1 : 0;
+  });
 
   return (
     <>
@@ -155,7 +157,7 @@ export default function ReactionModal({
                     })}
                   </section>
                   <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
-                    {filteredReaction?.map(
+                    {sortedReactionsData?.map(
                       (
                         { reaction: { reactionId, userId, content }, alias },
                         i
