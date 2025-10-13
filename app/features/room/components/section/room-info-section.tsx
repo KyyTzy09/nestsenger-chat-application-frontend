@@ -23,7 +23,14 @@ export default function RoomInfoSection({
   showImagePreviewChange,
 }: RoomInfoSectionProps) {
   const {
-    room: { roomId, type: roomType, createdAt, members, roomName },
+    room: {
+      roomId,
+      type: roomType,
+      avatar: roomAvatar,
+      createdAt,
+      members,
+      roomName,
+    },
     alias,
   } = data;
 
@@ -102,7 +109,7 @@ export default function RoomInfoSection({
               className="flex w-full items-center justify-center"
             >
               <img
-                src={defaultImage}
+                src={roomAvatar || defaultImage}
                 alt="avatar"
                 className="w-24 h-24 rounded-full"
               />

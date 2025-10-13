@@ -5,6 +5,7 @@ import type { ChatType } from "./chat-type"
 export type RoomType = {
     roomId: string
     roomName: string
+    avatar: string
     type: RoomTypeEnum
     members: MemberType[]
     lastChat: ChatType

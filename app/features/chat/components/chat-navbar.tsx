@@ -31,14 +31,14 @@ export default function ChatNavbar({
   const [showPreview, setShowPreview] = React.useState<boolean>(false);
 
   const {
-    room: { roomName, type },
+    room: { roomName, type, avatar },
     alias,
   } = roomInfo;
 
   const previewImageUrl = (): string => {
     let result = "";
     if (type === RoomTypeEnum.GROUP) {
-      result = defaultImage;
+      result = avatar;
     } else {
       if (alias && (alias as FriendType)) {
         result = (alias as FriendType)?.friend?.avatar;
@@ -84,10 +84,10 @@ export default function ChatNavbar({
           <div className="w-10 h-10">
             <img
               src={
-                alias
+                alias && type === RoomTypeEnum.PRIVATE
                   ? (alias as UserType)?.profile?.avatar ||
                     (alias as FriendType)?.friend?.avatar
-                  : defaultImage
+                  : avatar || defaultImage
               }
               alt="yaya"
               className="w-full h-full rounded-full group-hover:opacity-75"

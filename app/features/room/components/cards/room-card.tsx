@@ -30,10 +30,10 @@ export default function RoomCard({ data }: RoomCardProps) {
             <section className="w-[65px] h-full rounded-full overflow-hidden">
               <img
                 src={
-                  alias
+                  alias && room.type === RoomTypeEnum.PRIVATE
                     ? (alias as FriendType)?.friend?.avatar ||
                       (alias as UserType)?.profile?.avatar
-                    : defaultImage
+                    : room.avatar || defaultImage
                 }
                 alt="Default"
                 className="w-full h-full"
