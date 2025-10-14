@@ -8,6 +8,7 @@ import { useGetUserFriends } from "~/features/friends/hooks/friend-hook";
 import React from "react";
 import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function ChatSidebar() {
   const queryClient = useQueryClient();
@@ -47,7 +48,15 @@ export default function ChatSidebar() {
         </div>
       </section>
       <section className="flex w-full h-[90%] overflow-y-scroll custom-scrollbar px-5">
-        <RoomCard data={currentUserRoomResponse?.data!} />
+        {(currentUserRoomResponse?.data?.length as number) > 0 ? (
+          <RoomCard data={currentUserRoomResponse?.data!} />
+        ) : (
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <FaWhatsapp className="w-16 h-16" />
+            <p className="text-white text-xl font-semibold">Nestsenger</p>
+            <p className="text-sm text-gray-400">Mulai chat baru sekarang!!</p>
+          </div>
+        )}
       </section>
     </aside>
   );
