@@ -41,9 +41,11 @@ export default function ChatNavbar({
       result = avatar;
     } else {
       if (alias && (alias as FriendType)) {
-        result = (alias as FriendType)?.friend?.avatar;
+        result =
+          (alias as FriendType)?.friend?.avatar ||
+          (alias as UserType)?.profile?.avatar;
       } else {
-        result = (alias as UserType)?.profile?.avatar;
+        result = defaultImage;
       }
     }
     return result;
