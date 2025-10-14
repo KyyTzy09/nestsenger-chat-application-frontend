@@ -21,18 +21,9 @@ export const useGetChatParent = (data: { chatId: string }) => {
 }
 
 export const useCreateChat = (roomId: string,) => {
-    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['create-chat'],
         mutationFn: async (data: { message: string, parentId?: string }) => await ChatService.createChat({ message: data.message, roomId, parentId: data.parentId }),
-        onSuccess: () => {
-            socket.on("newMessage", (newChat: ChatType) => {
-                if (newChat.roomId) {
-                    queryClient.invalidateQueries({ queryKey: ['chat', newChat.roomId], refetchType: "all" })
-                    queryClient.invalidateQueries({ queryKey: ['current-room'], refetchType: "all" })
-                }
-            })
-        },
         onError: (err) => {
             toast.error(err.message || "Gagal mengirim chat")
         }

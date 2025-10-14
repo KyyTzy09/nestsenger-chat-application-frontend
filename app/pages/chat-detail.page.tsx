@@ -10,12 +10,15 @@ import { useGetRoomMember } from "~/features/member/hooks/member-hook";
 import { generateDateText } from "shared/helpers/generate-date";
 import React from "react";
 import { socket } from "shared/configs/socket";
+import { useQueryClient } from "@tanstack/react-query";
+import type { ChatType } from "shared/types/chat-type";
 
 interface ChatDetailPageProps {
   chatId: string;
 }
 
 export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
+  const queryClient = useQueryClient();
   const { data: roomInfoResponse, isPending: isRoomInfoLoading } =
     useGetRoomById({ roomId: chatId });
   const { data: chatResponse, isPending: isChatLoading } = useGetChats({
@@ -23,6 +26,26 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   });
   const { data: profileResponse } = useGetProfile();
   const { data: memberResponse } = useGetRoomMember({ roomId: chatId });
+
+  React.useEffect(() => {
+    const handler = (newChat: ChatType) => {
+      if (newChat.roomId) {
+        queryClient.invalidateQueries({
+          queryKey: ["current-room"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["chat", newChat.roomId],
+          refetchType: "all",
+        });
+      }
+    };
+    socket.on("newMessage", handler);
+
+    return () => {
+      socket.off("newMessage", handler);
+    };
+  }, []);
 
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">
