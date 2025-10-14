@@ -31,10 +31,6 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
     const handler = (newChat: ChatType) => {
       if (newChat.roomId) {
         queryClient.invalidateQueries({
-          queryKey: ["current-room"],
-          refetchType: "all",
-        });
-        queryClient.invalidateQueries({
           queryKey: ["chat", newChat.roomId],
           refetchType: "all",
         });
