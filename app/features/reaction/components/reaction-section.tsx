@@ -31,6 +31,10 @@ export default function ReactionSection({
       {reactionEmojiItems.map((e, i) => {
         return (
           <Button
+            disabled={
+              userReactionResponse?.data &&
+              e === userReactionResponse?.data?.content
+            }
             onClick={() => {
               createReactionMutate({
                 chatId,
