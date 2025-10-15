@@ -12,6 +12,7 @@ import React from "react";
 import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ChatType } from "shared/types/chat-type";
+import type { ReactionType } from "shared/types/reaction-type";
 
 interface ChatDetailPageProps {
   chatId: string;
@@ -41,7 +42,26 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
     return () => {
       socket.off("newMessage", handler);
     };
-  }, []);
+  }, [queryClient, chatResponse?.data]);
+
+  React.useEffect(() => {
+    const handler = (reaction: ReactionType) => {
+      if (reaction.chat) {
+        queryClient.invalidateQueries({
+          queryKey: ["chat", reaction.chat.roomId],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["reaction", reaction.chatId],
+          refetchType: "all",
+        });
+      }
+    };
+    socket.on("updateReaction", handler);
+    return () => {
+      socket.off("updateReaction", handler);
+    };
+  }, [queryClient]);
 
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">

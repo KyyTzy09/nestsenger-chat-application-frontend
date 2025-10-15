@@ -3,17 +3,17 @@ import {
   useDeleteReactionById,
   useGetChatReactions,
 } from "../hooks/reaction-hook";
-import { fa } from "zod/v4/locales";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "shared/shadcn/button";
 import type { UserType } from "shared/types/user-type";
 import { defaultImage } from "shared/constants/image-default";
 import type { FriendType } from "shared/types/friend-type";
 import { reactionGroupper } from "shared/helpers/group-emoji";
-import type { ReactionType } from "shared/types/reaction-type";
 import { useQueryClient } from "@tanstack/react-query";
 import { socket } from "shared/configs/socket";
 import { useParams } from "react-router";
+import { toast } from "sonner";
+import type { ReactionType } from "shared/types/reaction-type";
 
 interface ReactionModalProps {
   chatId: string;
@@ -24,7 +24,32 @@ export default function ReactionModal({
   chatId,
   currentUserId,
 }: ReactionModalProps) {
-  const params = useParams();
+  // Query
+  const queryClient = useQueryClient();
+  const { data: chatReactionResponse, isPending, refetch: invalidateChatReactions } = useGetChatReactions({
+    chatId,
+  });
+  const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
+    useDeleteReactionById({ chatId });
+  // Groupping
+  const grouppedReaction = reactionGroupper(chatReactionResponse?.data as []);
+
+  // Filtering
+  const [currentEmoji, setCurrentEmoji] = React.useState<string>("");
+  const filteredReaction = chatReactionResponse?.data?.filter(
+    ({ reaction }) => {
+      if (currentEmoji !== "") {
+        return reaction.content.includes(currentEmoji);
+      } else {
+        return true;
+      }
+    }
+  );
+
+  const sortedReactionsData = filteredReaction?.sort((a) => {
+    return a?.reaction?.userId === currentUserId ? -1 : 0;
+  });
+
   // Display
   const reactionModalRef = React.useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = React.useState(false);
@@ -60,49 +85,6 @@ export default function ReactionModal({
       setModalPosition({ x, y });
     }
   }, [showModal, setModalPosition]);
-
-  // Query
-  const queryClient = useQueryClient();
-  const { data: chatReactionResponse, isPending } = useGetChatReactions({
-    chatId,
-  });
-  const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
-    useDeleteReactionById({ chatId });
-  // Groupping
-  const grouppedReaction = reactionGroupper(chatReactionResponse?.data as []);
-
-  // Filtering
-  const [currentEmoji, setCurrentEmoji] = React.useState<string>("");
-  const filteredReaction = chatReactionResponse?.data?.filter(
-    ({ reaction }) => {
-      if (currentEmoji !== "") {
-        return reaction.content.includes(currentEmoji);
-      } else {
-        return true;
-      }
-    }
-  );
-  const sortedReactionsData = filteredReaction?.sort((a) => {
-    return a?.reaction?.userId === currentUserId ? -1 : 0;
-  });
-
-  React.useEffect(() => {
-    const handler = () => {
-      queryClient.invalidateQueries({
-        queryKey: ["chat", params.chatId],
-        refetchType: "all",
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["reaction", chatId],
-        type: "all",
-      });
-    };
-    socket.on("updateReaction", handler);
-
-    return () => {
-      socket.off("updateReaction", handler);
-    };
-  }, [queryClient]);
 
   return (
     <>
