@@ -55,8 +55,7 @@ export const useLogout = () => {
             toast.success("Logout berhasil", {
                 style: { color: "green", }
             })
-            queryClient.invalidateQueries({ queryKey: ['profile'], type: "all" })
-            queryClient.invalidateQueries({ queryKey: ["user-room"], type: "all" })
+            queryClient.invalidateQueries()
             navigate("/")
         },
         onError: (err) => {
