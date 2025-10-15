@@ -11,6 +11,9 @@ import { defaultImage } from "shared/constants/image-default";
 import type { FriendType } from "shared/types/friend-type";
 import { reactionGroupper } from "shared/helpers/group-emoji";
 import type { ReactionType } from "shared/types/reaction-type";
+import { useQueryClient } from "@tanstack/react-query";
+import { socket } from "shared/configs/socket";
+import { useParams } from "react-router";
 
 interface ReactionModalProps {
   chatId: string;
@@ -21,6 +24,7 @@ export default function ReactionModal({
   chatId,
   currentUserId,
 }: ReactionModalProps) {
+  const params = useParams();
   // Display
   const reactionModalRef = React.useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = React.useState(false);
@@ -58,7 +62,7 @@ export default function ReactionModal({
   }, [showModal, setModalPosition]);
 
   // Query
-
+  const queryClient = useQueryClient();
   const { data: chatReactionResponse, isPending } = useGetChatReactions({
     chatId,
   });
@@ -81,6 +85,24 @@ export default function ReactionModal({
   const sortedReactionsData = filteredReaction?.sort((a) => {
     return a?.reaction?.userId === currentUserId ? -1 : 0;
   });
+
+  React.useEffect(() => {
+    const handler = () => {
+      queryClient.invalidateQueries({
+        queryKey: ["chat", params.chatId],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["reaction", chatId],
+        type: "all",
+      });
+    };
+    socket.on("updateReaction", handler);
+
+    return () => {
+      socket.off("updateReaction", handler);
+    };
+  }, [queryClient]);
 
   return (
     <>
