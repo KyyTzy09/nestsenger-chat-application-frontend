@@ -1,8 +1,10 @@
 import React from "react";
 import { motion } from "motion/react";
-import { XIcon } from "lucide-react";
+import { ArrowBigLeftIcon, ArrowLeft, XIcon } from "lucide-react";
 import { Button } from "shared/shadcn/button";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { FaSearchMinus, FaSearchPlus } from "react-icons/fa";
+import PreviewImageHeader from "../preview-image-header";
 
 interface PreviewImageProps {
   image: string;
@@ -20,6 +22,7 @@ export default function PreviewImageModal({
   setIsPreviewAction,
 }: PreviewImageProps) {
   const [disablePan, setDisablePan] = React.useState<boolean>(true);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
@@ -38,7 +41,7 @@ export default function PreviewImageModal({
           }
         }}
         minScale={1}
-        maxScale={2}
+        maxScale={5}
         panning={{ disabled: disablePan }}
         initialScale={1}
         doubleClick={{ mode: "zoomIn" }}
@@ -57,19 +60,11 @@ export default function PreviewImageModal({
             width={width}
             height={height}
             draggable={false}
-            className="select-none cursor-grab object-contain max-h-[90vh] max-w-[100vv] sm:max-w-[90vw]"
+            className="select-none cursor-grab object-contain max-h-[90vh] max-w-[100vh] sm:max-w-[90vw]"
           />
         </TransformComponent>
-        <div className="fixed flex items-center justify-center gap-2 top-1 right-1">
-          <Button
-            onClick={() => setIsPreviewAction(false)}
-            className="group w-16 h-16 bg-transparent p-0 flex items-center justify-center hover:bg-transparent"
-          >
-            <XIcon
-              strokeWidth={4}
-              className="w-full h-full text-white group-hover:text-red-500 transition duration-700"
-            />
-          </Button>
+        <div className="fixed flex items-center justify-between w-full gap-2 top-1 p-1">
+          <PreviewImageHeader onClose={() => setIsPreviewAction(false)} />
         </div>
       </TransformWrapper>
     </motion.div>
