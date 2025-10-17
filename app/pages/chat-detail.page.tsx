@@ -3,7 +3,10 @@ import PrivateChatCard from "~/features/chat/components/cards/private-chat-card"
 import GroupChatCard from "~/features/chat/components/cards/group-chat-card";
 import ChatForm from "~/features/chat/components/chat-form";
 import ChatNavbar from "~/features/chat/components/chat-navbar";
-import { useGetChats } from "~/features/chat/hooks/chat-hook";
+import {
+  useGetChats,
+  useGetDeletedChats,
+} from "~/features/chat/hooks/chat-hook";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 import { useGetRoomById } from "~/features/room/hooks/room-hooks";
 import { useGetRoomMember } from "~/features/member/hooks/member-hook";
@@ -27,6 +30,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   });
   const { data: profileResponse } = useGetProfile();
   const { data: memberResponse } = useGetRoomMember({ roomId: chatId });
+  const { data: deletedChatResponse } = useGetDeletedChats({ roomId: chatId });
 
   React.useEffect(() => {
     const handler = (newChat: ChatType) => {
@@ -92,7 +96,8 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
                   />
                 ) : (
                   <GroupChatCard
-                    userId={profileResponse?.data.userId!}
+                    deletedData={deletedChatResponse?.data}
+                    currentUserId={profileResponse?.data.userId!}
                     data={chats}
                   />
                 )}

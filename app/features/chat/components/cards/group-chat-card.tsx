@@ -8,14 +8,59 @@ import { useCreateOrGetRoom } from "~/features/room/hooks/room-hooks";
 import ChatParentSection from "../sections/chat-parent-section";
 import ChatMenu from "../chat-menu";
 import ReactionModal from "~/features/reaction/components/reaction-modal";
+import type { DeletedChatType } from "shared/types/deleted-chat";
+import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
+import { BanIcon } from "lucide-react";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
-  userId: string;
+  deletedData?: DeletedChatType[];
+  currentUserId: string;
 }
 
-export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
+export default function GroupChatCard({
+  data,
+  deletedData,
+  currentUserId,
+}: GroupChatCardProps) {
   const prevChatLength = React.useRef<number>(0);
+  // Handle Deleted Menu
+  function isChatDeleted(chatId: string) {
+    const isSelfDeletedChat = deletedData?.filter(
+      ({ chatId: deletedChatId, type, userId }) => {
+        return (
+          deletedChatId === chatId &&
+          userId === currentUserId &&
+          type === DeletedChatTypeEnum.SELF
+        );
+      }
+    );
+
+    const isAllDeletedChat = deletedData?.filter(
+      ({ chatId: deletedChatId, type }) => {
+        return chatId === deletedChatId && type === DeletedChatTypeEnum.ALL;
+      }
+    );
+
+    if ((isSelfDeletedChat?.length as number) > 0) {
+      return "self";
+    } else if ((isAllDeletedChat?.length as number) > 0) {
+      return "all";
+    } else {
+      return null;
+    }
+  }
+
+  function chatDeletedOwned(chatId: string): boolean {
+    const filteredData = deletedData?.filter(
+      ({ chatId: deletedChatId, userId }) => {
+        return userId === currentUserId && chatId === deletedChatId;
+      }
+    );
+
+    return (filteredData?.length as number) > 0;
+  }
+
   // Chat menu handle
   const [showMenu, setShowMenu] = React.useState<string>("");
   const [menuPosition, setMenuPosition] = React.useState<{
@@ -30,7 +75,8 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
   };
 
   // onClick room card handle
-  const { mutate: createOrGetRoomMutate, isPending: onCreateOrGetRoomLoading } = useCreateOrGetRoom();
+  const { mutate: createOrGetRoomMutate, isPending: onCreateOrGetRoomLoading } =
+    useCreateOrGetRoom();
 
   // Expand chat handler
   const [selectedIndex, setSelectedIndex] = React.useState<number[]>([]);
@@ -80,96 +126,120 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
           i
         ) => {
           return (
-            <div
-              key={chatId}
-              className={`${senderId === userId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
-            >
-              {senderId !== userId && (
-                <button
-                  onClick={() => createOrGetRoomMutate({ userIdB: senderId })}
-                  title="btn-img"
-                  className="group w-10 h-10 rounded-full overflow-hidden"
-                >
-                  <img
-                    src={
-                      alias
-                        ? (alias as FriendType)?.friend?.avatar ||
-                          (alias as UserType)?.profile?.avatar
-                        : defaultImage
-                    }
-                    className="w-full h-full group-hover:opacity-80"
-                    alt=""
-                  />
-                </button>
-              )}
-              <section
-                onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === userId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
-              >
-                {senderId !== userId && (
-                  <div className="flex items-center w-full">
-                    <p className={"text-blue-500 text-[12px] font-semibold"}>
-                      {alias
-                        ? (alias as FriendType)?.alias ||
-                          "~" + (alias as UserType).email
-                        : "Pengguna"}
-                    </p>
-                  </div>
-                )}
-                {parent && (
-                  <ChatParentSection currentUserId={userId} chatId={chatId} />
-                )}
-                <p
-                  className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
-                >
-                  {linkify(message)}
-                </p>
+            <>
+              {isChatDeleted(chatId) !== "self" && (
                 <div
-                  className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
+                  key={chatId}
+                  className={`${senderId === currentUserId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
                 >
-                  {!findChatIndex(i) && message.length > 700 ? (
+                  {senderId !== currentUserId && (
                     <button
-                      onClick={() => handleExpandChat(i)}
-                      className=" text-white underline text-[12px] hover:opacity-70"
+                      onClick={() =>
+                        createOrGetRoomMutate({ userIdB: senderId })
+                      }
+                      title="btn-img"
+                      className="group w-10 h-10 rounded-full overflow-hidden"
                     >
-                      Selengkapnya
+                      <img
+                        src={
+                          alias
+                            ? (alias as FriendType)?.friend?.avatar ||
+                              (alias as UserType)?.profile?.avatar
+                            : defaultImage
+                        }
+                        className="w-full h-full group-hover:opacity-80"
+                        alt=""
+                      />
                     </button>
-                  ) : (
-                    <button
-                      title="prev"
-                      className=" text-white underline text-[12px] hover:opacity-70"
-                    ></button>
                   )}
-                  <p className="text-gray-300">
-                    {new Date(createdAt).toLocaleTimeString("id-ID", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                  <section
+                    onContextMenu={(e) => handleShowContextMenu(e, chatId)}
+                    className={`${senderId === currentUserId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
+                  >
+                    {senderId !== currentUserId && (
+                      <div className="flex items-center w-full">
+                        <p
+                          className={"text-blue-500 text-[12px] font-semibold"}
+                        >
+                          {alias
+                            ? (alias as FriendType)?.alias ||
+                              "~" + (alias as UserType).email
+                            : "Pengguna"}
+                        </p>
+                      </div>
+                    )}
+
+                    {!isChatDeleted(chatId) && parent && (
+                      <ChatParentSection
+                        currentUserId={currentUserId}
+                        chatId={chatId}
+                      />
+                    )}
+                    {isChatDeleted(chatId) === "all" ? (
+                      <p className="flex items-center justify-start text-sm text-gray-300 gap-1">
+                        <BanIcon className="w-3 h-3" />
+                        {chatDeletedOwned(chatId)
+                          ? "Pesan ini telah dihapus"
+                          : "Anda menghapus pesan ini"}
+                      </p>
+                    ) : (
+                      <p
+                        className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
+                      >
+                        {linkify(message)}
+                      </p>
+                    )}
+                    <div
+                      className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
+                    >
+                      {!findChatIndex(i) && message.length > 700 ? (
+                        <button
+                          onClick={() => handleExpandChat(i)}
+                          className=" text-white underline text-[12px] hover:opacity-70"
+                        >
+                          Selengkapnya
+                        </button>
+                      ) : (
+                        <button
+                          title="prev"
+                          className=" text-white underline text-[12px] hover:opacity-70"
+                        ></button>
+                      )}
+                      <p className="text-gray-300">
+                        {new Date(createdAt).toLocaleTimeString("id-ID", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                    <span
+                      className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
+                    ></span>
+                    {reactions.length > 0 && (
+                      <ReactionModal
+                        currentUserId={currentUserId}
+                        chatId={chatId}
+                      />
+                    )}
+                  </section>
+                  <ChatMenu
+                    open={showMenu === chatId}
+                    chatParent={{
+                      parentId: chatId,
+                      alias:
+                        alias && currentUserId === senderId
+                          ? "Anda"
+                          : (alias as FriendType)?.alias ||
+                            (alias as UserType)?.email,
+                      message,
+                    }}
+                    position={menuPosition!}
+                    setPosition={setMenuPosition}
+                    onClose={() => setShowMenu("")}
+                  />
                 </div>
-                <span
-                  className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
-                ></span>
-                {reactions.length > 0 && (
-                  <ReactionModal currentUserId={userId} chatId={chatId} />
-                )}
-              </section>
-              <ChatMenu
-                open={showMenu === chatId}
-                chatParent={{
-                  parentId: chatId,
-                  alias:
-                    alias && userId === senderId
-                      ? "Anda"
-                      : (alias as FriendType)?.alias ||
-                        (alias as UserType)?.email,
-                  message,
-                }}
-                position={menuPosition!}
-                setPosition={setMenuPosition}
-                onClose={() => setShowMenu("")}
-              />
-            </div>
+              )}
+            </>
           );
         }
       )}
