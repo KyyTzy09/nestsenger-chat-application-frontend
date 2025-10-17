@@ -24,7 +24,7 @@ export default function GroupChatCard({
   currentUserId,
 }: GroupChatCardProps) {
   const prevChatLength = React.useRef<number>(0);
-  // Handle Deleted Menu
+  // Handle Deleted Chat
   function isChatDeleted(chatId: string) {
     const isSelfDeletedChat = deletedData?.filter(
       ({ chatId: deletedChatId, type, userId }) => {

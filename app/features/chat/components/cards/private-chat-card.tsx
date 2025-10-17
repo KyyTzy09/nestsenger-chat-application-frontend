@@ -6,17 +6,59 @@ import type { UserType } from "shared/types/user-type";
 import ChatParentSection from "../sections/chat-parent-section";
 import ChatMenu from "../chat-menu";
 import ReactionModal from "~/features/reaction/components/reaction-modal";
+import type { DeletedChatType } from "shared/types/deleted-chat";
+import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
+import { BanIcon } from "lucide-react";
 
 interface PrivateChatCardProps {
   data: { chat: ChatType; alias: FriendType | UserType }[] | [];
-  userId: string;
+  deletedData?: DeletedChatType[];
+  currentUserId: string;
 }
 
 export default function PrivateChatCard({
   data,
-  userId,
+  deletedData,
+  currentUserId,
 }: PrivateChatCardProps) {
   const prevChatLength = React.useRef<number>(0);
+  // Handle Deleted Chat
+  function isChatDeleted(chatId: string) {
+    const isSelfDeletedChat = deletedData?.filter(
+      ({ chatId: deletedChatId, type, userId }) => {
+        return (
+          deletedChatId === chatId &&
+          userId === currentUserId &&
+          type === DeletedChatTypeEnum.SELF
+        );
+      }
+    );
+
+    const isAllDeletedChat = deletedData?.filter(
+      ({ chatId: deletedChatId, type }) => {
+        return chatId === deletedChatId && type === DeletedChatTypeEnum.ALL;
+      }
+    );
+
+    if ((isSelfDeletedChat?.length as number) > 0) {
+      return "self";
+    } else if ((isAllDeletedChat?.length as number) > 0) {
+      return "all";
+    } else {
+      return null;
+    }
+  }
+
+  function chatDeletedOwned(chatId: string): boolean {
+    const filteredData = deletedData?.filter(
+      ({ chatId: deletedChatId, userId }) => {
+        return userId === currentUserId && chatId === deletedChatId;
+      }
+    );
+
+    return (filteredData?.length as number) > 0;
+  }
+
   // Chat menu handle
   const [showMenu, setShowMenu] = React.useState<string>("");
   const [menuPosition, setMenuPosition] = React.useState<{
@@ -78,68 +120,87 @@ export default function PrivateChatCard({
           i
         ) => {
           return (
-            <div
-              key={chatId}
-              className={`${senderId === userId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto ${reactions?.length > 0 ? "mb-5" : "mb-0"}`}
-            >
-              <div
-                onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === userId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm gap-1 shadow`}
-              >
-                {parent && (
-                  <ChatParentSection currentUserId={userId} chatId={chatId} />
-                )}
-                <p
-                  className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-all`}
-                >
-                  {linkify(message)}
-                </p>
+            <>
+              {isChatDeleted(chatId) !== "self" && (
                 <div
-                  className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
+                  key={chatId}
+                  className={`${senderId === currentUserId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto ${reactions?.length > 0 ? "mb-5" : "mb-0"}`}
                 >
-                  {!findChatIndex(i) && message.length > 700 ? (
-                    <button
-                      onClick={() => handleExpandChat(i)}
-                      className=" text-white underline text-[12px] hover:opacity-70"
+                  <div
+                    onContextMenu={(e) => handleShowContextMenu(e, chatId)}
+                    className={`${senderId === currentUserId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm gap-1 shadow`}
+                  >
+                    {!isChatDeleted(chatId) && parent && (
+                      <ChatParentSection
+                        currentUserId={currentUserId}
+                        chatId={chatId}
+                      />
+                    )}
+                    {isChatDeleted(chatId) === "all" ? (
+                      <p className="flex items-center justify-start text-sm text-gray-300 gap-1">
+                        <BanIcon className="w-3 h-3" />
+                        {chatDeletedOwned(chatId)
+                          ? "Pesan ini telah dihapus"
+                          : "Anda menghapus pesan ini"}
+                      </p>
+                    ) : (
+                      <p
+                        className={`${findChatIndex(i) && message.length > 700 ? "line-clamp-none" : "line-clamp-6"} text-sm break-words`}
+                      >
+                        {linkify(message)}
+                      </p>
+                    )}
+                    <div
+                      className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
                     >
-                      Selengkapnya
-                    </button>
-                  ) : (
-                    <button
-                      title="prev"
-                      className=" text-white underline text-[12px] hover:opacity-70"
-                    ></button>
-                  )}
-                  <p className="text-gray-300 text-[0.6rem]">
-                    {new Date(createdAt).toLocaleTimeString("id-ID", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                      {!findChatIndex(i) && message.length > 700 ? (
+                        <button
+                          onClick={() => handleExpandChat(i)}
+                          className=" text-white underline text-[12px] hover:opacity-70"
+                        >
+                          Selengkapnya
+                        </button>
+                      ) : (
+                        <button
+                          title="prev"
+                          className=" text-white underline text-[12px] hover:opacity-70"
+                        ></button>
+                      )}
+                      <p className="text-gray-300 text-[0.6rem]">
+                        {new Date(createdAt).toLocaleTimeString("id-ID", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                    <span
+                      className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
+                    ></span>
+                    {reactions?.length > 0 && (
+                      <ReactionModal
+                        currentUserId={currentUserId}
+                        chatId={chatId}
+                      />
+                    )}
+                  </div>
+                  <ChatMenu
+                    open={showMenu === chatId}
+                    chatParent={{
+                      parentId: chatId,
+                      alias:
+                        alias && currentUserId === senderId
+                          ? "Anda"
+                          : (alias as FriendType)?.alias ||
+                            (alias as UserType)?.email,
+                      message,
+                    }}
+                    position={menuPosition!}
+                    setPosition={setMenuPosition}
+                    onClose={() => setShowMenu("")}
+                  />
                 </div>
-                <span
-                  className={`${senderId === userId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
-                ></span>
-                {reactions?.length > 0 && (
-                  <ReactionModal currentUserId={userId} chatId={chatId} />
-                )}
-              </div>
-              <ChatMenu
-                open={showMenu === chatId}
-                chatParent={{
-                  parentId: chatId,
-                  alias:
-                    alias && userId === senderId
-                      ? "Anda"
-                      : (alias as FriendType)?.alias ||
-                        (alias as UserType)?.email,
-                  message,
-                }}
-                position={menuPosition!}
-                setPosition={setMenuPosition}
-                onClose={() => setShowMenu("")}
-              />
-            </div>
+              )}
+            </>
           );
         }
       )}
