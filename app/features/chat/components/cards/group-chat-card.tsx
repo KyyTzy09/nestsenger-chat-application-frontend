@@ -29,9 +29,8 @@ export default function GroupChatCard({ data, userId }: GroupChatCardProps) {
     setShowMenu(chatId);
   };
 
-  // onClic room card handle
-  const { mutate: createOrGetRoomMutate, isPending: onCreateOrGetRoomLoading } =
-    useCreateOrGetRoom();
+  // onClick room card handle
+  const { mutate: createOrGetRoomMutate, isPending: onCreateOrGetRoomLoading } = useCreateOrGetRoom();
 
   // Expand chat handler
   const [selectedIndex, setSelectedIndex] = React.useState<number[]>([]);

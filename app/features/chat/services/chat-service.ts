@@ -10,6 +10,9 @@ export const ChatService = {
     async getChatParent(data: { chatId: string }) {
         return await apiClient<{ data: { chat: ChatType, alias: FriendType | UserType } }>({ url: `/chat/${data.chatId}/parent/get`, withCredentials: true })
     },
+    async getDeletedChats(data: { roomId: string }) {
+        return await apiClient<{ data: any }>({ url: `/chat/deleted-chat/${data.roomId}/get` })
+    },
     async createChat(data: { roomId: string, message: string, parentId?: string }) {
         return await apiClient<{ data: ChatType }>({ url: '/chat/create/post', data, method: "post", withCredentials: true })
     },
