@@ -1,5 +1,6 @@
 import { apiClient } from "shared/helpers/axios"
 import type { ChatType } from "shared/types/chat-type"
+import type { DeletedChatType } from "shared/types/deleted-chat"
 import type { FriendType } from "shared/types/friend-type"
 import type { UserType } from "shared/types/user-type"
 
@@ -11,7 +12,7 @@ export const ChatService = {
         return await apiClient<{ data: { chat: ChatType, alias: FriendType | UserType } }>({ url: `/chat/${data.chatId}/parent/get`, withCredentials: true })
     },
     async getDeletedChats(data: { roomId: string }) {
-        return await apiClient<{ data: any }>({ url: `/chat/deleted-chat/${data.roomId}/get` })
+        return await apiClient<{ data: DeletedChatType[] }>({ url: `/chat/deleted-chat/${data.roomId}/get` })
     },
     async createChat(data: { roomId: string, message: string, parentId?: string }) {
         return await apiClient<{ data: ChatType }>({ url: '/chat/create/post', data, method: "post", withCredentials: true })

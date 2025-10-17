@@ -22,7 +22,7 @@ export const useGetChatParent = (data: { chatId: string }) => {
 
 export const useGetDeletedChats = (data: { roomId: string }) => {
     return useQuery({
-        queryKey: ['chat-deleted', data.roomId],
+        queryKey: ['deleted-chats', data.roomId],
         queryFn: async () => await ChatService.getDeletedChats(data),
         staleTime: 1000 * 60 * 2
     })
