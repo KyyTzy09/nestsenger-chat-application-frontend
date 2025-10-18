@@ -27,7 +27,7 @@ export default function GroupChatCard({
   const prevChatLength = React.useRef<number>(0);
   // Handle Deleted Chat
   function isChatDeleted(chatId: string) {
-    const isSelfDeletedChat = deletedData?.filter(
+    const isSelfDeletedChat = deletedData?.some(
       ({ chatId: deletedChatId, type, userId }) => {
         return (
           deletedChatId === chatId &&
@@ -37,29 +37,28 @@ export default function GroupChatCard({
       }
     );
 
-    const isAllDeletedChat = deletedData?.filter(
+    const isAllDeletedChat = deletedData?.some(
       ({ chatId: deletedChatId, type }) => {
-        return chatId === deletedChatId && type === DeletedChatTypeEnum.ALL;
+        return deletedChatId === chatId && type === DeletedChatTypeEnum.ALL;
       }
     );
 
-    if ((isSelfDeletedChat?.length as number) > 0) {
+    if (isSelfDeletedChat) {
       return "self";
-    } else if ((isAllDeletedChat?.length as number) > 0) {
+    } else if (isAllDeletedChat) {
       return "all";
     } else {
       return null;
     }
   }
 
-  function chatDeletedOwned(chatId: string): boolean {
-    const filteredData = deletedData?.filter(
-      ({ chatId: deletedChatId, userId }) => {
-        return userId === currentUserId && chatId === deletedChatId;
-      }
+  function chatDeletedOwned(chatId: string, senderId: string): boolean {
+    return (
+      deletedData?.some(
+        ({ chatId: deletedChatId }) =>
+          senderId === currentUserId && chatId === deletedChatId
+      ) ?? false
     );
-
-    return (filteredData?.length as number) > 0;
   }
 
   // Chat menu handle
@@ -171,9 +170,10 @@ export default function GroupChatCard({
                     {isChatDeleted(chatId) === "all" ? (
                       <p className="flex items-center justify-start text-sm text-gray-300 gap-1">
                         <BanIcon className="w-3 h-3" />
-                        {chatDeletedOwned(chatId)
-                          ? "Pesan ini telah dihapus"
-                          : "Anda menghapus pesan ini"}
+                        {chatDeletedOwned(chatId, senderId) &&
+                        currentUserId === senderId
+                          ? "Anda menghapus pesan ini"
+                          : "Pesan ini telah dihapus"}
                       </p>
                     ) : (
                       <p
@@ -218,7 +218,7 @@ export default function GroupChatCard({
                   <ChatMenu
                     open={showMenu === chatId}
                     chatData={{
-                       chatId,
+                      chatId,
                       alias:
                         alias && currentUserId === senderId
                           ? "Anda"

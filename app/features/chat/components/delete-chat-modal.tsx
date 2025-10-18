@@ -7,6 +7,9 @@ import {
 import { Button } from "shared/shadcn/button";
 import { Label } from "shared/shadcn/label";
 import { RadioGroup, RadioGroupItem } from "shared/shadcn/radio-group";
+import { useDeleteChatForAll, useDeleteChatForSelf } from "../hooks/chat-hook";
+import { useParams } from "react-router";
+import { Loader2Icon } from "lucide-react";
 
 interface DeleteChatModal {
   onOpen: boolean;
@@ -19,6 +22,18 @@ export default function DeleteChatModal({
   onOpenChange,
   chatId,
 }: DeleteChatModal) {
+  const { chatId: roomId } = useParams<{ chatId: string }>();
+
+  const handleClose = () => {
+    onOpenChange(false);
+  };
+  
+  // Handle Mutation
+  const { mutate: deleteForAllMutate, isPending: isDeleteForAllLoading } =
+    useDeleteChatForAll(roomId as string, handleClose);
+  const { mutate: deleteForSelfMutate, isPending: isDeleteForSelfLoading } =
+    useDeleteChatForSelf(roomId as string, handleClose);
+
   const [deleteType, setDeleteType] = React.useState<"all" | "self" | "">("");
 
   const deleteOption = [
@@ -34,10 +49,11 @@ export default function DeleteChatModal({
 
   const handleDelete = () => {
     if (deleteType === "all") {
-      return;
-    } else {
-      return;
+      deleteForAllMutate({ chatId });
+    } else if (deleteType === "self") {
+      deleteForSelfMutate({ chatId });
     }
+    onOpenChange(false);
   };
 
   React.useEffect(() => {
@@ -80,10 +96,17 @@ export default function DeleteChatModal({
         </div>
         <div className="flex items-center justify-center w-full min-h-10 h-full bg-[#191919] gap-5 p-5 px-10">
           <Button
+            disabled={
+              !deleteType || isDeleteForAllLoading || isDeleteForSelfLoading
+            }
             onClick={handleDelete}
             className="w-1/2 bg-blue-600 hover:bg-blue-400"
           >
-            Hapus
+            {isDeleteForAllLoading || isDeleteForSelfLoading ? (
+              <Loader2Icon className="w-4 h-4 animate-spin" />
+            ) : (
+              "Hapus"
+            )}
           </Button>
           <AlertDialogCancel className="w-1/2 bg-[#303030] text-white font-semibold border-none hover:bg-[#353535] hover:text-white">
             Batal
