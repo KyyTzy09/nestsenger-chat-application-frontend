@@ -8,6 +8,7 @@ import { useCreateReaction } from "~/features/reaction/hooks/reaction-hook";
 import ReactionSection from "~/features/reaction/components/reaction-section";
 import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { cn } from "~/lib/utils";
+import DeleteChatModal from "./delete-chat-modal";
 
 interface ChatMenuProps {
   open: boolean;
@@ -32,6 +33,8 @@ export default function ChatMenu({
   setPosition,
 }: ChatMenuProps) {
   const [display, setDisplay] = React.useState<"menu" | "picker">("menu");
+  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+
   // Chat context handle
   const chatMenuRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
@@ -53,7 +56,9 @@ export default function ChatMenu({
         y = innerHeight - menuRect.height - 8;
       }
 
-      setPosition({ x, y });
+      if (x !== position.x || y !== position.y) {
+        setPosition({ x, y });
+      }
     }
   }, [open, position]);
 
@@ -80,6 +85,7 @@ export default function ChatMenu({
       Icon: Trash2Icon,
       text: "Hapus Pesan",
       action: () => {
+        setShowDeleteModal(true);
         onClose();
       },
     },
@@ -91,6 +97,11 @@ export default function ChatMenu({
 
   return (
     <AnimatePresence>
+      <DeleteChatModal
+        onOpen={showDeleteModal}
+        onOpenChange={setShowDeleteModal}
+        chatId={chatParent.parentId}
+      />
       {open && (
         <>
           <motion.div
