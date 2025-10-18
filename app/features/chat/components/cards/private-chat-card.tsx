@@ -124,7 +124,7 @@ export default function PrivateChatCard({
               {isChatDeleted(chatId) !== "self" && (
                 <div
                   key={chatId}
-                  className={`${senderId === currentUserId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto ${reactions?.length > 0 ? "mb-5" : "mb-0"}`}
+                  className={`${senderId === currentUserId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto ${!isChatDeleted(chatId) && reactions?.length > 0 ? "mb-5" : "mb-0"}`}
                 >
                   <div
                     onContextMenu={(e) => handleShowContextMenu(e, chatId)}
@@ -176,7 +176,7 @@ export default function PrivateChatCard({
                     <span
                       className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                     ></span>
-                    {reactions?.length > 0 && (
+                    {!isChatDeleted(chatId) && reactions?.length > 0 && (
                       <ReactionModal
                         currentUserId={currentUserId}
                         chatId={chatId}
