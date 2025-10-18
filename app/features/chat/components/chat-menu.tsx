@@ -12,8 +12,8 @@ import DeleteChatModal from "./delete-chat-modal";
 
 interface ChatMenuProps {
   open: boolean;
-  chatParent: {
-    parentId: string;
+  chatData: {
+    chatId: string;
     content?: string | null;
     alias: string;
     message: string;
@@ -26,7 +26,7 @@ interface ChatMenuProps {
 }
 
 export default function ChatMenu({
-  chatParent,
+  chatData,
   onClose,
   open,
   position,
@@ -69,7 +69,14 @@ export default function ChatMenu({
       Icon: ReplyIcon,
       text: "Balas",
       action: () => {
-        setParent({ parent: chatParent });
+        setParent({
+          parent: {
+            parentId: chatData.chatId,
+            alias: chatData.alias,
+            message: chatData.message,
+            content: chatData.content,
+          },
+        });
         onClose();
       },
     },
@@ -77,7 +84,7 @@ export default function ChatMenu({
       Icon: CopyIcon,
       text: "Salin",
       action: () => {
-        navigator.clipboard.writeText(chatParent?.message);
+        navigator.clipboard.writeText(chatData?.message);
         onClose();
       },
     },
@@ -100,7 +107,7 @@ export default function ChatMenu({
       <DeleteChatModal
         onOpen={showDeleteModal}
         onOpenChange={setShowDeleteModal}
-        chatId={chatParent.parentId}
+        chatId={chatData.chatId}
       />
       {open && (
         <>
@@ -127,7 +134,7 @@ export default function ChatMenu({
               <motion.div className="flex flex-col w-full h-full gap-1 p-2">
                 <ReactionSection
                   setDisplay={setDisplay}
-                  chatId={chatParent.parentId}
+                  chatId={chatData.chatId}
                   onClose={onClose}
                 />
                 <Separator className="opacity-70" />
@@ -149,7 +156,7 @@ export default function ChatMenu({
                 <EmojiPicker
                   onEmojiClick={(emoji) => {
                     createReactionMutate({
-                      chatId: chatParent?.parentId,
+                      chatId: chatData?.chatId,
                       content: emoji.emoji,
                     });
                     onClose();

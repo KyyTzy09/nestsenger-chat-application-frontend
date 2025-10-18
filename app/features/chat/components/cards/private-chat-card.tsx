@@ -186,10 +186,9 @@ export default function PrivateChatCard({
                   </div>
                   <ChatMenu
                     open={showMenu === chatId}
-                    chatParent={{
-                      parentId: chatId,
-                      alias:
-                        currentUserId === alias.userId ? "Anda" : alias.name,
+                    chatData={{
+                      chatId,
+                      alias: currentUserId === senderId ? "Anda" : alias.name,
                       message,
                     }}
                     position={menuPosition!}
