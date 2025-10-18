@@ -71,10 +71,10 @@ export default function ChatMenu({
       action: () => {
         setParent({
           parent: {
-            parentId: chatData.chatId,
-            alias: chatData.alias,
-            message: chatData.message,
-            content: chatData.content,
+            parentId: chatData?.chatId,
+            alias: chatData?.alias,
+            message: chatData?.message,
+            content: chatData?.content,
           },
         });
         onClose();
@@ -107,7 +107,7 @@ export default function ChatMenu({
       <DeleteChatModal
         onOpen={showDeleteModal}
         onOpenChange={setShowDeleteModal}
-        chatId={chatData.chatId}
+        chatId={chatData?.chatId}
       />
       {open && (
         <>
@@ -134,7 +134,7 @@ export default function ChatMenu({
               <motion.div className="flex flex-col w-full h-full gap-1 p-2">
                 <ReactionSection
                   setDisplay={setDisplay}
-                  chatId={chatData.chatId}
+                  chatId={chatData?.chatId}
                   onClose={onClose}
                 />
                 <Separator className="opacity-70" />
