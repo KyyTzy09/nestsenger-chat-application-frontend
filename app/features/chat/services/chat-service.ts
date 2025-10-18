@@ -19,6 +19,9 @@ export const ChatService = {
         return await apiClient<{ data: ChatType }>({ url: '/chat/create/post', data, method: "post", withCredentials: true })
     },
     async deleteChatForAll(data: { chatId: string }) {
-        return await apiClient<{ message: string, statusCode: number }>({ url: `/chat/${data.chatId}/delete`, withCredentials: true, method: "delete" })
+        return await apiClient<{ message: string, statusCode: number }>({ url: `/chat/for-all/${data.chatId}/delete`, withCredentials: true, method: "delete" })
+    },
+    async deleteChatForSelf(data: { chatId: string }) {
+        return await apiClient<{ message: string, statusCode: number }>({ url: `/chat/for-self/${data.chatId}/delete`, withCredentials: true, method: "delete" })
     }
 }

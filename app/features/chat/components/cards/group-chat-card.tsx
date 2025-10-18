@@ -217,8 +217,8 @@ export default function GroupChatCard({
                   </section>
                   <ChatMenu
                     open={showMenu === chatId}
-                    chatParent={{
-                      parentId: chatId,
+                    chatData={{
+                       chatId,
                       alias:
                         alias && currentUserId === senderId
                           ? "Anda"

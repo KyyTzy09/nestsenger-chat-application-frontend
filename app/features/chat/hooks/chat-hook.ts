@@ -38,11 +38,25 @@ export const useCreateChat = (roomId: string,) => {
     })
 }
 
-export const deleteChatForAll = (roomId: string) => {
+export const useDeleteChatForAll = (roomId: string) => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationKey: ["delete-forAll"],
+        mutationKey: ["delete-all"],
         mutationFn: async (data: { chatId: string }) => await ChatService.deleteChatForAll(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['chat', roomId], type: "all" })
+        },
+        onError: (err) => {
+            toast.error(err.message || "Gagal menghapus chat")
+        }
+    })
+}
+
+export const useDeleteChatForSelf = (roomId: string) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ["delete-self"],
+        mutationFn: async (data: { chatId: string }) => await ChatService.deleteChatForSelf(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['chat', roomId], type: "all" })
         },
