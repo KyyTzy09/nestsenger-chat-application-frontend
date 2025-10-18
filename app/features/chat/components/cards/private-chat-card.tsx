@@ -9,9 +9,10 @@ import ReactionModal from "~/features/reaction/components/reaction-modal";
 import type { DeletedChatType } from "shared/types/deleted-chat";
 import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
 import { BanIcon } from "lucide-react";
+import type { AliasType } from "shared/types/alias-type";
 
 interface PrivateChatCardProps {
-  data: { chat: ChatType; alias: FriendType | UserType }[] | [];
+  data: { chat: ChatType; alias: AliasType }[] | [];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
@@ -188,10 +189,7 @@ export default function PrivateChatCard({
                     chatParent={{
                       parentId: chatId,
                       alias:
-                        alias && currentUserId === senderId
-                          ? "Anda"
-                          : (alias as FriendType)?.alias ||
-                            (alias as UserType)?.email,
+                        currentUserId === alias.userId ? "Anda" : alias.name,
                       message,
                     }}
                     position={menuPosition!}

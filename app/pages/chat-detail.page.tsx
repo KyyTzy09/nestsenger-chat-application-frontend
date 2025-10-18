@@ -91,7 +91,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
                 </div>
                 {roomInfoResponse?.data?.room?.type === RoomTypeEnum.PRIVATE ? (
                   <PrivateChatCard
-                    userId={profileResponse?.data.userId!}
+                    currentUserId={profileResponse?.data.userId!}
                     data={chats}
                   />
                 ) : (

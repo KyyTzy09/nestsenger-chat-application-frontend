@@ -11,9 +11,10 @@ import ReactionModal from "~/features/reaction/components/reaction-modal";
 import type { DeletedChatType } from "shared/types/deleted-chat";
 import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
 import { BanIcon } from "lucide-react";
+import type { AliasType } from "shared/types/alias-type";
 
 interface GroupChatCardProps {
-  data: { chat: ChatType; alias: FriendType | UserType }[] | [];
+  data: { chat: ChatType; alias: AliasType }[] | [];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
@@ -141,12 +142,7 @@ export default function GroupChatCard({
                       className="group w-10 h-10 rounded-full overflow-hidden"
                     >
                       <img
-                        src={
-                          alias
-                            ? (alias as FriendType)?.friend?.avatar ||
-                              (alias as UserType)?.profile?.avatar
-                            : defaultImage
-                        }
+                        src={alias ? alias.avatar : defaultImage}
                         className="w-full h-full group-hover:opacity-80"
                         alt=""
                       />
@@ -161,10 +157,7 @@ export default function GroupChatCard({
                         <p
                           className={"text-blue-500 text-[12px] font-semibold"}
                         >
-                          {alias
-                            ? (alias as FriendType)?.alias ||
-                              "~" + (alias as UserType).email
-                            : "Pengguna"}
+                          {alias ? alias.name : "Pengguna"}
                         </p>
                       </div>
                     )}
@@ -229,8 +222,7 @@ export default function GroupChatCard({
                       alias:
                         alias && currentUserId === senderId
                           ? "Anda"
-                          : (alias as FriendType)?.alias ||
-                            (alias as UserType)?.email,
+                          : alias.name,
                       message,
                     }}
                     position={menuPosition!}

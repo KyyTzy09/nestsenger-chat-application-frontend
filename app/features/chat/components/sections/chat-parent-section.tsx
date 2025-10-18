@@ -18,9 +18,7 @@ export default function ChatParentSection({
   return (
     <section className="flex flex-col items-start justify-between w-full h-auto p-2 bg-gray-500/40 rounded-md border-l-[5px] border-blue-700">
       <p className="flex items-center justify-start w-full text-[12px] text-gray-300 font-semibold">
-        {alias && currentUserId === chat?.userId
-          ? "Anda"
-          : (alias as FriendType)?.alias || "~" + (alias as UserType)?.email}
+        {alias && currentUserId === chat?.userId ? "Anda" : alias?.name}
       </p>
       <p className="line-clamp-1 text-[11px] text-gray-300">{chat?.message}</p>
     </section>
