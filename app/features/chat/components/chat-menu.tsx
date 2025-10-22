@@ -23,6 +23,8 @@ interface ChatMenuProps {
     React.SetStateAction<{ x: number; y: number } | null>
   >;
   onClose: () => void;
+  isChatDeleted: boolean;
+  isChatOwner: boolean;
 }
 
 export default function ChatMenu({
@@ -31,6 +33,8 @@ export default function ChatMenu({
   open,
   position,
   setPosition,
+  isChatDeleted,
+  isChatOwner,
 }: ChatMenuProps) {
   const [display, setDisplay] = React.useState<"menu" | "picker">("menu");
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
@@ -66,6 +70,7 @@ export default function ChatMenu({
   const { setParent } = useChatParentDataStore();
   const chatButtonMenuItems = [
     {
+      disable: isChatDeleted,
       Icon: ReplyIcon,
       text: "Balas",
       action: () => {
@@ -81,6 +86,7 @@ export default function ChatMenu({
       },
     },
     {
+      disable: isChatDeleted,
       Icon: CopyIcon,
       text: "Salin",
       action: () => {
@@ -89,12 +95,19 @@ export default function ChatMenu({
       },
     },
     {
+      disable: isChatDeleted || !isChatOwner,
       Icon: Trash2Icon,
       text: "Hapus Pesan",
       action: () => {
         setShowDeleteModal(true);
         onClose();
       },
+    },
+    {
+      disable: !isChatDeleted && isChatOwner,
+      Icon: Trash2Icon,
+      text: "Hapus untuk saya",
+      action: () => {},
     },
   ];
 
@@ -132,24 +145,34 @@ export default function ChatMenu({
           >
             {display === "menu" ? (
               <motion.div className="flex flex-col w-full h-full gap-1 p-2">
-                <ReactionSection
-                  setDisplay={setDisplay}
-                  chatId={chatData?.chatId}
-                  onClose={onClose}
-                />
-                <Separator className="opacity-70" />
-                {chatButtonMenuItems.map(({ Icon, action, text }, i) => {
-                  return (
-                    <Button
-                      key={i}
-                      onClick={action}
-                      className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
-                    >
-                      <Icon />
-                      {text}
-                    </Button>
-                  );
-                })}
+                {!isChatDeleted && (
+                  <>
+                    <ReactionSection
+                      setDisplay={setDisplay}
+                      chatId={chatData?.chatId}
+                      onClose={onClose}
+                    />
+                    <Separator className="opacity-70" />
+                  </>
+                )}
+                {chatButtonMenuItems.map(
+                  ({ disable, Icon, action, text }, i) => {
+                    return (
+                      <>
+                        {!disable && (
+                          <Button
+                            key={i}
+                            onClick={action}
+                            className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+                          >
+                            <Icon />
+                            {text}
+                          </Button>
+                        )}
+                      </>
+                    );
+                  }
+                )}
               </motion.div>
             ) : (
               <motion.div className="flex w-full max-w-full h-full gap-1">

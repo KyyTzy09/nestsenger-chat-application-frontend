@@ -193,6 +193,8 @@ export default function PrivateChatCard({
                     position={menuPosition!}
                     setPosition={setMenuPosition}
                     onClose={() => setShowMenu("")}
+                    isChatDeleted={isChatDeleted(chatId) !== null}
+                    isChatOwner={currentUserId === senderId}
                   />
                 </div>
               )}
