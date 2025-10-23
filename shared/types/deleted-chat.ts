@@ -6,6 +6,7 @@ export type DeletedChatType = {
     userId: string
     chatId: string
     type: DeletedChatTypeEnum
+    isDeleted: boolean
     createdAt: Date
     updatedAt: Date
 

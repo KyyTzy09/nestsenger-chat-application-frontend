@@ -27,6 +27,16 @@ export default function GroupChatCard({
   const prevChatLength = React.useRef<number>(0);
   // Handle Deleted Chat
   function isChatDeleted(chatId: string) {
+    const isChatHasDeleted = deletedData?.some(
+      ({ chatId: deletedChatId, isDeleted, userId }) => {
+        return (
+          deletedChatId === chatId &&
+          userId === currentUserId &&
+          isDeleted === true
+        );
+      }
+    );
+
     const isSelfDeletedChat = deletedData?.some(
       ({ chatId: deletedChatId, type, userId }) => {
         return (
@@ -47,6 +57,8 @@ export default function GroupChatCard({
       return "self";
     } else if (isAllDeletedChat) {
       return "all";
+    } else if (isChatHasDeleted) {
+      return "deleted";
     } else {
       return null;
     }
@@ -127,7 +139,7 @@ export default function GroupChatCard({
         ) => {
           return (
             <>
-              {isChatDeleted(chatId) !== "self" && (
+              {isChatDeleted(chatId) !== "self" || isChatDeleted(chatId) !== "deleted" && (
                 <div
                   key={chatId}
                   className={`${senderId === currentUserId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
