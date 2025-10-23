@@ -67,6 +67,19 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
     };
   }, [queryClient]);
 
+  React.useEffect(() => {
+    const handler = () => {
+      queryClient.invalidateQueries({
+        queryKey: ["deleted-chats", chatId],
+        refetchType: "all",
+      });
+    };
+    socket.on("deletedChat", handler);
+    return () => {
+      socket.off("deletedChat", handler);
+    };
+  }, [queryClient]);
+
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">
       {!isRoomInfoLoading && (

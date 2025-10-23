@@ -9,6 +9,8 @@ import ReactionSection from "~/features/reaction/components/reaction-section";
 import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { cn } from "~/lib/utils";
 import DeleteChatModal from "./delete-chat-modal";
+import { useDeleteChatForSelf } from "../hooks/chat-hook";
+import { useParams } from "react-router";
 
 interface ChatMenuProps {
   open: boolean;
@@ -66,6 +68,11 @@ export default function ChatMenu({
     }
   }, [open, position]);
 
+  // DeleteChat
+  const { roomId } = useParams<{ roomId: string }>();
+  const { mutate: deleteChatForSelfMutate, isPending: isDeleting } =
+    useDeleteChatForSelf(roomId!, () => {});
+
   // Menu Item Handle
   const { setParent } = useChatParentDataStore();
   const chatButtonMenuItems = [
@@ -107,7 +114,10 @@ export default function ChatMenu({
       disable: !isChatDeleted && isChatOwner,
       Icon: Trash2Icon,
       text: "Hapus untuk saya",
-      action: () => {},
+      action: () => {
+        deleteChatForSelfMutate({ chatId: chatData.chatId });
+        onClose();
+      },
     },
   ];
 

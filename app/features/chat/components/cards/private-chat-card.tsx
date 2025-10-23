@@ -25,6 +25,16 @@ export default function PrivateChatCard({
   const prevChatLength = React.useRef<number>(0);
   // Handle Deleted Chat
   function isChatDeleted(chatId: string) {
+    const isChatHasDeleted = deletedData?.some(
+      ({ chatId: deletedChatId, isDeleted, userId }) => {
+        return (
+          deletedChatId === chatId &&
+          userId === currentUserId &&
+          isDeleted
+        );
+      }
+    );
+
     const isSelfDeletedChat = deletedData?.some(
       ({ chatId: deletedChatId, type, userId }) => {
         return (
@@ -45,6 +55,8 @@ export default function PrivateChatCard({
       return "self";
     } else if (isAllDeletedChat) {
       return "all";
+    } else if (isChatHasDeleted) {
+      return "deleted";
     } else {
       return null;
     }
