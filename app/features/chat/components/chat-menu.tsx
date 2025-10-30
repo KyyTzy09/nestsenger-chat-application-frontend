@@ -71,7 +71,7 @@ export default function ChatMenu({
   // DeleteChat
   const { roomId } = useParams<{ roomId: string }>();
   const { mutate: deleteChatForSelfMutate, isPending: isDeleting } =
-    useDeleteChatForSelf(roomId!, () => {});
+    useDeleteChatForSelf(roomId!, () => onClose());
 
   // Menu Item Handle
   const { setParent } = useChatParentDataStore();
@@ -116,7 +116,6 @@ export default function ChatMenu({
       text: "Hapus untuk saya",
       action: () => {
         deleteChatForSelfMutate({ chatId: chatData.chatId });
-        onClose();
       },
     },
   ];

@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ChatService } from "../services/chat-service"
 import { toast } from "sonner"
-import { socket } from "shared/configs/socket"
-import type { ChatType } from "shared/types/chat-type"
 
 export const useGetChats = (data: { roomId: string }) => {
     return useQuery({
@@ -60,8 +58,8 @@ export const useDeleteChatForSelf = (roomId: string, onSuccess: () => void) => {
         mutationKey: ["delete-self"],
         mutationFn: async (data: { chatId: string }) => await ChatService.deleteChatForSelf(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['chat', roomId], type: "all" })
-            queryClient.invalidateQueries({ queryKey: ['deleted-chats', roomId], type: "all" })
+            queryClient.refetchQueries({ queryKey: ['chat', roomId], type: "all" })
+            queryClient.refetchQueries({ queryKey: ['deleted-chats', roomId], type: "all" })
             onSuccess()
         },
         onError: (err) => {
