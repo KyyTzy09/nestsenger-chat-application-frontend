@@ -23,11 +23,8 @@ interface ChatDetailPageProps {
 
 export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   const queryClient = useQueryClient();
-  const { data: roomInfoResponse, isPending: isRoomInfoLoading } =
-    useGetRoomById({ roomId: chatId });
-  const { data: chatResponse, isPending: isChatLoading } = useGetChats({
-    roomId: chatId,
-  });
+  const { data: roomInfoResponse, isPending: isRoomInfoLoading } = useGetRoomById({ roomId: chatId });
+  const { data: chatResponse } = useGetChats({ roomId: chatId });
   const { data: profileResponse } = useGetProfile();
   const { data: memberResponse } = useGetRoomMember({ roomId: chatId });
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId: chatId });
@@ -91,31 +88,36 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
       )}
       <section className="relative w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
         {chatResponse?.data?.length! > 0 &&
-          chatResponse?.data.map(({ chats, date }, i) => {
+          chatResponse?.data?.map(({ chats, date }, i) => {
             return (
-              <div
-                key={i}
-                className="flex flex-col items-center w-full h-auto gap-5"
-              >
-                <div className="flex items-center justify-center w-full">
-                  <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
-                    {generateDateText(date)}
-                  </p>
-                </div>
-                {roomInfoResponse?.data?.room?.type === RoomTypeEnum.PRIVATE ? (
-                  <PrivateChatCard
-                    deletedData={deletedChatResponse?.data}
-                    currentUserId={profileResponse?.data.userId!}
-                    data={chats}
-                  />
-                ) : (
-                  <GroupChatCard
-                    deletedData={deletedChatResponse?.data}
-                    currentUserId={profileResponse?.data.userId!}
-                    data={chats}
-                  />
+              <React.Fragment key={i}>
+                {chats?.length > 0 && (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center w-full h-auto gap-5"
+                  >
+                    <div className="flex items-center justify-center w-full">
+                      <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
+                        {generateDateText(date)}
+                      </p>
+                    </div>
+                    {roomInfoResponse?.data?.room?.type ===
+                    RoomTypeEnum.PRIVATE ? (
+                      <PrivateChatCard
+                        deletedData={deletedChatResponse?.data}
+                        currentUserId={profileResponse?.data.userId!}
+                        data={chats}
+                      />
+                    ) : (
+                      <GroupChatCard
+                        deletedData={deletedChatResponse?.data}
+                        currentUserId={profileResponse?.data.userId!}
+                        data={chats}
+                      />
+                    )}
+                  </div>
                 )}
-              </div>
+              </React.Fragment>
             );
           })}
       </section>
