@@ -88,7 +88,7 @@ export default function PrivateChatCard({
         ) => {
           return (
             <div
-              className={`${senderId === currentUserId ? "justify-end" : "justify-start"} flex items-center relative w-full h-auto ${!isChatDeletedLogic(deletedData as [], chatId) && reactions?.length > 0 ? "mb-5" : "mb-0"}`}
+              className={`${isChatDeletedLogic(deletedData as [], chatId) === "deleted" ? "hidden" : "flex"} ${senderId === currentUserId ? "justify-end" : "justify-start"} items-center relative w-full h-auto ${!isChatDeletedLogic(deletedData as [], chatId) && reactions?.length > 0 ? "mb-5" : "mb-0"}`}
             >
               <div
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}

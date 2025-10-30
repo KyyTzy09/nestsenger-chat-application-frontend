@@ -95,7 +95,7 @@ export default function GroupChatCard({
           return (
             <div
               key={chatId}
-              className={`${senderId === currentUserId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative flex items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
+              className={`${isChatDeletedLogic(deletedData as [], chatId) === "deleted" ? "hidden" : "flex"} ${senderId === currentUserId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
             >
               {senderId !== currentUserId && (
                 <button
