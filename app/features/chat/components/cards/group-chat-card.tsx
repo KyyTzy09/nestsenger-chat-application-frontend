@@ -95,7 +95,7 @@ export default function GroupChatCard({
           return (
             <div
               key={chatId}
-              className={`${isChatDeletedLogic(deletedData as [], chatId) === "deleted" ? "hidden" : "flex"} ${senderId === currentUserId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
+              className={`${isChatDeletedLogic(deletedData as [], { currentUserId, chatId }) === "deleted" ? "hidden" : "flex"} ${senderId === currentUserId ? "justify-end rounded-tr-none" : "justify-start rounded-tl-none"} relative items-start w-full h-auto gap-2 ${reactions.length > 0 ? "mb-5" : "mb-0"}`}
             >
               {senderId !== currentUserId && (
                 <button
@@ -121,13 +121,20 @@ export default function GroupChatCard({
                     </p>
                   </div>
                 )}
-                {!isChatDeletedLogic(deletedData as [], chatId) && parent && (
-                  <ChatParentSection
-                    currentUserId={currentUserId}
-                    chatId={chatId}
-                  />
-                )}
-                {isChatDeletedLogic(deletedData as [], chatId) === "all" ? (
+                {!isChatDeletedLogic(deletedData as [], {
+                  currentUserId,
+                  chatId,
+                }) &&
+                  parent && (
+                    <ChatParentSection
+                      currentUserId={currentUserId}
+                      chatId={chatId}
+                    />
+                  )}
+                {isChatDeletedLogic(deletedData as [], {
+                  currentUserId,
+                  chatId,
+                }) === "all" ? (
                   <p className="flex items-center justify-start text-sm text-gray-300 gap-1">
                     <BanIcon className="w-3 h-3" />
                     {chatDeletedOwnedLogic(deletedData as [], {
@@ -171,7 +178,10 @@ export default function GroupChatCard({
                 <span
                   className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
-                {!isChatDeletedLogic(deletedData as [], chatId) &&
+                {!isChatDeletedLogic(deletedData as [], {
+                  currentUserId,
+                  chatId,
+                }) &&
                   reactions.length > 0 && (
                     <ReactionModal
                       currentUserId={currentUserId}
@@ -191,7 +201,10 @@ export default function GroupChatCard({
                 setPosition={setMenuPosition}
                 onClose={() => setShowMenu("")}
                 isChatDeleted={
-                  isChatDeletedLogic(deletedData as [], chatId) !== null
+                  isChatDeletedLogic(deletedData as [], {
+                    currentUserId,
+                    chatId,
+                  }) !== null
                 }
                 isChatOwner={currentUserId === senderId}
               />
