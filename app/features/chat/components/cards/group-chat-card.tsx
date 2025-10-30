@@ -2,8 +2,6 @@ import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { linkify } from "shared/helpers/linkify";
 import type { ChatType } from "shared/types/chat-type";
-import type { FriendType } from "shared/types/friend-type";
-import type { UserType } from "shared/types/user-type";
 import { useCreateOrGetRoom } from "~/features/room/hooks/room-hooks";
 import ChatParentSection from "../sections/chat-parent-section";
 import ChatMenu from "../chat-menu";
@@ -12,6 +10,10 @@ import type { DeletedChatType } from "shared/types/deleted-chat";
 import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
 import { BanIcon } from "lucide-react";
 import type { AliasType } from "shared/types/alias-type";
+import {
+  chatDeletedOwnedLogic,
+  isChatDeletedLogic,
+} from "../logic/deleted-chat-logic";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: AliasType }[] | [];
@@ -25,27 +27,6 @@ export default function GroupChatCard({
   currentUserId,
 }: GroupChatCardProps) {
   const prevChatLength = React.useRef<number>(0);
-  // Handle Deleted Chat
-  function isChatDeleted(chatId: string) {
-    const isChatHasDeleted = deletedData?.find(({ chatId: deletedChatId }) => {
-      return deletedChatId === chatId;
-    });
-
-    if (isChatHasDeleted?.type === DeletedChatTypeEnum.ALL) {
-      return "all";
-    } else {
-      return null;
-    }
-  }
-
-  function chatDeletedOwned(chatId: string, senderId: string): boolean {
-    return (
-      deletedData?.some(
-        ({ chatId: deletedChatId }) =>
-          senderId === currentUserId && chatId === deletedChatId
-      ) ?? false
-    );
-  }
 
   // Chat menu handle
   const [showMenu, setShowMenu] = React.useState<string>("");
@@ -140,17 +121,20 @@ export default function GroupChatCard({
                     </p>
                   </div>
                 )}
-                {!isChatDeleted(chatId) && parent && (
+                {!isChatDeletedLogic(deletedData as [], chatId) && parent && (
                   <ChatParentSection
                     currentUserId={currentUserId}
                     chatId={chatId}
                   />
                 )}
-                {isChatDeleted(chatId) === "all" ? (
+                {isChatDeletedLogic(deletedData as [], chatId) === "all" ? (
                   <p className="flex items-center justify-start text-sm text-gray-300 gap-1">
                     <BanIcon className="w-3 h-3" />
-                    {chatDeletedOwned(chatId, senderId) &&
-                    currentUserId === senderId
+                    {chatDeletedOwnedLogic(deletedData as [], {
+                      chatId,
+                      senderId,
+                      currentUserId,
+                    }) && currentUserId === senderId
                       ? "Anda menghapus pesan ini"
                       : "Pesan ini telah dihapus"}
                   </p>
@@ -187,12 +171,13 @@ export default function GroupChatCard({
                 <span
                   className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
-                {!isChatDeleted(chatId) && reactions.length > 0 && (
-                  <ReactionModal
-                    currentUserId={currentUserId}
-                    chatId={chatId}
-                  />
-                )}
+                {!isChatDeletedLogic(deletedData as [], chatId) &&
+                  reactions.length > 0 && (
+                    <ReactionModal
+                      currentUserId={currentUserId}
+                      chatId={chatId}
+                    />
+                  )}
               </section>
               <ChatMenu
                 open={showMenu === chatId}
@@ -205,7 +190,9 @@ export default function GroupChatCard({
                 position={menuPosition!}
                 setPosition={setMenuPosition}
                 onClose={() => setShowMenu("")}
-                isChatDeleted={isChatDeleted(chatId) !== null}
+                isChatDeleted={
+                  isChatDeletedLogic(deletedData as [], chatId) !== null
+                }
                 isChatOwner={currentUserId === senderId}
               />
             </div>
