@@ -12,6 +12,7 @@ import {
   chatDeletedOwnedLogic,
   isChatDeletedLogic,
 } from "../logic/deleted-chat-logic";
+import { AnimatePresence } from "motion/react";
 
 interface PrivateChatCardProps {
   data: { chat: ChatType; alias: AliasType }[] | [];
@@ -151,16 +152,18 @@ export default function PrivateChatCard({
                 <span
                   className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
-                {!isChatDeletedLogic(deletedData as [], {
-                  currentUserId,
-                  chatId,
-                }) &&
-                  reactions?.length > 0 && (
-                    <ReactionModal
-                      currentUserId={currentUserId}
-                      chatId={chatId}
-                    />
-                  )}
+                <AnimatePresence>
+                  {!isChatDeletedLogic(deletedData as [], {
+                    currentUserId,
+                    chatId,
+                  }) &&
+                    reactions?.length > 0 && (
+                      <ReactionModal
+                        currentUserId={currentUserId}
+                        chatId={chatId}
+                      />
+                    )}
+                </AnimatePresence>
               </div>
               <ChatMenu
                 open={showMenu === chatId}
