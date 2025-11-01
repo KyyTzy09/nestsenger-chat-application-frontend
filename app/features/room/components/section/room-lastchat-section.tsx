@@ -1,3 +1,4 @@
+import { BanIcon } from "lucide-react";
 import React from "react";
 import { RoomTypeEnum } from "shared/enums/room-type";
 import { generateDateText2 } from "shared/helpers/generate-date";
@@ -58,7 +59,16 @@ export default function RoomLastChatSection({
         </p>
       </div>
       <div className="flex items-center justify-start w-full text-[14px] text-gray-300 gap-1">
-        <p className="line-clamp-1">{`${displayLastChatData()} ${room?.lastChat?.message || ""}`}</p>
+        <p className="flex items-center line-clamp-1 gap-1">
+          {displayLastChatData()}{" "}
+          {room?.lastChat?.message === "Pesan ini telah dihapus" && (
+            <BanIcon className="w-3 h-3" />
+          )}
+          {profileResponse?.data.userId === room.lastChat.userId &&
+          room?.lastChat?.message === "Pesan ini telah dihapus"
+            ? "Anda menghapus pesan ini"
+            : room?.lastChat?.message}
+        </p>
       </div>
     </section>
   );
