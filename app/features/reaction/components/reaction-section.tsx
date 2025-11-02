@@ -6,7 +6,7 @@ import { PlusIcon } from "lucide-react";
 interface ReactionSectionProps {
   chatId: string;
   onClose: () => void;
-  setDisplay: React.Dispatch<React.SetStateAction<"menu" | "picker">>;
+  setDisplay: React.Dispatch<React.SetStateAction<"menu" | "picker" | "info">>;
 }
 
 export default function ReactionSection({

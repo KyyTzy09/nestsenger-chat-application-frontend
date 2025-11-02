@@ -17,6 +17,7 @@ import { cn } from "~/lib/utils";
 import DeleteChatModal from "./delete-chat-modal";
 import { useDeleteChatForSelf } from "../hooks/chat-hook";
 import { useParams } from "react-router";
+import ChatInfoSection from "./sections/chat-info-section";
 
 interface ChatMenuProps {
   open: boolean;
@@ -44,7 +45,9 @@ export default function ChatMenu({
   isChatDeleted,
   isChatOwner,
 }: ChatMenuProps) {
-  const [display, setDisplay] = React.useState<"menu" | "picker">("menu");
+  const [display, setDisplay] = React.useState<"menu" | "picker" | "info">(
+    "menu"
+  );
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
 
   // Chat context handle
@@ -192,7 +195,7 @@ export default function ChatMenu({
                   <div className="flex flex-col w-full gap-1">
                     <Separator className="opacity-70" />
                     <Button
-                      onClick={() => {}}
+                      onClick={() => setDisplay("info")}
                       className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
                     >
                       <InfoIcon />
@@ -201,6 +204,8 @@ export default function ChatMenu({
                   </div>
                 )}
               </motion.div>
+            ) : display === "info" ? (
+              <ChatInfoSection />
             ) : (
               <motion.div className="flex w-full max-w-full h-full gap-1">
                 <EmojiPicker
