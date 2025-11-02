@@ -205,7 +205,7 @@ export default function ChatMenu({
                 )}
               </motion.div>
             ) : display === "info" ? (
-              <ChatInfoSection />
+              <ChatInfoSection chatId={chatData?.chatId} />
             ) : (
               <motion.div className="flex w-full max-w-full h-full gap-1">
                 <EmojiPicker
