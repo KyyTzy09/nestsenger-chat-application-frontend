@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import type { AliasType } from "shared/types/alias-type";
@@ -17,8 +18,11 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
           alias: { name, avatar },
         }) => {
           return (
-            <div
-              className="flex items-center w-full h-8 justify-between text-[12px] rounded-sm"
+            <motion.div
+              initial={{ translateY: 20, opacity: 0 }}
+              animate={{ translateY: 0, opacity: 1 }}
+              exit={{ translateY: 20, opacity: 0 }}
+              className="flex items-center w-full h-8 justify-between text-sm rounded-sm"
               key={chatReadId}
             >
               <section className="flex items-center justify-start gap-2">
@@ -29,7 +33,7 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
                 />
                 <p className="line-clamp-1">{name || "Nama Pengguna"}</p>
               </section>
-              <p className="flex gap-1">
+              <p className="text-[12px] flex gap-1">
                 {new Date(type === "read" ? readAt : sendAt).toLocaleString(
                   "id-ID",
                   {
@@ -44,7 +48,7 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
                   }
                 )}
               </p>
-            </div>
+            </motion.div>
           );
         }
       )}

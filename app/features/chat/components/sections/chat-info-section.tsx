@@ -2,6 +2,7 @@ import { CheckCheckIcon } from "lucide-react";
 import React from "react";
 import ReaderChatCard from "../cards/reader-chat-card";
 import { useGetReadChats } from "../../hooks/readchat-hook";
+import { motion } from "motion/react";
 
 interface ChatInfoSectionProps {
   chatId: string;
@@ -32,7 +33,12 @@ export default function ChatInfoSection({ chatId }: ChatInfoSectionProps) {
   ];
 
   return (
-    <section className="flex flex-col items-center justify-start w-full h-full max-h-72 p-2 overflow-y-scroll custom-scroll gap-2">
+    <motion.section
+      initial={{ translateY: 20, opacity: 0 }}
+      animate={{ translateY: 0, opacity: 1 }}
+      exit={{ translateY: 20, opacity: 0 }}
+      className="flex flex-col items-center justify-start w-full h-full max-h-72 p-2 overflow-y-auto custom-scroll gap-2"
+    >
       {infoContents.map(({ type, text, Icon, data }) => {
         return (
           <React.Fragment key={type}>
@@ -48,6 +54,6 @@ export default function ChatInfoSection({ chatId }: ChatInfoSectionProps) {
           </React.Fragment>
         );
       })}
-    </section>
+    </motion.section>
   );
 }

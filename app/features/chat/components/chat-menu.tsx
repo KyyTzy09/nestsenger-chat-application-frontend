@@ -134,98 +134,100 @@ export default function ChatMenu({
     useCreateReaction();
 
   return (
-    <AnimatePresence>
+    <>
       <DeleteChatModal
         onOpen={showDeleteModal}
         onOpenChange={setShowDeleteModal}
         chatId={chatData?.chatId}
       />
-      {open && (
-        <>
-          <motion.div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={onClose}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
-          <motion.div
-            ref={chatMenuRef}
-            initial={{ opacity: 0, translateY: -20 }}
-            animate={{ opacity: 1, scale: 1, translateY: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            className="fixed z-50 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur"
-            style={{
-              top: position?.y,
-              left: position?.x,
-            }}
-          >
-            {display === "menu" ? (
-              <motion.div className="flex flex-col w-full h-full gap-1 p-2">
-                {!isChatDeleted && (
-                  <>
-                    <ReactionSection
-                      setDisplay={setDisplay}
-                      chatId={chatData?.chatId}
-                      onClose={onClose}
-                    />
-                    <Separator className="opacity-70" />
-                  </>
-                )}
-                {chatButtonMenuItems.map(
-                  ({ disable, Icon, action, text }, i) => {
-                    return (
-                      <>
-                        {!disable && (
-                          <Button
-                            key={i}
-                            onClick={action}
-                            className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
-                          >
-                            <Icon />
-                            {text}
-                          </Button>
-                        )}
-                      </>
-                    );
-                  }
-                )}
-                {isChatOwner && (
-                  <div className="flex flex-col w-full gap-1">
-                    <Separator className="opacity-70" />
-                    <Button
-                      onClick={() => setDisplay("info")}
-                      className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
-                    >
-                      <InfoIcon />
-                      Info
-                    </Button>
-                  </div>
-                )}
-              </motion.div>
-            ) : display === "info" ? (
-              <ChatInfoSection chatId={chatData?.chatId} />
-            ) : (
-              <motion.div className="flex w-full max-w-full h-full gap-1">
-                <EmojiPicker
-                  onEmojiClick={(emoji) => {
-                    createReactionMutate({
-                      chatId: chatData?.chatId,
-                      content: emoji.emoji,
-                    });
-                    onClose();
-                  }}
-                  lazyLoadEmojis={false}
-                  theme={Theme.DARK}
-                  className={cn(`bg-transparent relative`)}
-                  emojiStyle={EmojiStyle.NATIVE}
-                />
-              </motion.div>
-            )}
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              className="fixed inset-0 z-40 bg-transparent"
+              onClick={onClose}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            <motion.div
+              ref={chatMenuRef}
+              initial={{ opacity: 0, translateY: -20 }}
+              animate={{ opacity: 1, scale: 1, translateY: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="fixed z-50 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur"
+              style={{
+                top: position?.y,
+                left: position?.x,
+              }}
+            >
+              {display === "menu" ? (
+                <motion.div className="flex flex-col w-full h-full gap-1 p-2">
+                  {!isChatDeleted && (
+                    <>
+                      <ReactionSection
+                        setDisplay={setDisplay}
+                        chatId={chatData?.chatId}
+                        onClose={onClose}
+                      />
+                      <Separator className="opacity-70" />
+                    </>
+                  )}
+                  {chatButtonMenuItems.map(
+                    ({ disable, Icon, action, text }, i) => {
+                      return (
+                        <>
+                          {!disable && (
+                            <Button
+                              key={i}
+                              onClick={action}
+                              className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+                            >
+                              <Icon />
+                              {text}
+                            </Button>
+                          )}
+                        </>
+                      );
+                    }
+                  )}
+                  {isChatOwner && (
+                    <div className="flex flex-col w-full gap-1">
+                      <Separator className="opacity-70" />
+                      <Button
+                        onClick={() => setDisplay("info")}
+                        className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+                      >
+                        <InfoIcon />
+                        Info
+                      </Button>
+                    </div>
+                  )}
+                </motion.div>
+              ) : display === "info" ? (
+                <ChatInfoSection chatId={chatData?.chatId} />
+              ) : (
+                <motion.div className="flex w-full max-w-full h-full gap-1">
+                  <EmojiPicker
+                    onEmojiClick={(emoji) => {
+                      createReactionMutate({
+                        chatId: chatData?.chatId,
+                        content: emoji.emoji,
+                      });
+                      onClose();
+                    }}
+                    lazyLoadEmojis={false}
+                    theme={Theme.DARK}
+                    className={cn(`bg-transparent relative`)}
+                    emojiStyle={EmojiStyle.NATIVE}
+                  />
+                </motion.div>
+              )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

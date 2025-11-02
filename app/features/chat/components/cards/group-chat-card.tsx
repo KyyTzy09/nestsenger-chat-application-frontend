@@ -7,7 +7,6 @@ import ChatParentSection from "../sections/chat-parent-section";
 import ChatMenu from "../chat-menu";
 import ReactionModal from "~/features/reaction/components/reaction-modal";
 import type { DeletedChatType } from "shared/types/deleted-chat";
-import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
 import { BanIcon } from "lucide-react";
 import type { AliasType } from "shared/types/alias-type";
 import {
