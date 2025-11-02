@@ -1,6 +1,5 @@
 import { CheckCheckIcon } from "lucide-react";
 import React from "react";
-import { defaultImage } from "shared/constants/image-default";
 import ReaderChatCard from "../cards/reader-chat-card";
 import { useGetReadChats } from "../../hooks/readchat-hook";
 
@@ -9,7 +8,7 @@ interface ChatInfoSectionProps {
 }
 
 export default function ChatInfoSection({ chatId }: ChatInfoSectionProps) {
-  const { data: readChatResponse, isPending } = useGetReadChats({ chatId });
+  const { data: readChatResponse } = useGetReadChats({ chatId });
 
   const filteredData = (type: boolean): [] => {
     return readChatResponse?.data?.filter(({ readChat: { isRead } }) => {
