@@ -1,4 +1,10 @@
-import { CopyIcon, PlusIcon, ReplyIcon, Trash2Icon } from "lucide-react";
+import {
+  CopyIcon,
+  InfoIcon,
+  PlusIcon,
+  ReplyIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { AnimatePresence, m, motion } from "motion/react";
 import React from "react";
 import { Button } from "shared/shadcn/button";
@@ -181,6 +187,18 @@ export default function ChatMenu({
                       </>
                     );
                   }
+                )}
+                {isChatOwner && (
+                  <div className="flex flex-col w-full gap-1">
+                    <Separator className="opacity-70" />
+                    <Button
+                      onClick={() => {}}
+                      className="flex items-center justify-start bg-transparent hover:bg-gray-500/70 rounded-sm"
+                    >
+                      <InfoIcon />
+                      Info
+                    </Button>
+                  </div>
                 )}
               </motion.div>
             ) : (
