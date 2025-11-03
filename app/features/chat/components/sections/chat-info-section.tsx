@@ -3,20 +3,23 @@ import React from "react";
 import ReaderChatCard from "../cards/reader-chat-card";
 import { useGetReadChats } from "../../hooks/readchat-hook";
 import { motion } from "motion/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { socket } from "shared/configs/socket";
 
 interface ChatInfoSectionProps {
   chatId: string;
 }
 
 export default function ChatInfoSection({ chatId }: ChatInfoSectionProps) {
+  // Handle reader data
   const { data: readChatResponse } = useGetReadChats({ chatId });
-
   const filteredData = (type: boolean): [] => {
     return readChatResponse?.data?.filter(({ readChat: { isRead } }) => {
       return isRead === type;
     }) as [];
   };
 
+  // Handle contents
   const infoContents = [
     {
       type: "read",
