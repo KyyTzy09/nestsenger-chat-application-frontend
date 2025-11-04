@@ -16,8 +16,6 @@ import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ChatType } from "shared/types/chat-type";
 import type { ReactionType } from "shared/types/reaction-type";
-import { toast } from "sonner";
-import { useUpdateReadChat } from "~/features/chat/hooks/readchat-hook";
 
 interface ChatDetailPageProps {
   chatId: string;
@@ -31,7 +29,6 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   const { data: profileResponse } = useGetProfile();
   const { data: memberResponse } = useGetRoomMember({ roomId: chatId });
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId: chatId });
-  const { mutate: readChatMutation } = useUpdateReadChat({ roomId: chatId });
 
   React.useEffect(() => {
     const handler = (newChat: ChatType) => {
@@ -95,10 +92,6 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
       socket.off("readChatUpdate", handler);
     };
   }, [queryClient]);
-
-  React.useEffect(() => {
-    readChatMutation();
-  }, [chatId]);
 
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">

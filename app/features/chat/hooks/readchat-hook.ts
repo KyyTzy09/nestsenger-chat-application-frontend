@@ -9,13 +9,3 @@ export const useGetReadChats = (data: { chatId: string }) => {
         staleTime: 1000 * 60 * 2,
     })
 }
-
-export const useUpdateReadChat = (data: { roomId: string }) => {
-    return useMutation({
-        mutationKey: ['update-readchat', data.roomId],
-        mutationFn: async () => await ReadChatService.readChat(data),
-        onError: () => {
-            toast.error("Gagal membaca pesan")
-        }
-    })
-}
