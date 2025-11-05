@@ -19,23 +19,23 @@ import type { ReactionType } from "shared/types/reaction-type";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
 
 interface ChatDetailPageProps {
-  chatId: string;
+  roomId: string;
 }
 
-export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
+export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const queryClient = useQueryClient();
   const { data: roomInfoResponse, isPending: isRoomInfoLoading } =
-    useGetRoomById({ roomId: chatId });
-  const { data: chatResponse } = useGetChats({ roomId: chatId });
+    useGetRoomById({ roomId });
+  const { data: chatResponse } = useGetChats({ roomId });
   const { data: profileResponse } = useGetProfile();
-  const { data: memberResponse } = useGetRoomMember({ roomId: chatId });
-  const { data: deletedChatResponse } = useGetDeletedChats({ roomId: chatId });
+  const { data: memberResponse } = useGetRoomMember({ roomId });
+  const { data: deletedChatResponse } = useGetDeletedChats({ roomId});
 
   React.useEffect(() => {
     const handler = async(newChat: ChatType) => {
       if (newChat.roomId) {
         if (newChat.userId !== profileResponse?.data.userId) {
-          await ReadChatService.readChat({ roomId:chatId })
+          await ReadChatService.readChat({ roomId:roomId })
         }
         queryClient.invalidateQueries({
           queryKey: ["chat", newChat.roomId],
@@ -73,7 +73,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   React.useEffect(() => {
     const handler = () => {
       queryClient.invalidateQueries({
-        queryKey: ["deleted-chats", chatId],
+        queryKey: ["deleted-chats", roomId],
         refetchType: "all",
       });
     };
@@ -142,7 +142,7 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
           })}
       </section>
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
-        <ChatForm roomId={chatId} />
+        <ChatForm roomId={roomId} />
       </section>
     </div>
   );

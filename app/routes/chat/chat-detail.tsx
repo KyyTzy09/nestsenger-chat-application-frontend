@@ -5,7 +5,7 @@ import { socket } from "shared/configs/socket";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
 
 interface ChatDetailProps {
-  params: { chatId: string };
+  params: { roomId: string };
 }
 
 export const clientLoader = async ({ params }: Route.ClientLoaderArgs) => {
