@@ -2,6 +2,7 @@ import { BanIcon } from "lucide-react";
 import React from "react";
 import { RoomTypeEnum } from "shared/enums/room-type";
 import { generateDateText2 } from "shared/helpers/generate-date";
+import type { AliasType } from "shared/types/alias-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { ProfileType } from "shared/types/profile-type";
 import type { RoomType } from "shared/types/room-type";
@@ -11,20 +12,15 @@ import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 
 interface RoomLastChatSectionProps {
   room: RoomType;
-  alias: FriendType | UserType | null;
+  alias: AliasType;
 }
-
 export default function RoomLastChatSection({
   room,
   alias,
 }: RoomLastChatSectionProps) {
   const { roomName, type: roomType } = room;
-
-  const { data: friendResponse, isPending: onFriendLoading } = useGetFriendById(
-    { friendId: room.lastChat?.userId }
-  );
-  const { data: profileResponse, isPending: onProfileLoading } =
-    useGetProfile();
+  const { data: friendResponse } = useGetFriendById({ friendId: room.lastChat?.userId });
+  const { data: profileResponse } = useGetProfile();
 
   const displayLastChatData = () => {
     let result = "";
@@ -48,9 +44,7 @@ export default function RoomLastChatSection({
     <section className="flex flex-col items-center justify-start w-full h-full p-1">
       <div className="flex w-full items-start justify-between text-sm text-white font-semibold">
         <p className="max-w-40 truncate">
-          {roomType === RoomTypeEnum.PRIVATE && alias
-            ? (alias as FriendType).alias || (alias as UserType).email
-            : roomName}
+          {roomType === RoomTypeEnum.PRIVATE && alias ? alias.name : roomName}
         </p>
         <p className="text-[12px] font-normal">
           {room?.lastChat

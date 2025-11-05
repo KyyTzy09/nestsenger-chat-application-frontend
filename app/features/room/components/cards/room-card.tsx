@@ -7,12 +7,13 @@ import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
 import RoomLastChatSection from "../section/room-lastchat-section";
 import { motion } from "motion/react";
+import type { AliasType } from "shared/types/alias-type";
 
 interface RoomCardProps {
   data:
     | {
         room: RoomType;
-        alias?: FriendType | UserType | null;
+        alias?: AliasType
       }[]
     | [];
 }
@@ -25,7 +26,6 @@ export default function RoomCard({ data }: RoomCardProps) {
         return (
           <motion.div
             className={`${params.roomId === room.roomId ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-start w-full h-[70px] rounded-sm p-2 hover:bg-[#45494f]/50`}
-            
             initial={{ translateY: 20, opacity: 0 }}
             animate={{ translateY: 0, opacity: 1 }}
             exit={{ opacity: 0, translateY: -20 }}
@@ -41,8 +41,7 @@ export default function RoomCard({ data }: RoomCardProps) {
                 <img
                   src={
                     alias && room.type === RoomTypeEnum.PRIVATE
-                      ? (alias as FriendType)?.friend?.avatar ||
-                        (alias as UserType)?.profile?.avatar
+                      ? alias.avatar
                       : room.avatar || defaultImage
                   }
                   alt="Default"
