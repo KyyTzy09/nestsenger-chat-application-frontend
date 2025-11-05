@@ -16,6 +16,7 @@ import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ChatType } from "shared/types/chat-type";
 import type { ReactionType } from "shared/types/reaction-type";
+import { ReadChatService } from "~/features/chat/services/readchat-service";
 
 interface ChatDetailPageProps {
   chatId: string;
@@ -31,8 +32,11 @@ export default function ChatDetailPage({ chatId }: ChatDetailPageProps) {
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId: chatId });
 
   React.useEffect(() => {
-    const handler = (newChat: ChatType) => {
+    const handler = async(newChat: ChatType) => {
       if (newChat.roomId) {
+        if (newChat.userId !== profileResponse?.data.userId) {
+          await ReadChatService.readChat({ roomId:chatId })
+        }
         queryClient.invalidateQueries({
           queryKey: ["chat", newChat.roomId],
           refetchType: "all",
