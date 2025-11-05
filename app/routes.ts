@@ -6,7 +6,7 @@ export default [
         ...prefix("chat", [
             layout("layouts/chat.layout.tsx", [
                 index("routes/chat/chat.tsx"),
-                route(":chatId", "routes/chat/chat-detail.tsx")
+                route(":roomId", "routes/chat/chat-detail.tsx")
             ])
         ]),
         route("status", "routes/status/status.tsx")

@@ -9,7 +9,7 @@ interface ChatDetailProps {
 }
 
 export const clientLoader = async ({ params }: Route.ClientLoaderArgs) => {
-  const roomId = (params as { chatId: string }).chatId;
+  const roomId = (params as { roomId: string }).roomId;
   socket.emit("joinRoom", { roomId });
   await ReadChatService.readChat({ roomId });
 };
