@@ -14,6 +14,7 @@ import { socket } from "shared/configs/socket";
 import { useParams } from "react-router";
 import { toast } from "sonner";
 import type { ReactionType } from "shared/types/reaction-type";
+import ReactionCard from "./cards/reaction-card";
 
 interface ReactionModalProps {
   chatId: string;
@@ -28,8 +29,6 @@ export default function ReactionModal({
   const { data: chatReactionResponse, isPending } = useGetChatReactions({
     chatId,
   });
-  const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
-    useDeleteReactionById({ chatId });
   // Groupping
   const grouppedReaction = reactionGroupper(chatReactionResponse?.data as []);
 
@@ -159,57 +158,11 @@ export default function ReactionModal({
                       );
                     })}
                   </section>
-                  <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
-                    {sortedReactionsData?.map(
-                      (
-                        { reaction: { reactionId, userId, content }, alias },
-                        i
-                      ) => {
-                        return (
-                          <motion.button
-                            initial={{ translateY: 20 }}
-                            whileInView={{ translateY: 0 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{
-                              ease: "easeOut",
-                            }}
-                            onClick={() => {
-                              deleteReactionMutation({ reactionId });
-                            }}
-                            disabled={currentUserId !== userId}
-                            className={`${currentUserId === userId && "hover:bg-[#45494f]/50"} flex items-center justify-start h-14 p-2 gap-2 rounded-sm`}
-                          >
-                            <div className="min-w-10 max-w-[15%] h-10">
-                              <img
-                                src={
-                                  alias
-                                    ? alias.avatar
-                                    : defaultImage
-                                }
-                                className="w-full h-full rounded-full"
-                                alt="avatar"
-                              />
-                            </div>
-                            <div className="flex flex-col items-start justify-start self-start w-[70%] h-full">
-                              <p className="text-sm line-clamp-1 text-start">
-                                {alias && currentUserId === userId
-                                  ? "Anda"
-                                  : alias.name}
-                              </p>
-                              {currentUserId === userId && (
-                                <p className="text-[12px] text-gray-400">
-                                  Pilih untuk menghapus
-                                </p>
-                              )}
-                            </div>
-                            <div className="w-[10%]">
-                              <p>{content}</p>
-                            </div>
-                          </motion.button>
-                        );
-                      }
-                    )}
-                  </section>
+                  <ReactionCard
+                    data={sortedReactionsData!}
+                    currentUserId={currentUserId}
+                    chatId={chatId}
+                  />
                 </motion.div>
               </>
             )}
