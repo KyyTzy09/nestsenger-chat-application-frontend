@@ -7,7 +7,7 @@ import ChatParentSection from "../sections/chat-parent-section";
 import ChatMenu from "../chat-menu";
 import ReactionModal from "~/features/reaction/components/reaction-modal";
 import type { DeletedChatType } from "shared/types/deleted-chat";
-import { BanIcon } from "lucide-react";
+import { BanIcon, CheckCheckIcon } from "lucide-react";
 import type { AliasType } from "shared/types/alias-type";
 import {
   chatDeletedOwnedLogic,
@@ -167,12 +167,15 @@ export default function GroupChatCard({
                       className=" text-white underline text-[12px] hover:opacity-70"
                     ></button>
                   )}
-                  <p className="text-gray-300">
-                    {new Date(createdAt).toLocaleTimeString("id-ID", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                  <div className="flex items-center justify-end gap-1">
+                    <p className="text-gray-300 text-[0.6rem]">
+                      {new Date(createdAt).toLocaleTimeString("id-ID", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <CheckCheckIcon className="w-3 h-3 text-white" />
+                  </div>
                 </div>
                 <span
                   className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
