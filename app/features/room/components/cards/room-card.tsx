@@ -18,13 +18,13 @@ interface RoomCardProps {
 }
 
 export default function RoomCard({ data }: RoomCardProps) {
-  const params = useParams<{ chatId: string }>();
+  const params = useParams<{ roomId: string }>();
   return (
     <div className="flex flex-col items-center justify-start w-full h-full gap-2">
       {data?.map(({ room, alias }, index) => {
         return (
           <motion.div
-            className={`${params.chatId === room.roomId ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-start w-full h-[70px] rounded-sm p-2 hover:bg-[#45494f]/50`}
+            className={`${params.roomId === room.roomId ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-start w-full h-[70px] rounded-sm p-2 hover:bg-[#45494f]/50`}
             
             initial={{ translateY: 20, opacity: 0 }}
             animate={{ translateY: 0, opacity: 1 }}
