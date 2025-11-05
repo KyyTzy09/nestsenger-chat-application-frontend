@@ -31,7 +31,7 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
                   src={avatar || defaultImage}
                   alt="Read Chat"
                 />
-                <p className="line-clamp-1">{name || "Nama Pengguna"}</p>
+                <p className="max-w-[70%] truncate">{name || "Nama Pengguna"}</p>
               </section>
               <p className="text-[12px] flex gap-1">
                 {new Date(type === "read" ? readAt : sendAt).toLocaleString(

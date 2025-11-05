@@ -25,8 +25,7 @@ export default function ReactionModal({
   currentUserId,
 }: ReactionModalProps) {
   // Query
-  const queryClient = useQueryClient();
-  const { data: chatReactionResponse, isPending, refetch: invalidateChatReactions } = useGetChatReactions({
+  const { data: chatReactionResponse, isPending } = useGetChatReactions({
     chatId,
   });
   const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
@@ -184,8 +183,7 @@ export default function ReactionModal({
                               <img
                                 src={
                                   alias
-                                    ? (alias as UserType)?.profile?.avatar ||
-                                      (alias as FriendType)?.friend?.avatar
+                                    ? alias.avatar
                                     : defaultImage
                                 }
                                 className="w-full h-full rounded-full"
@@ -196,9 +194,7 @@ export default function ReactionModal({
                               <p className="text-sm line-clamp-1 text-start">
                                 {alias && currentUserId === userId
                                   ? "Anda"
-                                  : (alias as FriendType)?.alias ||
-                                    (alias as UserType)?.email ||
-                                    ""}
+                                  : alias.name}
                               </p>
                               {currentUserId === userId && (
                                 <p className="text-[12px] text-gray-400">
