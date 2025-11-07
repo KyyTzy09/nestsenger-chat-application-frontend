@@ -90,9 +90,9 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
         queryKey: ["read-chats"],
         refetchType: "all",
       });
-      queryClient.refetchQueries({
-        queryKey: ["unread-chat", roomId],
-        type: "all",
+      queryClient.invalidateQueries({
+        queryKey: ["ischatread"],
+        refetchType: "all",
       });
     };
 
