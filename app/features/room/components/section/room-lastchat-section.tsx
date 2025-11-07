@@ -7,6 +7,7 @@ import type { FriendType } from "shared/types/friend-type";
 import type { ProfileType } from "shared/types/profile-type";
 import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
+import { useCountRoomUnreadChats } from "~/features/chat/hooks/readchat-hook";
 import { useGetFriendById } from "~/features/friends/hooks/friend-hook";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 
@@ -18,11 +19,12 @@ export default function RoomLastChatSection({
   room,
   alias,
 }: RoomLastChatSectionProps) {
-  const { roomName, type: roomType } = room;
+  const { roomId, roomName, type: roomType } = room;
   const { data: friendResponse } = useGetFriendById({
     friendId: room.lastChat?.userId,
   });
   const { data: profileResponse } = useGetProfile();
+  const { data: unreadChatsResponse } = useCountRoomUnreadChats({ roomId });
 
   const displayLastChatSender = () => {
     let result = "";
@@ -68,7 +70,7 @@ export default function RoomLastChatSection({
               : room?.lastChat?.message}
           </span>
         </p>
-        <p>ya</p>
+        <p>{unreadChatsResponse?.data || 0}</p>
       </div>
     </section>
   );

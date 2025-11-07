@@ -1,6 +1,5 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { ReadChatService } from "../services/readchat-service"
-import { toast } from "sonner"
 
 export const useGetReadChats = (data: { chatId: string }) => {
     return useQuery({
@@ -12,9 +11,8 @@ export const useGetReadChats = (data: { chatId: string }) => {
 
 export const useCountRoomUnreadChats = (data: { roomId: string }) => {
     return useQuery({
-        queryKey: ['read-chat-room', data.roomId],
+        queryKey: ['unread-chat', data.roomId],
         queryFn: async () => await ReadChatService.countRoomUnreadChats(data),
         staleTime: 1000 * 60 * 2,
-        enabled: !!data.roomId
     })
 }
