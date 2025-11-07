@@ -25,13 +25,13 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
               className="flex items-center w-full h-8 justify-between text-sm rounded-sm"
               key={chatReadId}
             >
-              <section className="flex items-center justify-start gap-2">
+              <section className="flex items-center justify-start gap-2 max-w-[60%]">
                 <img
                   className="w-5 h-5 rounded-full"
                   src={avatar || defaultImage}
                   alt="Read Chat"
                 />
-                <p className="max-w-[70%] truncate">{name || "Nama Pengguna"}</p>
+                <p className="truncate">{name || "Nama Pengguna"}</p>
               </section>
               <p className="text-[12px] flex gap-1">
                 {new Date(type === "read" ? readAt : sendAt).toLocaleString(

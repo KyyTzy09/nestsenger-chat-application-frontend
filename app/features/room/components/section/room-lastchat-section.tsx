@@ -19,10 +19,12 @@ export default function RoomLastChatSection({
   alias,
 }: RoomLastChatSectionProps) {
   const { roomName, type: roomType } = room;
-  const { data: friendResponse } = useGetFriendById({ friendId: room.lastChat?.userId });
+  const { data: friendResponse } = useGetFriendById({
+    friendId: room.lastChat?.userId,
+  });
   const { data: profileResponse } = useGetProfile();
 
-  const displayLastChatData = () => {
+  const displayLastChatSender = () => {
     let result = "";
     if (roomType === RoomTypeEnum.GROUP) {
       if (friendResponse?.data) {
@@ -52,17 +54,21 @@ export default function RoomLastChatSection({
             : ""}
         </p>
       </div>
-      <div className="flex items-center justify-start w-full text-[14px] text-gray-300 gap-1">
-        <p className="flex items-center line-clamp-1 gap-1">
-          {displayLastChatData()}{" "}
-          {room?.lastChat?.message === "Pesan ini telah dihapus" && (
-            <BanIcon className="w-3 h-3" />
-          )}
-          {profileResponse?.data.userId === room.lastChat.userId &&
-          room?.lastChat?.message === "Pesan ini telah dihapus"
-            ? "Anda menghapus pesan ini"
-            : room?.lastChat?.message}
+      <div className="flex items-center justify-between w-full text-[14px] text-gray-300 gap-1">
+        <p className="flex items-center w-full gap-1">
+          {displayLastChatSender()}{" "}
+          <span className="flex items-center gap-1 line-clamp-1">
+            {room?.lastChat?.message === "Pesan ini telah dihapus" && (
+              <BanIcon className="w-3 h-3" />
+            )}
+
+            {profileResponse?.data.userId === room.lastChat.userId &&
+            room?.lastChat?.message === "Pesan ini telah dihapus"
+              ? "Anda menghapus pesan ini"
+              : room?.lastChat?.message}
+          </span>
         </p>
+        <p>ya</p>
       </div>
     </section>
   );
