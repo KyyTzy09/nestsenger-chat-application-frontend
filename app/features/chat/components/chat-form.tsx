@@ -44,6 +44,13 @@ export default function ChatForm({ roomId }: ChatFormProps) {
     resetState();
   };
 
+  const handleEnterSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
+    }
+  };
+
   return (
     <>
       <ChatEmojiPicker
@@ -92,6 +99,7 @@ export default function ChatForm({ roomId }: ChatFormProps) {
           <div className="flex items-center w-full gap-1">
             <TextAreaAutoSize
               value={message}
+              onKeyDown={handleEnterSubmit}
               onChange={(e) => setMessage(e.target.value)}
               minRows={1}
               maxRows={5}
