@@ -13,6 +13,7 @@ import {
   chatDeletedOwnedLogic,
   isChatDeletedLogic,
 } from "../logic/deleted-chat-logic";
+import ReadChatMark from "../sections/readchat-mark-section";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: AliasType }[] | [];
@@ -174,7 +175,13 @@ export default function GroupChatCard({
                         minute: "2-digit",
                       })}
                     </p>
-                    <CheckCheckIcon className="w-3 h-3 text-white" />
+                    {!isChatDeletedLogic(deletedData as [], {
+                      currentUserId,
+                      chatId,
+                    }) &&
+                      currentUserId === senderId && (
+                        <ReadChatMark chatId={chatId} />
+                      )}
                   </div>
                 </div>
                 <span

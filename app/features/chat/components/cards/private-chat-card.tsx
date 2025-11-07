@@ -150,9 +150,13 @@ export default function PrivateChatCard({
                         minute: "2-digit",
                       })}
                     </p>
-                    {currentUserId === senderId && (
-                      <ReadChatMark chatId={chatId} />
-                    )}
+                    {!isChatDeletedLogic(deletedData as [], {
+                      currentUserId,
+                      chatId,
+                    }) &&
+                      currentUserId === senderId && (
+                        <ReadChatMark chatId={chatId} />
+                      )}
                   </div>
                 </div>
                 <span
