@@ -70,7 +70,11 @@ export default function RoomLastChatSection({
               : room?.lastChat?.message}
           </span>
         </p>
-        <p>{unreadChatsResponse?.data || 0}</p>
+        {unreadChatsResponse?.data && (
+          <p className="flex items-center justify-center bg-blue-500 px-2 rounded-md">
+            {unreadChatsResponse?.data}
+          </p>
+        )}
       </div>
     </section>
   );

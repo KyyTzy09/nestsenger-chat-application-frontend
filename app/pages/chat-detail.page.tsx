@@ -17,6 +17,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { ChatType } from "shared/types/chat-type";
 import type { ReactionType } from "shared/types/reaction-type";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
+import { toast } from "sonner";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -29,13 +30,13 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: chatResponse } = useGetChats({ roomId });
   const { data: profileResponse } = useGetProfile();
   const { data: memberResponse } = useGetRoomMember({ roomId });
-  const { data: deletedChatResponse } = useGetDeletedChats({ roomId});
+  const { data: deletedChatResponse } = useGetDeletedChats({ roomId });
 
   React.useEffect(() => {
-    const handler = async(newChat: ChatType) => {
+    const handler = async (newChat: ChatType) => {
       if (newChat.roomId) {
         if (newChat.userId !== profileResponse?.data.userId) {
-          await ReadChatService.readChat({ roomId:roomId })
+          await ReadChatService.readChat({ roomId: roomId });
         }
         queryClient.invalidateQueries({
           queryKey: ["chat", newChat.roomId],
@@ -49,7 +50,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     return () => {
       socket.off("newMessage", handler);
     };
-  }, [queryClient, chatResponse?.data]);
+  }, [queryClient]);
 
   React.useEffect(() => {
     const handler = (reaction: ReactionType) => {
@@ -88,6 +89,10 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       queryClient.invalidateQueries({
         queryKey: ["read-chats"],
         refetchType: "all",
+      });
+      queryClient.refetchQueries({
+        queryKey: ["unread-chat", roomId],
+        type: "all",
       });
     };
 
