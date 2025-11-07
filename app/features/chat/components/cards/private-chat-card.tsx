@@ -13,6 +13,7 @@ import {
   isChatDeletedLogic,
 } from "../logic/deleted-chat-logic";
 import { AnimatePresence } from "motion/react";
+import ReadChatMark from "../sections/readchat-mark-section";
 
 interface PrivateChatCardProps {
   data: { chat: ChatType; alias: AliasType }[] | [];
@@ -149,7 +150,9 @@ export default function PrivateChatCard({
                         minute: "2-digit",
                       })}
                     </p>
-                    <CheckCheckIcon className="w-3 h-3 text-white" />
+                    {currentUserId === senderId && (
+                      <ReadChatMark chatId={chatId} />
+                    )}
                   </div>
                 </div>
                 <span
