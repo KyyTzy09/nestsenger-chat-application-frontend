@@ -16,3 +16,11 @@ export const useCountRoomUnreadChats = (data: { roomId: string }) => {
         staleTime: 1000 * 60 * 2,
     })
 }
+
+export const useGetIsChatHasRead = (data: { chatId: string }) => {
+    return useQuery({
+        queryKey: ['ischatread', data.chatId],
+        queryFn: async () => await ReadChatService.isChatHasRead(data),
+        staleTime: 1000 * 60 * 2
+    })
+}

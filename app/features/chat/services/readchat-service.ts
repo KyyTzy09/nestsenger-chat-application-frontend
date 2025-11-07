@@ -17,5 +17,8 @@ export const ReadChatService = {
     },
     async countRoomUnreadChats(data: { roomId: string }) {
         return await apiClient<{ data: number }>({ url: `/readchat/${data.roomId}/unread/get`, withCredentials: true })
+    },
+    async isChatHasRead(data: { chatId: string }) {
+        return await apiClient<{ data: boolean }>({ url: `/readchat/${data.chatId}/has-read/get` })
     }
 }
