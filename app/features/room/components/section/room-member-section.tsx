@@ -17,8 +17,12 @@ export default function RoomMemberSection({
   data,
   currentUserId,
 }: RoomMemberSectionProps) {
-  const sortedMemberData = data?.sort((a) => {
-    return a?.member?.userId === currentUserId ? -1 : 0;
+  const sortedMemberData = data?.sort((a, b) => {
+    const isA = a?.member?.userId === currentUserId;
+    const isB = b?.member?.userId === currentUserId;
+    if (isA && !isB) return -1;
+    if (!isA && isB) return 1;
+    return 0;
   });
 
   return (
