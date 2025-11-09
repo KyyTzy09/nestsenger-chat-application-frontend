@@ -5,8 +5,7 @@ import ChatParentSection from "../sections/chat-parent-section";
 import ChatMenu from "../chat-menu";
 import ReactionModal from "~/features/reaction/components/reaction-modal";
 import type { DeletedChatType } from "shared/types/deleted-chat";
-import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
-import { BanIcon, CheckCheckIcon } from "lucide-react";
+import { BanIcon, PlayIcon } from "lucide-react";
 import type { AliasType } from "shared/types/alias-type";
 import {
   chatDeletedOwnedLogic,
@@ -80,6 +79,7 @@ export default function PrivateChatCard({
               chatId,
               message,
               userId: senderId,
+              media,
               createdAt,
               parent,
               reactions,
@@ -94,8 +94,34 @@ export default function PrivateChatCard({
             >
               <div
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === currentUserId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm gap-1 shadow`}
+                className={`${senderId === currentUserId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] ${media ? "w-[40%]" : "w-auto"} h-auto text-white p-2 rounded-sm gap-1 shadow`}
               >
+                {!isChatDeletedLogic(deletedData as [], {
+                  currentUserId,
+                  chatId,
+                }) &&
+                  media && (
+                    <div className="relative w-full max-h-[400px] rounded-sm overflow-hidden">
+                      {media.mediaUrl.endsWith("jpg") ||
+                      media.mediaUrl.endsWith("png") ? (
+                        <img
+                          src={media.mediaUrl}
+                          alt="yaya"
+                          className="w-full h-auto"
+                        />
+                      ) : (
+                        <>
+                          <video
+                            className="relative w-full h-auto"
+                            src={media.mediaUrl}
+                          ></video>
+                          <div className="absolute flex items-center justify-center w-full h-full top-0">
+                            <PlayIcon className="bg-black/80 rounded-sm w-10 h-10 p-2" />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
