@@ -14,6 +14,7 @@ import {
   isChatDeletedLogic,
 } from "../logic/deleted-chat-logic";
 import ReadChatMark from "../sections/readchat-mark-section";
+import ChatMediaSection from "../sections/chat-media-section";
 
 interface GroupChatCardProps {
   data: { chat: ChatType; alias: AliasType }[] | [];
@@ -87,6 +88,7 @@ export default function GroupChatCard({
               createdAt,
               parent,
               reactions,
+              media,
             },
             alias,
           },
@@ -112,7 +114,7 @@ export default function GroupChatCard({
               )}
               <section
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === currentUserId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
+                className={`${senderId === currentUserId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col  ${media ? "w-[40%]" : "w-auto"} max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
               >
                 {senderId !== currentUserId && (
                   <div className="flex items-center w-full">
@@ -131,6 +133,11 @@ export default function GroupChatCard({
                       chatId={chatId}
                     />
                   )}
+                {!isChatDeletedLogic(deletedData as [], {
+                  currentUserId,
+                  chatId,
+                }) &&
+                  media && <ChatMediaSection data={media} />}
                 {isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,

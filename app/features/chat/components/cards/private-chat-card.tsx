@@ -13,6 +13,7 @@ import {
 } from "../logic/deleted-chat-logic";
 import { AnimatePresence } from "motion/react";
 import ReadChatMark from "../sections/readchat-mark-section";
+import ChatMediaSection from "../sections/chat-media-section";
 
 interface PrivateChatCardProps {
   data: { chat: ChatType; alias: AliasType }[] | [];
@@ -100,28 +101,7 @@ export default function PrivateChatCard({
                   currentUserId,
                   chatId,
                 }) &&
-                  media && (
-                    <div className="relative w-full max-h-[400px] rounded-sm overflow-hidden">
-                      {media.mediaUrl.endsWith("jpg") ||
-                      media.mediaUrl.endsWith("png") ? (
-                        <img
-                          src={media.mediaUrl}
-                          alt="yaya"
-                          className="w-full h-auto"
-                        />
-                      ) : (
-                        <>
-                          <video
-                            className="relative w-full h-auto"
-                            src={media.mediaUrl}
-                          ></video>
-                          <div className="absolute flex items-center justify-center w-full h-full top-0">
-                            <PlayIcon className="bg-black/80 rounded-sm w-10 h-10 p-2" />
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
+                  media && <ChatMediaSection data={media} />}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
