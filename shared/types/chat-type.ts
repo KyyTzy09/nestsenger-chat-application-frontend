@@ -1,3 +1,4 @@
+import type { ChatMediaType } from "./media-type"
 import type { ReactionType } from "./reaction-type"
 import type { RoomType } from "./room-type"
 import type { UserType } from "./user-type"
@@ -13,6 +14,7 @@ export type ChatType = {
     updatedAt: Date
 
     parent: ChatType
+    media: ChatMediaType
     replies: ChatType[]
     sender: UserType
     room: RoomType
