@@ -15,10 +15,7 @@ export default function ChatMediaSection({
         <img src={mediaUrl} alt="yaya" className="w-full h-auto object-cover" />
       ) : mediaUrl.endsWith("mp4") ? (
         <>
-          <video
-            className="relative w-full h-auto"
-            src={mediaUrl}
-          ></video>
+          <video className="relative w-full h-auto" src={mediaUrl}></video>
         </>
       ) : (
         <></>

@@ -28,7 +28,7 @@ export default function ImageInput({
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full hover:bg-[#353535] rounded-sm">
       <Label
         htmlFor="upload"
         className={
