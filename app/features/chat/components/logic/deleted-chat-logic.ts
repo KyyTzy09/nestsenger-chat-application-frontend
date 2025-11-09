@@ -2,11 +2,11 @@ import { DeletedChatTypeEnum } from "shared/enums/deleted-type";
 import type { DeletedChatType } from "shared/types/deleted-chat";
 
 export function isChatDeletedLogic(deletedData: DeletedChatType[], chat: { chatId: string, currentUserId: string }) {
-    const deletedChat = deletedData?.find(({ chatId: deletedChatId }) => {
-        return deletedChatId === chat.chatId;
+    const deletedChat = deletedData?.find(({ type, chatId: deletedChatId }) => {
+        return deletedChatId === chat.chatId && type === DeletedChatTypeEnum.ALL;
     });
 
-    if (deletedChat?.type === DeletedChatTypeEnum.ALL && deletedChat?.userId === chat.currentUserId && deletedChat?.isDeleted === true) {
+    if (deletedChat?.userId === chat.currentUserId && deletedChat?.isDeleted === true) {
         return "deleted"
     }
     else if (deletedChat?.type === DeletedChatTypeEnum.ALL) {
