@@ -41,8 +41,12 @@ export default function ReactionCard({
                 alt="avatar"
               />
             </div>
-            <div className="flex flex-col items-start justify-start self-start w-[70%] h-full">
-              <p className="text-sm line-clamp-1 text-start">
+            <div
+              className={`flex flex-col items-start ${currentUserId === userId ? "justify-start" : "justify-center"} self-start w-[70%] h-full`}
+            >
+              <p
+                className={`${currentUserId === userId ? "text-sm" : "text-[15px]"} line-clamp-1 text-start`}
+              >
                 {alias && currentUserId === userId ? "Anda" : alias.name}
               </p>
               {currentUserId === userId && (
