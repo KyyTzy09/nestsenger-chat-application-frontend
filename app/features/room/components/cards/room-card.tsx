@@ -13,7 +13,7 @@ interface RoomCardProps {
   data:
     | {
         room: RoomType;
-        alias?: AliasType
+        user?: AliasType;
       }[]
     | [];
 }
@@ -22,7 +22,7 @@ export default function RoomCard({ data }: RoomCardProps) {
   const params = useParams<{ roomId: string }>();
   return (
     <div className="flex flex-col items-center justify-start w-full h-full gap-2">
-      {data?.map(({ room, alias }, index) => {
+      {data?.map(({ room, user }, index) => {
         return (
           <motion.div
             className={`${params.roomId === room.roomId ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-start w-full h-[70px] rounded-sm p-2 hover:bg-[#45494f]/50`}
@@ -40,15 +40,15 @@ export default function RoomCard({ data }: RoomCardProps) {
               <section className="w-[65px] h-full rounded-full overflow-hidden">
                 <img
                   src={
-                    alias && room.type === RoomTypeEnum.PRIVATE
-                      ? alias.avatar
+                    user && room.type === RoomTypeEnum.PRIVATE
+                      ? user.avatar
                       : room.avatar || defaultImage
                   }
                   alt="Default"
                   className="w-full h-full"
                 />
               </section>
-              <RoomLastChatSection room={room!} alias={alias!} />
+              <RoomLastChatSection room={room!} alias={user!} />
             </Link>
           </motion.div>
         );

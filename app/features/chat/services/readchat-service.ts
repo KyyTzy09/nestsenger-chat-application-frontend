@@ -6,7 +6,7 @@ import type { ReadChatType } from "shared/types/readchat-type"
 
 export const ReadChatService = {
     async getReadChats(data: { chatId: string }) {
-        return await apiClient<{ data: { readChat: ReadChatType, alias: AliasType }[] }>({ url: `/readchat/${data.chatId}/get`, withCredentials: true })
+        return await apiClient<{ data: { readChat: ReadChatType, user: AliasType }[] }>({ url: `/readchat/${data.chatId}/get`, withCredentials: true })
     },
     async readChat(data: { roomId: string }) {
         try {

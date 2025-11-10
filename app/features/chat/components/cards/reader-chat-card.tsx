@@ -5,7 +5,7 @@ import type { AliasType } from "shared/types/alias-type";
 import type { ReadChatType } from "shared/types/readchat-type";
 
 interface ReaderChatDataProps {
-  data: { readChat: ReadChatType; alias: AliasType }[];
+  data: { readChat: ReadChatType; user: AliasType }[];
   type: "read" | "send" | string;
 }
 
@@ -15,7 +15,7 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
       {data?.map(
         ({
           readChat: { chatReadId, sendAt, readAt },
-          alias: { name, avatar },
+          user: { alias, avatar },
         }) => {
           return (
             <motion.div
@@ -31,7 +31,7 @@ export default function ReaderChatCard({ data, type }: ReaderChatDataProps) {
                   src={avatar || defaultImage}
                   alt="Read Chat"
                 />
-                <p className="truncate">{name || "Nama Pengguna"}</p>
+                <p className="truncate">{alias || "Nama Pengguna"}</p>
               </section>
               <p className="text-[12px] flex gap-1">
                 {new Date(type === "read" ? readAt : sendAt).toLocaleString(

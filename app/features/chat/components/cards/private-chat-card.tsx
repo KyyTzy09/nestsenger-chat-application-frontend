@@ -16,7 +16,7 @@ import ReadChatMark from "../sections/readchat-mark-section";
 import ChatMediaSection from "../sections/chat-media-section";
 
 interface PrivateChatCardProps {
-  data: { chat: ChatType; alias: AliasType }[] | [];
+  data: { chat: ChatType; user: AliasType }[] | [];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
@@ -87,7 +87,7 @@ export default function PrivateChatCard({
               parent,
               reactions,
             },
-            alias,
+            user,
           },
           i
         ) => {
@@ -187,7 +187,7 @@ export default function PrivateChatCard({
                 open={showMenu === chatId}
                 chatData={{
                   chatId,
-                  alias: currentUserId === senderId ? "Anda" : alias.name,
+                  alias: currentUserId === senderId ? "Anda" : user.alias,
                   message,
                 }}
                 position={menuPosition!}

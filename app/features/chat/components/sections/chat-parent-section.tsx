@@ -13,12 +13,12 @@ export default function ChatParentSection({
   chatId,
 }: ChatParentSectionProps) {
   const { data: chatParentResponse } = useGetChatParent({ chatId });
-  const { chat, alias } = chatParentResponse?.data || {};
+  const { chat, user } = chatParentResponse?.data || {};
 
   return (
     <section className="flex flex-col items-start justify-between w-full h-auto p-2 bg-gray-500/40 rounded-md border-l-[5px] border-blue-700">
       <p className="flex items-center justify-start w-full text-[12px] text-gray-300 font-semibold">
-        {alias && currentUserId === chat?.userId ? "Anda" : alias?.name}
+        {user && currentUserId === chat?.userId ? "Anda" : user?.alias}
       </p>
       <p className="line-clamp-1 text-[11px] text-gray-300">{chat?.message}</p>
     </section>

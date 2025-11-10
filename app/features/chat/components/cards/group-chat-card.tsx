@@ -17,7 +17,7 @@ import ReadChatMark from "../sections/readchat-mark-section";
 import ChatMediaSection from "../sections/chat-media-section";
 
 interface GroupChatCardProps {
-  data: { chat: ChatType; alias: AliasType }[] | [];
+  data: { chat: ChatType; user: AliasType }[] | [];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
@@ -92,7 +92,7 @@ export default function GroupChatCard({
               reactions,
               media,
             },
-            alias,
+            user,
           },
           i
         ) => {
@@ -108,7 +108,7 @@ export default function GroupChatCard({
                   className="group w-10 h-10 rounded-full overflow-hidden"
                 >
                   <img
-                    src={alias ? alias.avatar : defaultImage}
+                    src={user ? user.avatar : defaultImage}
                     className="w-full h-full group-hover:opacity-80"
                     alt=""
                   />
@@ -121,7 +121,7 @@ export default function GroupChatCard({
                 {senderId !== currentUserId && (
                   <div className="flex items-center w-full">
                     <p className={"text-blue-500 text-[12px] font-semibold"}>
-                      {alias ? alias.name : "Pengguna"}
+                      {user ? user.alias : "Pengguna"}
                     </p>
                   </div>
                 )}
@@ -212,7 +212,7 @@ export default function GroupChatCard({
                 chatData={{
                   chatId,
                   alias:
-                    alias && currentUserId === senderId ? "Anda" : alias.name,
+                    user && currentUserId === senderId ? "Anda" : user.alias,
                   message,
                 }}
                 position={menuPosition!}

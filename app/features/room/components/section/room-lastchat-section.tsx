@@ -48,7 +48,7 @@ export default function RoomLastChatSection({
     <section className="flex flex-col items-center justify-start w-full h-full p-1">
       <div className="flex w-full items-start justify-between text-sm text-white font-semibold">
         <p className="max-w-40 truncate">
-          {roomType === RoomTypeEnum.PRIVATE && alias ? alias.name : roomName}
+          {roomType === RoomTypeEnum.PRIVATE && alias ? alias.alias : roomName}
         </p>
         <p className="text-[12px] font-normal">
           {room?.lastChat

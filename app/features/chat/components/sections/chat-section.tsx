@@ -11,7 +11,7 @@ import { RoomTypeEnum } from "shared/enums/room-type";
 import GroupChatCard from "../cards/group-chat-card";
 
 interface ChatSectionProps {
-  chatsData: { date: string; chats: { chat: ChatType; alias: AliasType }[] }[];
+  chatsData: { date: string; chats: { chat: ChatType; user: AliasType }[] }[];
   deletedChatsData: DeletedChatType[];
   roomData: { room: RoomType; alias: FriendType | UserType | null };
   currentUserId: string;
@@ -43,7 +43,7 @@ export default function ChatSection({
                     <PrivateChatCard
                       deletedData={deletedChatsData}
                       currentUserId={currentUserId}
-                      data={chats}
+                      data={chats as []}
                     />
                   ) : (
                     <GroupChatCard
