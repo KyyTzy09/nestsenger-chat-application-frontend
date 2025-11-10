@@ -1,5 +1,4 @@
-import { FileIcon, PlayIcon } from "lucide-react";
-import React from "react";
+import { DownloadIcon, FileIcon, PlayIcon } from "lucide-react";
 import { Separator } from "shared/shadcn/separator";
 import type { ChatMediaType } from "shared/types/media-type";
 
@@ -38,8 +37,9 @@ export default function ChatMediaSection({
             <a
               href={mediaUrl}
               download
-              className="bg-black/40 px-3 p-2 text-sm rounded-sm"
+              className="flex items-center justify-center bg-black/40 px-3 p-2 text-sm rounded-sm gap-1"
             >
+              <DownloadIcon className="w-5 h-4" />
               Unduh File
             </a>
           </div>

@@ -18,6 +18,7 @@ import type { ChatType } from "shared/types/chat-type";
 import type { ReactionType } from "shared/types/reaction-type";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
 import { toast } from "sonner";
+import ChatSection from "~/features/chat/components/sections/chat-section";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -111,41 +112,12 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
           memberInfo={memberResponse?.data as []}
         />
       )}
-      <section className="relative w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
-        {chatResponse?.data?.length! > 0 &&
-          chatResponse?.data?.map(({ chats, date }, i) => {
-            return (
-              <React.Fragment key={i}>
-                {chats?.length > 0 && (
-                  <div
-                    key={i}
-                    className="flex flex-col items-center w-full h-auto gap-5"
-                  >
-                    <div className="flex items-center justify-center w-full">
-                      <p className="flex items-center justify-center bg-[#232323] text-gray-400 font-semibold text-[12px] p-2 rounded-sm">
-                        {generateDateText(date)}
-                      </p>
-                    </div>
-                    {roomInfoResponse?.data?.room?.type ===
-                    RoomTypeEnum.PRIVATE ? (
-                      <PrivateChatCard
-                        deletedData={deletedChatResponse?.data}
-                        currentUserId={profileResponse?.data.userId!}
-                        data={chats}
-                      />
-                    ) : (
-                      <GroupChatCard
-                        deletedData={deletedChatResponse?.data}
-                        currentUserId={profileResponse?.data.userId!}
-                        data={chats}
-                      />
-                    )}
-                  </div>
-                )}
-              </React.Fragment>
-            );
-          })}
-      </section>
+      <ChatSection
+        roomData={roomInfoResponse?.data!}
+        chatsData={chatResponse?.data as []}
+        deletedChatsData={deletedChatResponse?.data as []}
+        currentUserId={profileResponse?.data?.userId as string}
+      />
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
         <ChatForm roomId={roomId} />
       </section>
