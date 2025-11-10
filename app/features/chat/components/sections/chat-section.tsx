@@ -25,7 +25,7 @@ export default function ChatSection({
 }: ChatSectionProps) {
   return (
     <section className="relative w-full h-[85%] p-8 text-white overflow-y-scroll custom-scrollbar">
-      {chatsData?.length! > 0 &&
+      {chatsData?.length > 0 &&
         chatsData?.map(({ chats, date }, i) => {
           return (
             <React.Fragment key={i}>

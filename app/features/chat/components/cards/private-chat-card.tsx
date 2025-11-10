@@ -65,7 +65,9 @@ export default function PrivateChatCard({
     setSelectedIndex([]);
     if (data) {
       if (data.length > prevChatLength.current) {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 50);
       }
       prevChatLength.current = data.length;
     }
