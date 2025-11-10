@@ -6,7 +6,7 @@ import { useDeleteReactionById } from "../../hooks/reaction-hook";
 import { defaultImage } from "shared/constants/image-default";
 
 interface ReactionCardProps {
-  data: { reaction: ReactionType; alias: AliasType }[];
+  data: { reaction: ReactionType; user: AliasType }[];
   currentUserId: string;
   chatId: string;
 }
@@ -19,7 +19,7 @@ export default function ReactionCard({
     useDeleteReactionById({ chatId });
   return (
     <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
-      {data?.map(({ reaction: { reactionId, userId, content }, alias }, i) => {
+      {data?.map(({ reaction: { reactionId, userId, content }, user }, i) => {
         return (
           <motion.button
             initial={{ translateY: 20 }}
@@ -36,7 +36,7 @@ export default function ReactionCard({
           >
             <div className="min-w-10 max-w-[15%] h-10">
               <img
-                src={alias ? alias.avatar : defaultImage}
+                src={user ? user.avatar : defaultImage}
                 className="w-full h-full rounded-full"
                 alt="avatar"
               />
@@ -47,7 +47,7 @@ export default function ReactionCard({
               <p
                 className={`${currentUserId === userId ? "text-sm" : "text-[15px]"} line-clamp-1 text-start`}
               >
-                {alias && currentUserId === userId ? "Anda" : alias.name}
+                {user && currentUserId === userId ? "Anda" : user.alias}
               </p>
               {currentUserId === userId && (
                 <p className="text-[12px] text-gray-400">
