@@ -8,11 +8,13 @@ interface ChatMediaSectionProps {
 }
 
 export default function ChatMediaSection({
-  data: { mediaUrl },
+  data: { mediaUrl, mediaName, size },
 }: ChatMediaSectionProps) {
   return (
     <section className="relative w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40">
-      {mediaUrl.endsWith("jpg") || mediaUrl.endsWith("png") ? (
+      {mediaUrl.endsWith("jpg") ||
+      mediaUrl.endsWith("png") ||
+      mediaUrl.endsWith("jpeg") ? (
         <img src={mediaUrl} alt="yaya" className="w-full h-auto object-cover" />
       ) : mediaUrl.endsWith("mp4") ? (
         <div className="w-full h-auto">
@@ -25,9 +27,9 @@ export default function ChatMediaSection({
               <FileIcon className="w-full h-full" />
             </section>
             <section className="max-w-[60%] h-full text-[13px] py-1">
-              <p className="truncate text-sm">{mediaUrl}</p>
+              <p className="truncate text-sm">{mediaName}</p>
               <div className="flex items-center justify-start w-full">
-                <p className="text-gray-300">size</p>
+                <p className="text-gray-300">{size}</p>
               </div>
             </section>
           </div>
