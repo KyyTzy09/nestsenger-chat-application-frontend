@@ -72,7 +72,7 @@ export default function GroupChatCard({
       if (data.length > prevChatLength.current) {
         setTimeout(() => {
           bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 50);
+        }, 100);
       }
       prevChatLength.current = data.length;
     }
