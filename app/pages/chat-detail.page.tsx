@@ -1,7 +1,7 @@
 import { RoomTypeEnum } from "shared/enums/room-type";
 import PrivateChatCard from "~/features/chat/components/cards/private-chat-card";
 import GroupChatCard from "~/features/chat/components/cards/group-chat-card";
-import ChatForm from "~/features/chat/components/chat-form";
+import ChatForm from "~/features/chat/components/forms/chat-form";
 import ChatNavbar from "~/features/chat/components/chat-navbar";
 import {
   useGetChats,

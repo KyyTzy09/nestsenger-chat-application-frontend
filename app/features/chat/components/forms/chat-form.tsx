@@ -8,11 +8,10 @@ import {
   SendIcon,
   SmileIcon,
   XCircleIcon,
-  XIcon,
 } from "lucide-react";
-import { useCreateChat } from "../hooks/chat-hook";
-import ChatEmojiPicker from "./chat-emoji";
-import { useChatParentDataStore } from "../stores/chat-store";
+import { useCreateChat } from "../../hooks/chat-hook";
+import ChatEmojiPicker from "../chat-emoji";
+import { useChatParentDataStore } from "../../stores/chat-store";
 
 interface ChatFormProps {
   roomId: string;
