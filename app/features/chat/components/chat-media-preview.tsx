@@ -22,8 +22,8 @@ export default function ChatMediaPreview() {
       <section className="flex items-center justify-center w-full h-[85%] ">
         <div className="w-[30%] h-full bg-gray-500"></div>
       </section>
-      <section className="flex flex-row items-center w-full max-h-[10%] py-1 gap-2 overflow-x-scroll">
-        {Array.from({ length: 100 }).map((v, i) => {
+      <section className="flex flex-row items-center w-full max-h-[10%] py-1 gap-2 overflow-x-auto no-scrollbar">
+        {Array.from({ length: 101 }).map((v, i) => {
           return (
             <div key={i} className="min-w-12 h-12 bg-white rounded-sm border-blue-500 border-3">
               {i}
