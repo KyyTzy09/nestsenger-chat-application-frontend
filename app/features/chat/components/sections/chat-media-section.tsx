@@ -1,6 +1,7 @@
 import { DownloadIcon, FileIcon, PlayIcon } from "lucide-react";
 import { Separator } from "shared/shadcn/separator";
 import type { ChatMediaType } from "shared/types/media-type";
+import { GetMediaType } from "../logic/media-type-logic";
 
 interface ChatMediaSectionProps {
   data: ChatMediaType;
@@ -11,11 +12,9 @@ export default function ChatMediaSection({
 }: ChatMediaSectionProps) {
   return (
     <section className="relative w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40">
-      {mediaUrl.endsWith("jpg") ||
-      mediaUrl.endsWith("png") ||
-      mediaUrl.endsWith("jpeg") ? (
+      {GetMediaType(mediaName) === "image" ? (
         <img src={mediaUrl} alt="yaya" className="w-full h-auto object-cover" />
-      ) : mediaUrl.endsWith("mp4") ? (
+      ) : GetMediaType(mediaName) === "video" ? (
         <div className="w-full h-auto">
           <video className="relative w-full h-auto" src={mediaUrl}></video>
         </div>

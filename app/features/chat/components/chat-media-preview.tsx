@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "shared/shadcn/button";
 
 export default function ChatMediaPreview() {
-  const isOpen = true;
+  const isOpen = false;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
