@@ -1,4 +1,4 @@
-import { DownloadIcon, FileIcon, PlayIcon } from "lucide-react";
+import { DownloadIcon, FileIcon, MusicIcon, PlayIcon } from "lucide-react";
 import { Separator } from "shared/shadcn/separator";
 import type { ChatMediaType } from "shared/types/media-type";
 
@@ -22,6 +22,20 @@ export default function ChatMediaSection({
               className="w-10 h-10 bg-black/75 rounded-md p-2"
             />
           </div>
+        </div>
+      ) : mediaType === "audio" ? (
+        <div className="flex w-full p-2 gap-1">
+          <div className="relative flex items-center justify-center w-10 h-10 p-2 bg-blue-600 rounded-full">
+            <MusicIcon className="text-white" />
+            <p className="absolute text-[8px] bottom-0 right-0">
+              {mediaName.split(".")[1]}
+            </p>
+          </div>
+          <audio
+            src={mediaUrl}
+            className="w-full rounded-sm h-10"
+            controls
+          ></audio>
         </div>
       ) : (
         <div className="flex flex-col items-center w-full gap-1">
