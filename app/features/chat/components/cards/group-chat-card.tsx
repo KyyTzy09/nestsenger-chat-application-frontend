@@ -116,7 +116,7 @@ export default function GroupChatCard({
               )}
               <section
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === currentUserId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col  ${media ? "w-[35%]" : "w-auto"} max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
+                className={`${senderId === currentUserId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col  ${!isChatDeletedLogic(deletedData as [], { currentUserId, chatId }) && media ? "w-[35%]" : "w-auto"} max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
               >
                 {senderId !== currentUserId && (
                   <div className="flex items-center w-full">
