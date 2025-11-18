@@ -18,12 +18,13 @@ import DeleteChatModal from "./delete-chat-modal";
 import { useDeleteChatForSelf } from "../hooks/chat-hook";
 import { useParams } from "react-router";
 import ChatInfoSection from "./sections/chat-info-section";
+import type { ChatMediaType } from "shared/types/media-type";
 
 interface ChatMenuProps {
   open: boolean;
   chatData: {
     chatId: string;
-    content?: string | null;
+    media?: ChatMediaType | null;
     alias: string;
     message: string;
   };
@@ -95,7 +96,7 @@ export default function ChatMenu({
             parentId: chatData?.chatId,
             alias: chatData?.alias,
             message: chatData?.message,
-            content: chatData?.content,
+            media: chatData?.media,
           },
         });
         onClose();

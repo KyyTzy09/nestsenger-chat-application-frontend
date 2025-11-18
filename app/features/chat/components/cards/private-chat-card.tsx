@@ -189,6 +189,7 @@ export default function PrivateChatCard({
                   chatId,
                   alias: currentUserId === senderId ? "Anda" : user.alias,
                   message,
+                  media
                 }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}

@@ -1,17 +1,18 @@
+import type { ChatMediaType } from "shared/types/media-type";
 import { create } from "zustand";
 
 interface chatParentDataStore {
     parent: {
         parentId: string;
-        content?: string | null;
+        media?: ChatMediaType | null
         alias: string;
         message: string;
     };
     setParent: (parent: {
         parent: {
             parentId: string;
-            content?: string | null;
             alias: string;
+            media?: ChatMediaType | null
             message: string;
         }
     }) => void
@@ -22,6 +23,7 @@ const initialState = {
     alias: "",
     parentId: "",
     message: "",
+    media: null,
     content: null
 }
 

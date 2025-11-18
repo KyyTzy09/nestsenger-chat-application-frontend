@@ -3,10 +3,15 @@ import { Button } from "shared/shadcn/button";
 import { cn } from "~/lib/utils";
 import TextAreaAutoSize from "react-textarea-autosize";
 import {
+  FileIcon,
+  ImageIcon,
   LoaderIcon,
+  Music2Icon,
+  MusicIcon,
   PaperclipIcon,
   SendIcon,
   SmileIcon,
+  VideoIcon,
   XCircleIcon,
 } from "lucide-react";
 import { useCreateChat } from "../../hooks/chat-hook";
@@ -76,15 +81,41 @@ export default function ChatForm({ roomId }: ChatFormProps) {
           })}
         </div>
         <div className="flex flex-col items-center justify-start w-full h-auto">
+          {/* Reply section */}
           {chatParentState?.parentId && (
             <section className="flex items-center justify-between w-full h-auto p-2 bg-gray-500/40 rounded-md border-l-[5px] border-blue-700 gap-1">
               <div className="flex flex-col items-start justify-between w-full text-start">
                 <p className="flex items-center justify-start w-full text-[12px] text-blue-500 font-semibold">
                   {chatParentState?.alias}
                 </p>
-                <p className="text-sm text-gray-300 break-all line-clamp-2">
+                <p className="flex items-center justify-start text-sm text-gray-300 break-all line-clamp-2 gap-1">
+                  {chatParentState.media &&
+                  chatParentState.media.mediaType === "image" ? (
+                    <ImageIcon className="w-4 h-4" />
+                  ) : chatParentState.media?.mediaType === "video" ? (
+                    <VideoIcon className="w-5 h-5" />
+                  ) : chatParentState.media?.mediaType === "audio" ? (
+                    <MusicIcon className="w-4 h-4" />
+                  ) : chatParentState.media?.mediaType === "file" ? (
+                    <FileIcon className="w-4 h-4" />
+                  ) : null}
                   {chatParentState?.message}
                 </p>
+              </div>
+              <div className="w-12 h-full rounded-sm overflow-hidden">
+                {chatParentState.media &&
+                chatParentState?.media.mediaType === "image" ? (
+                  <img
+                    title="media"
+                    className="w-full h-full object-cover"
+                    src={chatParentState.media.mediaUrl}
+                  />
+                ) : chatParentState.media?.mediaType === "video" ? (
+                  <video
+                    className="w-full h-full"
+                    src={chatParentState.media.mediaUrl}
+                  ></video>
+                ) : null}
               </div>
               <Button
                 onClick={() => resetState()}

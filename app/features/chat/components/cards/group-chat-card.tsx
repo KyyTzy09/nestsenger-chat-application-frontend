@@ -214,6 +214,7 @@ export default function GroupChatCard({
                   alias:
                     user && currentUserId === senderId ? "Anda" : user.alias,
                   message,
+                  media
                 }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}
