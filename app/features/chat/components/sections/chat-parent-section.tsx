@@ -32,15 +32,15 @@ export default function ChatParentSection({
           {chat?.message}
         </p>
       </div>
-      <div className="w-12 h-full rounded-r-sm overflow-hidden">
+      <div className="w-12 min-h-12 h-full rounded-r-sm overflow-hidden">
         {chat?.media && chat?.media?.mediaType === "image" ? (
           <img
             title="media"
-            className="w-full h-full object-cover"
+            className="w-full min-h-12 h-full object-cover"
             src={chat?.media.mediaUrl}
           />
         ) : chat?.media?.mediaType === "video" ? (
-          <video className="w-full h-full" src={chat?.media.mediaUrl}></video>
+          <video className="w-full min-h-12 h-full" src={chat?.media.mediaUrl}></video>
         ) : null}
       </div>
     </section>

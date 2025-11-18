@@ -107,12 +107,12 @@ export default function ChatForm({ roomId }: ChatFormProps) {
                 chatParentState?.media.mediaType === "image" ? (
                   <img
                     title="media"
-                    className="w-full h-full object-cover"
+                    className="w-full min-h-12 h-full object-cover"
                     src={chatParentState.media.mediaUrl}
                   />
                 ) : chatParentState.media?.mediaType === "video" ? (
                   <video
-                    className="w-full h-full"
+                    className="w-full min-h-12 h-full"
                     src={chatParentState.media.mediaUrl}
                   ></video>
                 ) : null}
