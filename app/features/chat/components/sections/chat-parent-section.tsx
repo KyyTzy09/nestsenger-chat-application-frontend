@@ -17,7 +17,7 @@ export default function ChatParentSection({
   const { chat, user } = chatParentResponse?.data || {};
 
   return (
-    <section className="flex items-center justify-between w-full h-auto bg-gray-500/40 rounded-md border-l-[5px] border-blue-700">
+    <section className={`${chat?.media && "min-w-[150px]"} flex items-center justify-between h-auto bg-gray-500/40 rounded-md border-l-[5px] border-blue-700`}>
       <div className="flex flex-col items-start justify-between w-auto h-full p-2">
         <p className="flex items-center justify-start w-full text-[12px] text-gray-300 font-semibold">
           {user && currentUserId === chat?.userId ? "Anda" : user?.alias}
