@@ -1,16 +1,25 @@
 import { DownloadIcon, FileIcon, MusicIcon, PlayIcon } from "lucide-react";
 import { Separator } from "shared/shadcn/separator";
 import type { ChatMediaType } from "shared/types/media-type";
+import { useMediaPreviewStore } from "../../stores/media-preview-store";
 
 interface ChatMediaSectionProps {
   data: ChatMediaType;
 }
 
 export default function ChatMediaSection({
-  data: { mediaUrl, mediaName, size, mediaType },
+  data: { mediaUrl, mediaName, size, mediaType, chatId },
 }: ChatMediaSectionProps) {
+  const { setChatId, setOpenPreview } = useMediaPreviewStore();
+
   return (
-    <section className="w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40">
+    <section
+      onClick={() => {
+        setChatId(chatId);
+        setOpenPreview(true);
+      }}
+      className="w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40"
+    >
       {mediaType === "image" ? (
         <img src={mediaUrl} alt="yaya" className="w-full h-auto object-cover" />
       ) : mediaType === "video" ? (
