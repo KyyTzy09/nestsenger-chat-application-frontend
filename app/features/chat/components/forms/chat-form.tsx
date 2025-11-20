@@ -17,14 +17,19 @@ import {
 import { useCreateChat } from "../../hooks/chat-hook";
 import ChatEmojiPicker from "../chat-emoji";
 import { useChatParentDataStore } from "../../stores/chat-store";
+import MediaDropdown from "../media-dropdown";
 
 interface ChatFormProps {
   roomId: string;
 }
 
 export default function ChatForm({ roomId }: ChatFormProps) {
-  const [message, setMessage] = React.useState<string>("");
+  // Modal
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
+  const [showMediaDropdown, setShowMediaDropdown] =
+    React.useState<boolean>(false);
+
+  const [message, setMessage] = React.useState<string>("");
   const { parent: chatParentState, resetState } = useChatParentDataStore();
 
   const { mutate: createChatMutate, isPending: onCreateChatLoad } =
@@ -37,7 +42,7 @@ export default function ChatForm({ roomId }: ChatFormProps) {
     },
     {
       Icon: PaperclipIcon,
-      action: () => {},
+      action: () => setShowMediaDropdown(true),
     },
   ];
 
@@ -61,6 +66,10 @@ export default function ChatForm({ roomId }: ChatFormProps) {
         isOpen={showEmoji}
         onClose={() => setShowEmoji(false)}
         onSelect={setMessage}
+      />
+      <MediaDropdown
+        isOpen={showMediaDropdown}
+        onClose={() => setShowMediaDropdown(false)}
       />
       <form
         onSubmit={handleSubmit}

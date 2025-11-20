@@ -41,7 +41,7 @@ export default function ChatMediaPreview() {
                   return (
                     <div
                       key={i}
-                      className="min-w-12 h-12 rounded-sm border-blue-500 border-3"
+                      className="w-12 h-12 rounded-sm border-blue-500 border-3"
                     >
                       {mediaType === "image" ? (
                         <img
@@ -52,7 +52,7 @@ export default function ChatMediaPreview() {
                       ) : mediaType === "video" ? (
                         <video
                           src={mediaUrl}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                         ></video>
                       ) : (
                         <div className="w-full h-full p-1">
