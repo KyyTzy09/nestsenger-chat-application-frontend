@@ -5,6 +5,7 @@ interface IMediaPreviewStore {
     openPreview: boolean
     setOpenPreview: (open: boolean) => void
     setChatId: (mediaId: string | null) => void
+    resetState: () => void
 }
 
 export const useMediaPreviewStore = create<IMediaPreviewStore>((set) => ({
@@ -12,4 +13,5 @@ export const useMediaPreviewStore = create<IMediaPreviewStore>((set) => ({
     openPreview: false,
     setChatId: (chatId: string | null) => set({ chatId }),
     setOpenPreview: (open: boolean) => set({ openPreview: open }),
+    resetState: () => set({ chatId: "" })
 }))
