@@ -14,29 +14,56 @@ import { useParams } from "react-router";
 import { useMediaPreviewStore } from "../stores/media-preview-store";
 
 export default function ChatMediaPreview() {
-  // Handle pagination
-  const [page, setPage] = React.useState<number>(1);
+  // Refs
+  const scrollRef = React.useRef<HTMLDivElement | null>(null);
+  const mediaRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
-  const { openPreview, setOpenPreview } = useMediaPreviewStore();
+  const [selectedIndex, setSelectedIndex] = React.useState<number>();
+  const { openPreview, setOpenPreview, chatId, resetState } =
+    useMediaPreviewStore();
+
   const { roomId } = useParams<{ roomId: string }>() as { roomId: string };
   const { data: nonFileMediaResponse, isPending } = useGetNonFileMedia({
     roomId,
   });
-  const limit = 1;
 
-  const slicedMedia = nonFileMediaResponse?.data.slice(
-    (page - 1) * limit,
-    page * limit
-  );
+  const handleScroll = (index: number) => {
+    if (index >= 0 && mediaRefs.current[index]) {
+      mediaRefs.current[index]?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+      });
+    }
+  };
 
-  const {
-    mediaName: currentMediaName,
-    mediaType,
-    mediaUrl,
-    chatId,
-  } = slicedMedia && slicedMedia?.length! > 0 ? slicedMedia[0] : {};
+  React.useEffect(() => {
+    if (mediaRefs.current) {
+      const mediaIndex = mediaRefs.current.findIndex((m) => m?.id === chatId);
+      handleScroll(mediaIndex);
+    }
+  }, [openPreview, chatId]);
 
-  const maxPage = Math.ceil(nonFileMediaResponse?.data?.length! / limit);
+  React.useEffect(() => {
+    if (!mediaRefs.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.getAttribute("data-index"));
+            setSelectedIndex(index);
+          }
+        });
+      },
+      { threshold: 0.8 }
+    );
+
+    mediaRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [openPreview, setSelectedIndex]);
+
   return (
     <AnimatePresence>
       {openPreview && (
@@ -49,6 +76,7 @@ export default function ChatMediaPreview() {
           <section className="flex items-center justify-between w-full">
             <Button
               onClick={() => {
+                resetState();
                 setOpenPreview(false);
               }}
               className="flex items-center justify-center w-10 h-10 bg-transparent hover:bg-[#45494f] p-2"
@@ -57,38 +85,74 @@ export default function ChatMediaPreview() {
             </Button>
           </section>
           <section className="flex items-center justify-between w-full h-[85%] ">
-            <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
+            <Button
+              disabled={selectedIndex === 0}
+              onClick={() => {
+                if (selectedIndex !== null && selectedIndex !== undefined) {
+                  handleScroll(selectedIndex - 1);
+                }
+              }}
+            >
               <ChevronLeftIcon />
             </Button>
-            <React.Fragment key={chatId}>
-              {mediaType === "image" ? (
-                <img
-                  src={mediaUrl}
-                  alt="yaya"
-                  className="w-auto h-auto max-h-full object-cover"
-                />
-              ) : mediaType === "video" ? (
-                <video
-                  className="w-auto h-auto max-h-full object-cover"
-                  src={mediaUrl}
-                  controls
-                ></video>
-              ) : mediaType === "audio" ? (
-                <div className="flex flex-col items-center justify-center w-auto h-full min-w-[40%] p-2 gap-1">
-                  <div className="flex items-center justify-center w-full h-[90%] bg-blue-500 rounded-t-md">
-                    <Music2Icon className="w-32 h-32 text-white" />
-                  </div>
-                  <audio
-                    src={mediaUrl}
-                    className="w-full rounded-sm h-12"
-                    controls
-                  ></audio>
-                </div>
-              ) : null}
-            </React.Fragment>
+            <div
+              ref={scrollRef}
+              className="flex overflow-x-auto snap-x snap-mandatory w-full h-full no-scrollbar"
+            >
+              {nonFileMediaResponse?.data.length! > 0 &&
+                nonFileMediaResponse?.data.map(
+                  ({ chatId, mediaUrl, mediaType }, i) => {
+                    return (
+                      <div
+                        key={i}
+                        data-index={i}
+                        id={chatId}
+                        className="w-full h-full flex items-center justify-center shrink-0 snap-center"
+                        ref={(el) => {
+                          if (mediaRefs.current) {
+                            mediaRefs.current[i] = el;
+                          }
+                        }}
+                      >
+                        {mediaType === "image" ? (
+                          <img
+                            src={mediaUrl}
+                            alt="yaya"
+                            className="w-auto h-auto max-h-full object-cover"
+                          />
+                        ) : mediaType === "video" ? (
+                          <video
+                            className="w-auto h-auto max-h-full object-cover"
+                            src={mediaUrl}
+                            controls
+                          ></video>
+                        ) : mediaType === "audio" ? (
+                          <div className="flex flex-col items-center justify-center w-auto h-full min-w-[40%] p-2 gap-1">
+                            <div className="flex items-center justify-center w-full h-[90%] bg-blue-500 rounded-t-md">
+                              <Music2Icon className="w-32 h-32 text-white" />
+                            </div>
+                            <audio
+                              src={mediaUrl}
+                              className="w-full rounded-sm h-12"
+                              controls
+                            ></audio>
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  }
+                )}
+            </div>
             <Button
-              disabled={page === maxPage}
-              onClick={() => setPage(page + 1)}
+              disabled={
+                selectedIndex ===
+                (nonFileMediaResponse?.data.length as number) - 1
+              }
+              onClick={() => {
+                if (selectedIndex !== null && selectedIndex !== undefined) {
+                  handleScroll(selectedIndex + 1);
+                }
+              }}
             >
               <ChevronRightIcon />
             </Button>
@@ -100,7 +164,11 @@ export default function ChatMediaPreview() {
                   return (
                     <div
                       key={i}
-                      className={`w-12 h-12 rounded-sm overflow-hidden ${currentMediaName === mediaName ? "border-blue-500 border-3" : "border-1"}`}
+                      onClick={() => {
+                        setSelectedIndex(i);
+                        handleScroll(i);
+                      }}
+                      className={`w-12 h-12 rounded-sm overflow-hidden ${mediaName ? "border-blue-500 border-3" : "border-1"}`}
                     >
                       {mediaType === "image" ? (
                         <img
