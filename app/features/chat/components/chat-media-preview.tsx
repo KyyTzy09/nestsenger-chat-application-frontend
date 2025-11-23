@@ -39,7 +39,12 @@ export default function ChatMediaPreview() {
   React.useEffect(() => {
     if (mediaRefs.current) {
       const mediaIndex = mediaRefs.current.findIndex((m) => m?.id === chatId);
-      handleScroll(mediaIndex);
+      if (mediaIndex >= 0 && mediaRefs.current[mediaIndex]) {
+        mediaRefs.current[mediaIndex]?.scrollIntoView({
+          behavior: "instant",
+          inline: "center",
+        });
+      }
     }
   }, [openPreview, chatId]);
 
@@ -160,7 +165,7 @@ export default function ChatMediaPreview() {
           <section className="flex flex-row items-center w-full max-h-[10%] py-1 gap-2 overflow-x-auto no-scrollbar">
             {nonFileMediaResponse?.data?.length! > 0 &&
               nonFileMediaResponse?.data?.map(
-                ({ mediaName, mediaType, mediaUrl }, i) => {
+                ({ chatId, mediaName, mediaType, mediaUrl }, i) => {
                   return (
                     <div
                       key={i}
@@ -168,7 +173,7 @@ export default function ChatMediaPreview() {
                         setSelectedIndex(i);
                         handleScroll(i);
                       }}
-                      className={`w-12 h-12 rounded-sm overflow-hidden ${mediaName ? "border-blue-500 border-3" : "border-1"}`}
+                      className={`w-12 h-12 rounded-sm overflow-hidden ${selectedIndex === i ? "border-blue-500 border-3" : "border-1"}`}
                     >
                       {mediaType === "image" ? (
                         <img

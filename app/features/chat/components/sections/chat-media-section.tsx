@@ -12,12 +12,15 @@ export default function ChatMediaSection({
 }: ChatMediaSectionProps) {
   const { setChatId, setOpenPreview } = useMediaPreviewStore();
 
+  const handleClick = () => {
+    if (mediaType === "file" || mediaType === "audio") return;
+    setChatId(chatId);
+    setOpenPreview(true);
+  };
+
   return (
     <section
-      onClick={() => {
-        setChatId(chatId);
-        setOpenPreview(true);
-      }}
+      onClick={handleClick}
       className="w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40"
     >
       {mediaType === "image" ? (
