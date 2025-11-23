@@ -120,19 +120,19 @@ export default function ChatMediaPreview() {
                           }
                         }}
                       >
-                        {mediaType === "image" ? (
+                        {selectedIndex === i && mediaType === "image" ? (
                           <img
                             src={mediaUrl}
                             alt="yaya"
                             className="w-auto h-auto max-h-full object-cover"
                           />
-                        ) : mediaType === "video" ? (
+                        ) : selectedIndex === i && mediaType === "video" ? (
                           <video
                             className="w-auto h-auto max-h-full object-cover"
                             src={mediaUrl}
                             controls
                           ></video>
-                        ) : mediaType === "audio" ? (
+                        ) : selectedIndex === i && mediaType === "audio" ? (
                           <div className="flex flex-col items-center justify-center w-auto h-full min-w-[40%] p-2 gap-1">
                             <div className="flex items-center justify-center w-full h-[90%] bg-blue-500 rounded-t-md">
                               <Music2Icon className="w-32 h-32 text-white" />
