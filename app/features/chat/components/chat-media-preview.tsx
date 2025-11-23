@@ -12,6 +12,7 @@ import { Button } from "shared/shadcn/button";
 import { useGetNonFileMedia } from "../hooks/chat-media-hook";
 import { useParams } from "react-router";
 import { useMediaPreviewStore } from "../stores/media-preview-store";
+import ChatMediaCard from "./cards/chat-media-card";
 
 export default function ChatMediaPreview() {
   // Refs
@@ -163,38 +164,13 @@ export default function ChatMediaPreview() {
             </Button>
           </section>
           <section className="flex flex-row items-center w-full max-h-[10%] py-1 gap-2 overflow-x-auto no-scrollbar">
-            {nonFileMediaResponse?.data?.length! > 0 &&
-              nonFileMediaResponse?.data?.map(
-                ({ chatId, mediaName, mediaType, mediaUrl }, i) => {
-                  return (
-                    <div
-                      key={i}
-                      onClick={() => {
-                        setSelectedIndex(i);
-                        handleScroll(i);
-                      }}
-                      className={`w-12 h-12 rounded-sm overflow-hidden ${selectedIndex === i ? "border-blue-500 border-3" : "border-1"}`}
-                    >
-                      {mediaType === "image" ? (
-                        <img
-                          className="w-full h-full object-cover"
-                          src={mediaUrl}
-                          alt={mediaName}
-                        />
-                      ) : mediaType === "video" ? (
-                        <video
-                          src={mediaUrl}
-                          className="w-full h-full object-cover"
-                        ></video>
-                      ) : (
-                        <div className="w-full h-full p-1">
-                          <Music2Icon className="w-full h-full " />
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-              )}
+            <ChatMediaCard
+              data={nonFileMediaResponse?.data as []}
+              onClickAction={(i: number) => {
+                handleScroll(i);
+              }}
+              selectedIndex={selectedIndex as number}
+            />
           </section>
         </motion.div>
       )}
