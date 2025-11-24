@@ -44,7 +44,7 @@ export function generateDateText2(data: { date: Date }) {
     } else if (matchedMonthAndYear && Number(currentDate) - Number(date) === 1) {
         result = "Kemarin"
     } else {
-        result = current
+        result = formatedDate
     }
 
     return result
