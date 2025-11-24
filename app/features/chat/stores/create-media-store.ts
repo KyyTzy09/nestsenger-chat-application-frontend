@@ -1,3 +1,4 @@
+import type React from "react"
 import { create } from "zustand"
 
 interface IChatData {
@@ -12,12 +13,14 @@ interface ICreateMediaStore {
     openModal: boolean
     setOpenModal: (open: boolean) => void
     chat: IChatData[] | null
-    setChats: (chat: IChatData[]) => void
+    setChats: React.Dispatch<React.SetStateAction<IChatData[] | null>>
 }
 
 export const useCreateMediaStore = create<ICreateMediaStore>((set) => ({
     openModal: false,
     chat: null,
     setOpenModal: (value: boolean) => set({ openModal: value }),
-    setChats: (chat: IChatData[]) => set({ chat })
+    setChats: (value) => set((state) => ({
+        chat: typeof value === "function" ? value(state.chat) : value
+    }))
 }))

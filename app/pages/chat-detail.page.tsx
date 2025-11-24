@@ -19,6 +19,7 @@ import type { ReactionType } from "shared/types/reaction-type";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
 import { toast } from "sonner";
 import ChatSection from "~/features/chat/components/sections/chat-section";
+import ChatMediaForm from "~/features/chat/components/forms/chat-media-form";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -105,6 +106,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
 
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">
+      <ChatMediaForm />
       {!isRoomInfoLoading && (
         <ChatNavbar
           currentUserId={profileResponse?.data.userId || ""}
