@@ -34,7 +34,7 @@ export default function ChatEmojiPicker({
           initial={{ opacity: 0, translateY: 30 }}
           animate={{ opacity: 1, translateY: 0 }}
           exit={{ opacity: 0, translateY: 30 }}
-          className="absolute bottom-12 left-0"
+          className="absolute bottom-12 left-0 z-60"
         >
           <EmojiPicker
             lazyLoadEmojis={true}
