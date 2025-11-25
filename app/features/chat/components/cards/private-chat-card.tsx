@@ -103,17 +103,17 @@ export default function PrivateChatCard({
                   currentUserId,
                   chatId,
                 }) &&
-                  media && <ChatMediaSection data={media} />}
-                {!isChatDeletedLogic(deletedData as [], {
-                  currentUserId,
-                  chatId,
-                }) &&
                   parent && (
                     <ChatParentSection
                       currentUserId={currentUserId}
                       chatId={chatId}
                     />
                   )}
+                {!isChatDeletedLogic(deletedData as [], {
+                  currentUserId,
+                  chatId,
+                }) &&
+                  media && <ChatMediaSection data={media} />}
                 {isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
@@ -189,7 +189,7 @@ export default function PrivateChatCard({
                   chatId,
                   alias: currentUserId === senderId ? "Anda" : user.alias,
                   message,
-                  media
+                  media,
                 }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}

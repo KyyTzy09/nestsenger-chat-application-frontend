@@ -18,11 +18,13 @@ import { useCreateMediaStore } from "../../stores/create-media-store";
 import { useCreateChatWithMedia } from "../../hooks/chat-hook";
 import { useParams } from "react-router";
 import ChatEmojiPicker from "../chat-emoji";
+import { useChatParentDataStore } from "../../stores/chat-store";
 
 export default function ChatMediaForm() {
   const { roomId } = useParams<{ roomId: string }>();
   // Store
   const { chat, resetState } = useCreateMediaStore();
+  const { parent } = useChatParentDataStore();
   // State
   const [message, setMessage] = React.useState<string>("");
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
@@ -54,7 +56,7 @@ export default function ChatMediaForm() {
         roomId: roomId!,
         file: chat.file,
         message,
-        parentId: chat?.parent?.parentId,
+        parentId: parent.parentId,
       });
       resetState();
     }
