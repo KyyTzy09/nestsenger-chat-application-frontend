@@ -20,7 +20,7 @@ export const ChatService = {
     },
     async createChatWithMedia(data: { roomId: string, file: File, message: string, parentId?: string }) {
         const formData = new FormData()
-        formData.append("file", data.file)
+        formData.append("media", data.file)
         formData.append("roomId", data.roomId)
         formData.append("message", data.message)
         if (data.parentId) {

@@ -4,7 +4,6 @@ import { create } from "zustand"
 interface IChatData {
     file: File,
     fileUrl: string
-    message: string,
     parent?: {
         parentId: string
     }

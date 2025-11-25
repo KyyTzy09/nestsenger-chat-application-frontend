@@ -1,5 +1,6 @@
 import {
   CropIcon,
+  Loader2Icon,
   PlusIcon,
   RedoDotIcon,
   SendIcon,
@@ -14,13 +15,18 @@ import { defaultImage } from "shared/constants/image-default";
 import { Button } from "shared/shadcn/button";
 import { cn } from "~/lib/utils";
 import { useCreateMediaStore } from "../../stores/create-media-store";
+import { useCreateChatWithMedia } from "../../hooks/chat-hook";
+import { useParams } from "react-router";
 
 export default function ChatMediaForm() {
+  const { roomId } = useParams<{ roomId: string }>();
   // Store
-  const { setOpenModal, chat, setChat } = useCreateMediaStore();
+  const { chat } = useCreateMediaStore();
   // State
   const [message, setMessage] = React.useState<string>("");
 
+  const { mutate: createChatMutation, isPending: createChatLoading } =
+    useCreateChatWithMedia();
   const headerMenu = [
     {
       title: "Potong",
@@ -39,16 +45,39 @@ export default function ChatMediaForm() {
     },
   ];
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (chat) {
+      createChatMutation({
+        roomId: roomId!,
+        file: chat.file,
+        message,
+        parentId: chat?.parent?.parentId,
+      });
+    }
+  };
+
   const handleEnterSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      if (chat) {
+        createChatMutation({
+          roomId: roomId!,
+          file: chat.file,
+          message,
+          parentId: chat?.parent?.parentId,
+        });
+      }
     }
   };
 
   return (
     <AnimatePresence>
       {chat !== null && (
-        <motion.div className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto h-auto max-w-[50%] max-h-[100%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden">
+        <motion.form
+          onSubmit={handleSubmit}
+          className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto h-auto max-w-[50%] max-h-[100%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
+        >
           <section className="flex items-center justify-start w-full h-[12%] bg-[#141414] px-2 py-1 gap-2">
             {headerMenu.map(({ title, Icon, action }, i) => {
               return (
@@ -98,10 +127,15 @@ export default function ChatMediaForm() {
                   type="submit"
                   className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
                 >
-                  <SendIcon />
+                  {createChatLoading ? (
+                    <Loader2Icon className="w-full h-full animate-spin" />
+                  ) : (
+                    <SendIcon className="w-full h-full " />
+                  )}
                 </Button>
               )}
             </div>
+            {/* Card */}
             <div className="flex items-center justify-center w-full gap-2">
               {Array.from({ length: 10 }).map((_, i) => {
                 return (
@@ -115,7 +149,7 @@ export default function ChatMediaForm() {
               })}
             </div>
           </section>
-        </motion.div>
+        </motion.form>
       )}
     </AnimatePresence>
   );
