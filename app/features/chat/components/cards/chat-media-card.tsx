@@ -32,7 +32,7 @@ export default function ChatMediaCard({ data, selectedIndex, onClickAction }: Ch
                 ></video>
               ) : (
                 <div className="w-full h-full p-1">
-                  <Music2Icon className="w-full h-full " />
+                  <Music2Icon strokeWidth={2} className="w-full h-full text-white" />
                 </div>
               )}
             </div>

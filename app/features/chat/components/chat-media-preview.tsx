@@ -19,6 +19,7 @@ export default function ChatMediaPreview() {
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
   const mediaRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
+  // State
   const [selectedIndex, setSelectedIndex] = React.useState<number>();
   const { openPreview, setOpenPreview, chatId, resetState } =
     useMediaPreviewStore();
@@ -37,6 +38,7 @@ export default function ChatMediaPreview() {
     }
   };
 
+  // Initial Scroll Handle
   React.useEffect(() => {
     if (mediaRefs.current) {
       const mediaIndex = mediaRefs.current.findIndex((m) => m?.id === chatId);
@@ -49,6 +51,7 @@ export default function ChatMediaPreview() {
     }
   }, [openPreview, chatId]);
 
+  // Get Media Index
   React.useEffect(() => {
     if (!mediaRefs.current) return;
     const observer = new IntersectionObserver(
@@ -79,6 +82,7 @@ export default function ChatMediaPreview() {
           exit={{ opacity: 0 }}
           className={`flex fixed flex-col w-full min-h-screen bg-[#232323]/80 z-50 top-0 bottom-0 left-0 right-0 backdrop-blur-md gap-1 px-3 py-2`}
         >
+          {/* Header */}
           <section className="flex items-center justify-between w-full">
             <Button
               onClick={() => {
@@ -90,7 +94,8 @@ export default function ChatMediaPreview() {
               <ArrowLeftIcon />
             </Button>
           </section>
-          <section className="flex items-center justify-between w-full h-[85%] ">
+          {/* Preview */}
+          <section className="flex items-center justify-between w-full h-[85%] gap-5">
             <Button
               disabled={selectedIndex === 0}
               onClick={() => {
@@ -163,6 +168,7 @@ export default function ChatMediaPreview() {
               <ChevronRightIcon />
             </Button>
           </section>
+          {/* Thumbnail Media Card */}
           <section className="flex flex-row items-center w-full max-h-[10%] py-1 gap-2 overflow-x-auto no-scrollbar">
             <ChatMediaCard
               data={nonFileMediaResponse?.data as []}
