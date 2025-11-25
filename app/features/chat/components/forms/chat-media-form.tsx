@@ -85,9 +85,9 @@ export default function ChatMediaForm() {
       {chat !== null && (
         <motion.form
           onSubmit={handleSubmit}
-          className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto h-auto max-w-[50%] max-h-[100%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
+          className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto max-w-[50%] max-h-[90%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
         >
-          <section className="flex items-center justify-start w-full h-[12%] bg-[#141414] px-2 py-1 gap-2">
+          <section className="flex items-center justify-start w-full h-[10%] bg-[#141414] px-2 py-1 gap-2">
             {headerMenu.map(({ title, Icon, action }, i) => {
               return (
                 <Button
@@ -102,9 +102,9 @@ export default function ChatMediaForm() {
               );
             })}
           </section>
-          <section className="flex items-center justify-center w-[90%] h-[80%] p-5">
+          <section className="flex items-center justify-center w-auto max-w-[80%] max-h-[70%] px-10">
             <img
-              className="w-auto max-w-full h-full object-cover"
+              className="w-auto max-w-full object-cover"
               src={chat.fileUrl ?? defaultImage}
               alt="default"
             />
