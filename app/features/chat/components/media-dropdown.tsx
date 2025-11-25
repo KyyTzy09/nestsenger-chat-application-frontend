@@ -12,8 +12,8 @@ interface MediaDropdownProps {
 
 export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
   const [selectedMedia, setSelectedMedia] = React.useState<File[] | null>(null);
-  
-  const { setChats } = useCreateMediaStore();
+
+  const { chat, setChat } = useCreateMediaStore();
   const mediaDropDownItems = [
     {
       text: "Foto & Video",
@@ -27,7 +27,19 @@ export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
     },
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const media = e.target.files?.[0];
+    if (media) {
+      const mediaUrl = URL.createObjectURL(media);
+      setChat({
+        file: media,
+        fileUrl: mediaUrl,
+        message: "",
+      });
+      onClose();
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -48,17 +60,13 @@ export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
             <div className="flex flex-col items-center justify-start w-full h-full p-1 gap-3">
               {mediaDropDownItems.map(({ Icon, text, type }) => {
                 return (
-                  <Label
-                    onClick={onClose}
-                    className="flex items-center justify-start w-full gap-2 hover:bg-[#353535] p-1 rounded-sm"
-                  >
+                  <Label className="flex items-center justify-start w-full gap-2 hover:bg-[#353535] p-1 rounded-sm">
                     <input
                       onChange={handleChange}
                       title={text}
                       className="hidden w-full"
                       type="file"
                       accept={type}
-                      multiple
                     />
                     <Icon className="w-5 h-5" />
                     {text}

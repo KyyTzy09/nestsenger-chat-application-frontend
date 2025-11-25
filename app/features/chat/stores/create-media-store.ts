@@ -3,6 +3,7 @@ import { create } from "zustand"
 
 interface IChatData {
     file: File,
+    fileUrl: string
     message: string,
     parent?: {
         parentId: string
@@ -12,15 +13,20 @@ interface IChatData {
 interface ICreateMediaStore {
     openModal: boolean
     setOpenModal: (open: boolean) => void
-    chat: IChatData[] | null
-    setChats: React.Dispatch<React.SetStateAction<IChatData[] | null>>
+    chat: IChatData | null
+    // setChats: React.Dispatch<React.SetStateAction<IChatData[] | null>>
+    setChat: (chat: IChatData) => void
+}
+
+const initialState = {
+    chat: null,
+    openModal: false,
 }
 
 export const useCreateMediaStore = create<ICreateMediaStore>((set) => ({
     openModal: false,
     chat: null,
     setOpenModal: (value: boolean) => set({ openModal: value }),
-    setChats: (value) => set((state) => ({
-        chat: typeof value === "function" ? value(state.chat) : value
-    }))
+    setChat: (chat) => set({ chat }),
+    resetState: () => set(initialState)
 }))
