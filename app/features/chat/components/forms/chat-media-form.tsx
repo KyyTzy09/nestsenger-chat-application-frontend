@@ -113,7 +113,7 @@ export default function ChatMediaForm() {
               />
             ) : (
               <video
-                className="w-auto max-w-[70%] object-cover"
+                className="w-auto max-w-full max-h-[90%] object-cover"
                 src={chat.fileUrl}
                 controls
               ></video>

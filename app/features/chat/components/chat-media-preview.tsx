@@ -133,7 +133,7 @@ export default function ChatMediaPreview() {
                           />
                         ) : selectedIndex === i && mediaType === "video" ? (
                           <video
-                            className="w-auto h-auto max-h-full object-cover"
+                            className="w-auto h-auto min-w-[40%] max-h-full object-cover"
                             src={mediaUrl}
                             controls
                           ></video>
