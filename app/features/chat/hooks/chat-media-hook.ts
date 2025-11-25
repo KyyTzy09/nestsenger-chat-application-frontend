@@ -5,6 +5,5 @@ export const useGetNonFileMedia = (data: { roomId: string }) => {
     return useQuery({
         queryKey: ['media-non-file', data.roomId],
         queryFn: async () => await MediaService.getNonFileMedia(data),
-        staleTime: Infinity
     })
 }
