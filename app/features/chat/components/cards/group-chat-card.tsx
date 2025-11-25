@@ -118,6 +118,7 @@ export default function GroupChatCard({
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
                 className={`${senderId === currentUserId ? "bg-blue-500 rounded-tr-none" : "bg-[#303030] rounded-tl-none"} relative flex flex-col  ${!isChatDeletedLogic(deletedData as [], { currentUserId, chatId }) && media ? "w-[35%]" : "w-auto"} max-w-[55%] min-w-[120px] h-auto text-white p-2 rounded-sm shadow`}
               >
+                {/* Sender alias */}
                 {senderId !== currentUserId && (
                   <div className="flex items-center w-full">
                     <p className={"text-blue-500 text-[12px] font-semibold"}>
@@ -125,6 +126,7 @@ export default function GroupChatCard({
                     </p>
                   </div>
                 )}
+                {/* Reply section */}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
@@ -135,11 +137,13 @@ export default function GroupChatCard({
                       chatId={chatId}
                     />
                   )}
+                {/* Media preview section */}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
                 }) &&
                   media && <ChatMediaSection data={media} />}
+                {/* Chat message section */}
                 {isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
@@ -161,6 +165,7 @@ export default function GroupChatCard({
                     {linkify(message)}
                   </p>
                 )}
+                {/* Expand message section */}
                 <div
                   className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
                 >
@@ -196,6 +201,7 @@ export default function GroupChatCard({
                 <span
                   className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
+                {/* Reaction button */}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
@@ -214,7 +220,7 @@ export default function GroupChatCard({
                   alias:
                     user && currentUserId === senderId ? "Anda" : user.alias,
                   message,
-                  media
+                  media,
                 }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}

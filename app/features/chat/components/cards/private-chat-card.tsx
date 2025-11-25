@@ -99,6 +99,7 @@ export default function PrivateChatCard({
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
                 className={`${senderId === currentUserId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] ${!isChatDeletedLogic(deletedData as [], { currentUserId, chatId }) && media ? "w-[35%]" : "w-auto"} h-auto text-white p-2 rounded-sm gap-1 shadow`}
               >
+                {/* Reply section */}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
@@ -109,11 +110,13 @@ export default function PrivateChatCard({
                       chatId={chatId}
                     />
                   )}
+                {/* Media preview section */}
                 {!isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
                 }) &&
                   media && <ChatMediaSection data={media} />}
+                {/* Chat message section */}
                 {isChatDeletedLogic(deletedData as [], {
                   currentUserId,
                   chatId,
@@ -135,6 +138,7 @@ export default function PrivateChatCard({
                     {linkify(message)}
                   </p>
                 )}
+                {/* Expand chat section */}
                 <div
                   className={`${findChatIndex(i) && message.length < 700 ? "justify-end-safe" : "justify-between"} flex items-center w-full text-[11px]`}
                 >
@@ -170,6 +174,7 @@ export default function PrivateChatCard({
                 <span
                   className={`${senderId === currentUserId ? "self-end border-b-8 border-t-transparent border-l-8 border-l-blue-500 border-b-transparent -right-2" : "border-b-8 border-t-transparent border-r-8 border-r-[#303030] border-b-transparent -left-2"} absolute top-0 w-0 h-0`}
                 ></span>
+                {/* Reaction Button */}
                 <AnimatePresence>
                   {!isChatDeletedLogic(deletedData as [], {
                     currentUserId,
