@@ -36,6 +36,19 @@ export const useCreateChat = (roomId: string,) => {
     })
 }
 
+export const useCreateChatWithMedia = () => {
+    return useMutation({
+        mutationKey: ["create-chat-media"],
+        mutationFn: async (data: { roomId: string, file: File, message: string, parentId?: string }) => await ChatService.createChatWithMedia(data),
+        onSuccess: () => {
+            toast.success("Berhasil kirim pesan")
+        },
+        onError: (err) => {
+            toast.error(err.message || "Gagal kirim pesan")
+        }
+    })
+}
+
 export const useDeleteChatForAll = (roomId: string, onSuccess: () => void) => {
     const queryClient = useQueryClient()
     return useMutation({

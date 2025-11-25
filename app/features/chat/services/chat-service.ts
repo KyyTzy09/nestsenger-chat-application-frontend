@@ -18,6 +18,16 @@ export const ChatService = {
     async createChat(data: { roomId: string, message: string, parentId?: string }) {
         return await apiClient<{ data: ChatType }>({ url: '/chat/create/post', data, method: "post", withCredentials: true })
     },
+    async createChatWithMedia(data: { roomId: string, file: File, message: string, parentId?: string }) {
+        const formData = new FormData()
+        formData.append("file", data.file)
+        formData.append("roomId", data.roomId)
+        formData.append("message", data.message)
+        if (data.parentId) {
+            formData.append("parentId", data.parentId)
+        }
+        return await apiClient<{ message: string, data: ChatType }>({ url: `/chat/create-media/post`, data: formData, withCredentials: true, method: "post" })
+    },
     async deleteChatForAll(data: { chatId: string }) {
         return await apiClient<{ message: string, statusCode: number }>({ url: `/chat/for-all/${data.chatId}/delete`, withCredentials: true, method: "delete" })
     },
