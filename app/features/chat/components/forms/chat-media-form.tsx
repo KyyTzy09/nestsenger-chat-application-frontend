@@ -105,11 +105,19 @@ export default function ChatMediaForm() {
             })}
           </section>
           <section className="flex items-center justify-center w-auto max-w-[80%] max-h-[70%] px-10">
-            <img
-              className="w-auto max-w-full object-cover"
-              src={chat.fileUrl ?? defaultImage}
-              alt="default"
-            />
+            {chat.fileType === "image" ? (
+              <img
+                className="w-auto max-w-full object-cover"
+                src={chat.fileUrl ?? defaultImage}
+                alt="default"
+              />
+            ) : (
+              <video
+                className="w-auto max-w-[70%] object-cover"
+                src={chat.fileUrl}
+                controls
+              ></video>
+            )}
           </section>
           {/* Input */}
           <section className="flex flex-col items-center justify-center w-full h-[20%] bg-[#141414] py-2 px-5 gap-5">

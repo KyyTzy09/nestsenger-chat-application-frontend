@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { Label } from "shared/shadcn/label";
 import { useCreateMediaStore } from "../stores/create-media-store";
+import { GetMediaType } from "./logic/media-type-logic";
 
 interface MediaDropdownProps {
   isOpen: boolean;
@@ -18,7 +19,7 @@ export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
     {
       text: "Foto & Video",
       Icon: ImageIcon,
-      type: "image/*",
+      type: "image/*,video/*",
     },
     {
       text: "Dokumen",
@@ -34,7 +35,7 @@ export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
       setChat({
         file: media,
         fileUrl: mediaUrl,
-        message: "",
+        fileType: GetMediaType(media.name),
       });
       onClose();
     }

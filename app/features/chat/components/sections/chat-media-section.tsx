@@ -21,12 +21,12 @@ export default function ChatMediaSection({
   return (
     <section
       onClick={handleClick}
-      className="w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40"
+      className="relative w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40"
     >
       {mediaType === "image" ? (
         <img src={mediaUrl} alt="yaya" className="w-full h-auto object-cover" />
       ) : mediaType === "video" ? (
-        <div className="relative w-full h-auto">
+        <div className="w-full h-auto">
           <video className="w-full h-auto object-cover" src={mediaUrl}></video>
           <div className="absolute flex items-center justify-center w-full h-full z-10 top-0">
             <PlayIcon

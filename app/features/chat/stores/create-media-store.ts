@@ -2,8 +2,9 @@ import type React from "react"
 import { create } from "zustand"
 
 interface IChatData {
-    file: File,
+    file: File
     fileUrl: string
+    fileType: "image" | "video" | "audio" | "file"
     parent?: {
         parentId: string
     }
