@@ -17,13 +17,15 @@ import { cn } from "~/lib/utils";
 import { useCreateMediaStore } from "../../stores/create-media-store";
 import { useCreateChatWithMedia } from "../../hooks/chat-hook";
 import { useParams } from "react-router";
+import ChatEmojiPicker from "../chat-emoji";
 
 export default function ChatMediaForm() {
   const { roomId } = useParams<{ roomId: string }>();
   // Store
-  const { chat } = useCreateMediaStore();
+  const { chat, resetState } = useCreateMediaStore();
   // State
   const [message, setMessage] = React.useState<string>("");
+  const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
 
   const { mutate: createChatMutation, isPending: createChatLoading } =
     useCreateChatWithMedia();
@@ -41,7 +43,7 @@ export default function ChatMediaForm() {
     {
       title: "Hapus",
       Icon: Trash2Icon,
-      action: () => {},
+      action: () => resetState(),
     },
   ];
 
@@ -54,6 +56,7 @@ export default function ChatMediaForm() {
         message,
         parentId: chat?.parent?.parentId,
       });
+      resetState();
     }
   };
 
@@ -67,12 +70,18 @@ export default function ChatMediaForm() {
           message,
           parentId: chat?.parent?.parentId,
         });
+        resetState();
       }
     }
   };
 
   return (
     <AnimatePresence>
+      <ChatEmojiPicker
+        isOpen={showEmoji}
+        onClose={() => setShowEmoji(false)}
+        onSelect={setMessage}
+      />
       {chat !== null && (
         <motion.form
           onSubmit={handleSubmit}
@@ -100,10 +109,11 @@ export default function ChatMediaForm() {
               alt="default"
             />
           </section>
+          {/* Input */}
           <section className="flex flex-col items-center justify-center w-full h-[20%] bg-[#141414] py-2 px-5 gap-5">
             <div className="flex items-start justify-between w-full h-auto gap-1">
               <Button
-                onClick={() => {}}
+                onClick={() => setShowEmoji(true)}
                 type="button"
                 className="w-9 h-9 p-1 bg-transparent hover:bg-gray-600"
               >

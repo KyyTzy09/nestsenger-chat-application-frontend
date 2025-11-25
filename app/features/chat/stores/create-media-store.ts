@@ -15,6 +15,7 @@ interface ICreateMediaStore {
     chat: IChatData | null
     // setChats: React.Dispatch<React.SetStateAction<IChatData[] | null>>
     setChat: (chat: IChatData) => void
+    resetState: () => void
 }
 
 const initialState = {
