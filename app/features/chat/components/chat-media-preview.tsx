@@ -112,13 +112,13 @@ export default function ChatMediaPreview() {
             >
               {nonFileMediaResponse?.data.length! > 0 &&
                 nonFileMediaResponse?.data.map(
-                  ({ chatId, mediaUrl, mediaType }, i) => {
+                  ({ chatId, mediaUrl, mediaType, chat: { message } }, i) => {
                     return (
                       <div
                         key={i}
                         data-index={i}
                         id={chatId}
-                        className="w-full h-full flex items-center justify-center shrink-0 snap-center"
+                        className="relative w-full h-full flex items-center justify-center shrink-0 snap-center"
                         ref={(el) => {
                           if (mediaRefs.current) {
                             mediaRefs.current[i] = el;
@@ -149,6 +149,11 @@ export default function ChatMediaPreview() {
                             ></audio>
                           </div>
                         ) : null}
+                        {message !== null && (
+                          <div className="absolute w-auto max-w-[200px] h-auto line-clamp-2 text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
+                            {message}
+                          </div>
+                        )}
                       </div>
                     );
                   }

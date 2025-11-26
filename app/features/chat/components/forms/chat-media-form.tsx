@@ -81,28 +81,31 @@ export default function ChatMediaForm() {
 
   return (
     <AnimatePresence>
-      <AlertModal
-        onOpen={showAlert}
-        setOnOpen={setShowAlert}
-        alertDesc="Yakin ingin membatalkan?"
-        alertTitle="Batalkan?"
-        onConfirm={() => {
-          resetState();
-          setShowAlert(false);
-        }}
-      />
-      <ChatEmojiPicker
-        isOpen={showEmoji}
-        onClose={() => setShowEmoji(false)}
-        onSelect={setMessage}
-      />
       {chat !== null && (
         <>
+          <AlertModal
+            onOpen={showAlert}
+            setOnOpen={setShowAlert}
+            alertDesc="Yakin ingin membatalkan?"
+            alertTitle="Batalkan?"
+            onConfirm={() => {
+              resetState();
+              setShowAlert(false);
+            }}
+          />
+          <ChatEmojiPicker
+            isOpen={showEmoji}
+            onClose={() => setShowEmoji(false)}
+            onSelect={setMessage}
+          />
           <motion.div
             onClick={() => setShowAlert(true)}
             className="top-0 left-0 fixed w-full h-full bg-black/60 z-40"
           />
           <motion.form
+            initial={{ translateY: 50, opacity: 0 }}
+            animate={{ translateY: 0, opacity: 1 }}
+            exit={{ translateY: 50, opacity: 0 }}
             onSubmit={handleSubmit}
             className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto max-w-[50%] max-h-[90%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
           >
