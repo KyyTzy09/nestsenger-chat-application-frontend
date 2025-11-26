@@ -19,6 +19,7 @@ import { useCreateChatWithMedia } from "../../hooks/chat-hook";
 import { useParams } from "react-router";
 import ChatEmojiPicker from "../chat-emoji";
 import { useChatParentDataStore } from "../../stores/chat-store";
+import AlertModal from "shared/components/modals/alert-modal";
 
 export default function ChatMediaForm() {
   const { roomId } = useParams<{ roomId: string }>();
@@ -28,6 +29,7 @@ export default function ChatMediaForm() {
   // State
   const [message, setMessage] = React.useState<string>("");
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
+  const [showAlert, setShowAlert] = React.useState<boolean>(false);
 
   const { mutate: createChatMutation, isPending: createChatLoading } =
     useCreateChatWithMedia();
@@ -79,97 +81,113 @@ export default function ChatMediaForm() {
 
   return (
     <AnimatePresence>
+      <AlertModal
+        onOpen={showAlert}
+        setOnOpen={setShowAlert}
+        alertDesc="Yakin ingin membatalkan?"
+        alertTitle="Batalkan?"
+        onConfirm={() => {
+          resetState();
+          setShowAlert(false);
+        }}
+      />
       <ChatEmojiPicker
         isOpen={showEmoji}
         onClose={() => setShowEmoji(false)}
         onSelect={setMessage}
       />
       {chat !== null && (
-        <motion.form
-          onSubmit={handleSubmit}
-          className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto max-w-[50%] max-h-[90%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
-        >
-          <section className="flex items-center justify-start w-full h-[10%] bg-[#141414] px-2 py-1 gap-2">
-            {headerMenu.map(({ title, Icon, action }, i) => {
-              return (
-                <Button
-                  key={i}
-                  title={title}
-                  onClick={action}
-                  type="button"
-                  className="w-10 h-10 p-1 bg-transparent hover:bg-gray-600"
-                >
-                  <Icon />
-                </Button>
-              );
-            })}
-          </section>
-          <section className="flex items-center justify-center w-auto max-w-[80%] max-h-[70%] px-10">
-            {chat.fileType === "image" ? (
-              <img
-                className="w-auto max-w-full object-cover"
-                src={chat.fileUrl ?? defaultImage}
-                alt="default"
-              />
-            ) : (
-              <video
-                className="w-auto max-w-full max-h-[90%] object-cover"
-                src={chat.fileUrl}
-                controls
-              ></video>
-            )}
-          </section>
-          {/* Input */}
-          <section className="flex flex-col items-center justify-center w-full h-[20%] bg-[#141414] py-2 px-5 gap-5">
-            <div className="flex items-start justify-between w-full h-auto gap-1">
-              <Button
-                onClick={() => setShowEmoji(true)}
-                type="button"
-                className="w-9 h-9 p-1 bg-transparent hover:bg-gray-600"
-              >
-                <SmileIcon />
-              </Button>
-              <TextAreaAutoSize
-                value={message}
-                onKeyDown={handleEnterSubmit}
-                onChange={(e) => setMessage(e.target.value)}
-                minRows={1}
-                maxRows={5}
-                required
-                placeholder="Ketik Pesan"
-                className={cn(
-                  "w-full min-h-7 text-white resize-none no-scrollbar text-justify p-2 text-sm",
-                  "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring"
-                )}
-              />
-              {message.length > 0 && (
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
-                >
-                  {createChatLoading ? (
-                    <Loader2Icon className="w-full h-full animate-spin" />
-                  ) : (
-                    <SendIcon className="w-full h-full " />
-                  )}
-                </Button>
-              )}
-            </div>
-            {/* Card */}
-            <div className="flex items-center justify-center w-full gap-2">
-              {Array.from({ length: 10 }).map((_, i) => {
+        <>
+          <motion.div
+            onClick={() => setShowAlert(true)}
+            className="top-0 left-0 fixed w-full h-full bg-black/60 z-40"
+          />
+          <motion.form
+            onSubmit={handleSubmit}
+            className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto max-w-[50%] max-h-[90%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
+          >
+            <section className="flex items-center justify-start w-full h-[10%] bg-[#141414] px-2 py-1 gap-2">
+              {headerMenu.map(({ title, Icon, action }, i) => {
                 return (
-                  <div
+                  <Button
                     key={i}
-                    className="flex items-center justify-center w-10 h-10 bg-gray-500 rounded-sm"
+                    title={title}
+                    onClick={action}
+                    type="button"
+                    className="w-10 h-10 p-1 bg-transparent hover:bg-gray-600"
                   >
-                    <PlusIcon />
-                  </div>
+                    <Icon />
+                  </Button>
                 );
               })}
-            </div>
-          </section>
-        </motion.form>
+            </section>
+            <section className="flex items-center justify-center max-w-[90%] max-h-[60vh] overflow-hidden bg-black/20">
+              {chat.fileType === "image" ? (
+                <img
+                  className="w-auto h-auto max-w-full max-h-full object-contain"
+                  src={chat.fileUrl ?? defaultImage}
+                  alt="default"
+                />
+              ) : (
+                <video
+                  className="w-auto h-auto max-w-full max-h-full object-contain"
+                  src={chat.fileUrl}
+                  controls
+                ></video>
+              )}
+            </section>
+            {/* Input */}
+            <section className="flex flex-col items-center justify-center w-full h-[20%] bg-[#141414] py-2 px-5 gap-5">
+              <div className="flex items-start justify-between w-full h-auto gap-1">
+                <Button
+                  onClick={() => setShowEmoji(true)}
+                  type="button"
+                  className="w-9 h-9 p-1 bg-transparent hover:bg-gray-600"
+                >
+                  <SmileIcon />
+                </Button>
+                <TextAreaAutoSize
+                  value={message}
+                  onKeyDown={handleEnterSubmit}
+                  onChange={(e) => setMessage(e.target.value)}
+                  minRows={1}
+                  maxRows={5}
+                  required
+                  placeholder="Ketik Pesan"
+                  className={cn(
+                    "w-full min-h-7 text-white resize-none no-scrollbar text-justify p-2 text-sm",
+                    "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring"
+                  )}
+                />
+                {message.length > 0 && (
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
+                  >
+                    {createChatLoading ? (
+                      <Loader2Icon className="w-full h-full animate-spin" />
+                    ) : (
+                      <SendIcon className="w-full h-full " />
+                    )}
+                  </Button>
+                )}
+              </div>
+              {/* Card */}
+              <div className="flex items-center justify-center w-full gap-2">
+                {Array.from({ length: 10 }).map((_, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-center justify-center w-10 h-10 bg-gray-500 rounded-sm"
+                    >
+                      <PlusIcon />
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </motion.form>
+        </>
       )}
     </AnimatePresence>
   );
