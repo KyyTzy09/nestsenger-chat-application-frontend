@@ -60,18 +60,22 @@ export default function ChatMediaForm() {
     return i === selectedIndex;
   });
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (chat) {
-  //     createChatMutation({
-  //       roomId: roomId!,
-  //       file: chat.file,
-  //       message,
-  //       parentId: parent.parentId,
-  //     });
-  //     resetState();
-  //   }
-  // };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (chat && chat?.length > 0) {
+      await Promise.all(
+        chat?.map((chat, i) => {
+          createChatMutation({
+            roomId: roomId!,
+            file: chat.file,
+            message: message[i] ? message[i].message : "",
+            parentId: chat?.parent?.parentId,
+          });
+        })
+      );
+      resetState();
+    }
+  };
 
   const handleEnterSubmit = async (
     e: React.KeyboardEvent<HTMLTextAreaElement>
@@ -87,7 +91,7 @@ export default function ChatMediaForm() {
               message: message[i] ? message[i].message : "",
               parentId: chat?.parent?.parentId,
             });
-          }) as []
+          })
         );
 
         resetState();
@@ -121,6 +125,7 @@ export default function ChatMediaForm() {
             className="top-0 left-0 fixed w-full h-full bg-black/60 z-40"
           />
           <motion.form
+            onSubmit={handleSubmit}
             initial={{ translateY: 50, opacity: 0 }}
             animate={{ translateY: 0, opacity: 1 }}
             exit={{ translateY: 50, opacity: 0 }}
