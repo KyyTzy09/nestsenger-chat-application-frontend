@@ -27,6 +27,7 @@ export default function ChatMediaForm() {
   const { chat, resetState } = useCreateMediaStore();
   const { parent } = useChatParentDataStore();
   // State
+  const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
   const [message, setMessage] = React.useState<string>("");
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
@@ -51,29 +52,40 @@ export default function ChatMediaForm() {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (chat) {
-      createChatMutation({
-        roomId: roomId!,
-        file: chat.file,
-        message,
-        parentId: parent.parentId,
-      });
-      resetState();
-    }
-  };
+  const selectedMedia = chat?.find((_, i) => {
+    return i === selectedIndex;
+  });
 
-  const handleEnterSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (chat) {
+  //     createChatMutation({
+  //       roomId: roomId!,
+  //       file: chat.file,
+  //       message,
+  //       parentId: parent.parentId,
+  //     });
+  //     resetState();
+  //   }
+  // };
+
+  const handleEnterSubmit = async (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (chat) {
-        createChatMutation({
-          roomId: roomId!,
-          file: chat.file,
-          message,
-          parentId: chat?.parent?.parentId,
-        });
+      if (chat && chat?.length > 0) {
+        await Promise.all(
+          chat?.map((chat) => {
+            createChatMutation({
+              roomId: roomId!,
+              file: chat.file,
+              message,
+              parentId: chat?.parent?.parentId,
+            });
+          }) as []
+        );
+
         resetState();
       }
     }
@@ -106,7 +118,6 @@ export default function ChatMediaForm() {
             initial={{ translateY: 50, opacity: 0 }}
             animate={{ translateY: 0, opacity: 1 }}
             exit={{ translateY: 50, opacity: 0 }}
-            onSubmit={handleSubmit}
             className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto max-w-[50%] max-h-[90%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
           >
             <section className="flex items-center justify-start w-full h-[10%] bg-[#141414] px-2 py-1 gap-2">
@@ -124,21 +135,23 @@ export default function ChatMediaForm() {
                 );
               })}
             </section>
-            <section className="flex items-center justify-center max-w-[90%] max-h-[60vh] overflow-hidden bg-black/20">
-              {chat.fileType === "image" ? (
-                <img
-                  className="w-auto h-auto max-w-full max-h-full object-contain"
-                  src={chat.fileUrl ?? defaultImage}
-                  alt="default"
-                />
-              ) : (
-                <video
-                  className="w-auto h-auto max-w-full max-h-full object-contain"
-                  src={chat.fileUrl}
-                  controls
-                ></video>
-              )}
-            </section>
+            {selectedMedia && (
+              <section className="flex items-center justify-center max-w-[90%] max-h-[60vh] overflow-hidden bg-black/20">
+                {selectedMedia.fileType === "image" ? (
+                  <img
+                    className="w-auto h-auto max-w-full max-h-full object-contain"
+                    src={selectedMedia.fileUrl ?? defaultImage}
+                    alt="default"
+                  />
+                ) : (
+                  <video
+                    className="w-auto h-auto max-w-full max-h-full object-contain"
+                    src={selectedMedia.fileUrl}
+                    controls
+                  ></video>
+                )}
+              </section>
+            )}
             {/* Input */}
             <section className="flex flex-col items-center justify-center w-full h-[20%] bg-[#141414] py-2 px-5 gap-5">
               <div className="flex items-start justify-between w-full h-auto gap-1">

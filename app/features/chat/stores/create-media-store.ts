@@ -13,9 +13,8 @@ interface IChatData {
 interface ICreateMediaStore {
     openModal: boolean
     setOpenModal: (open: boolean) => void
-    chat: IChatData | null
-    // setChats: React.Dispatch<React.SetStateAction<IChatData[] | null>>
-    setChat: (chat: IChatData) => void
+    chat: IChatData[] | null
+    setChat: React.Dispatch<React.SetStateAction<IChatData[] | null>>
     resetState: () => void
 }
 
@@ -28,6 +27,6 @@ export const useCreateMediaStore = create<ICreateMediaStore>((set) => ({
     openModal: false,
     chat: null,
     setOpenModal: (value: boolean) => set({ openModal: value }),
-    setChat: (chat) => set({ chat }),
+    setChat: (chat) => set({ chat: chat as [] }),
     resetState: () => set(initialState)
 }))

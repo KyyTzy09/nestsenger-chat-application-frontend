@@ -12,8 +12,6 @@ interface MediaDropdownProps {
 }
 
 export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
-  const [selectedMedia, setSelectedMedia] = React.useState<File[] | null>(null);
-
   const { chat, setChat } = useCreateMediaStore();
   const mediaDropDownItems = [
     {
@@ -28,18 +26,33 @@ export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
     },
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const media = e.target.files?.[0];
-    if (media) {
-      const mediaUrl = URL.createObjectURL(media);
-      setChat({
-        file: media,
-        fileUrl: mediaUrl,
-        fileType: GetMediaType(media.name),
+  const handleManyMedia = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const medias = [...e.target.files];
+      const chatData = medias.map((file) => {
+        return {
+          file,
+          fileUrl: URL.createObjectURL(file),
+          fileType: GetMediaType(file.name),
+        };
       });
+      setChat(chatData);
       onClose();
     }
   };
+
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const media = e.target.files?.[0];
+  //   if (media) {
+  //     const mediaUrl = URL.createObjectURL(media);
+  //     setChat({
+  //       file: media,
+  //       fileUrl: mediaUrl,
+  //       fileType: GetMediaType(media.name),
+  //     });
+  //     onClose();
+  //   }
+  // };
 
   return (
     <AnimatePresence>
@@ -63,11 +76,12 @@ export default function MediaDropdown({ isOpen, onClose }: MediaDropdownProps) {
                 return (
                   <Label className="flex items-center justify-start w-full gap-2 hover:bg-[#353535] p-1 rounded-sm">
                     <input
-                      onChange={handleChange}
+                      onChange={handleManyMedia}
                       title={text}
                       className="hidden w-full"
                       type="file"
                       accept={type}
+                      multiple
                     />
                     <Icon className="w-5 h-5" />
                     {text}
