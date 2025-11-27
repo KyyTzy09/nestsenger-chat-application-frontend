@@ -1,6 +1,7 @@
 import {
   CropIcon,
   Loader2Icon,
+  Music2Icon,
   PlusIcon,
   RedoDotIcon,
   SendIcon,
@@ -26,9 +27,12 @@ export default function ChatMediaForm() {
   // Store
   const { chat, resetState } = useCreateMediaStore();
   const { parent } = useChatParentDataStore();
+
   // State
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
-  const [message, setMessage] = React.useState<string>("");
+  const [message, setMessage] = React.useState<
+    { index: number; message: string }[]
+  >([]);
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
 
@@ -76,11 +80,11 @@ export default function ChatMediaForm() {
       e.preventDefault();
       if (chat && chat?.length > 0) {
         await Promise.all(
-          chat?.map((chat) => {
+          chat?.map((chat, i) => {
             createChatMutation({
               roomId: roomId!,
               file: chat.file,
-              message,
+              message: message[i] ? message[i].message : "",
               parentId: chat?.parent?.parentId,
             });
           }) as []
@@ -105,11 +109,13 @@ export default function ChatMediaForm() {
               setShowAlert(false);
             }}
           />
-          <ChatEmojiPicker
+          {/* <ChatEmojiPicker
             isOpen={showEmoji}
             onClose={() => setShowEmoji(false)}
-            onSelect={setMessage}
-          />
+            onSelect={(prev) =>
+              setMessage({ index: selectedIndex, message: prev as string })
+            }
+          /> */}
           <motion.div
             onClick={() => setShowAlert(true)}
             className="top-0 left-0 fixed w-full h-full bg-black/60 z-40"
@@ -163,9 +169,22 @@ export default function ChatMediaForm() {
                   <SmileIcon />
                 </Button>
                 <TextAreaAutoSize
-                  value={message}
+                  value={
+                    message[selectedIndex] ? message[selectedIndex].message : ""
+                  }
                   onKeyDown={handleEnterSubmit}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={(e) => {
+                    setMessage((prev) =>
+                      prev.map((item, i) =>
+                        i === selectedIndex
+                          ? {
+                              ...item,
+                              message: e.target.value,
+                            }
+                          : item
+                      )
+                    );
+                  }}
                   minRows={1}
                   maxRows={5}
                   required
@@ -175,7 +194,7 @@ export default function ChatMediaForm() {
                     "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring"
                   )}
                 />
-                {message.length > 0 && (
+                {(message[selectedIndex]?.message?.length as number) > 0 && (
                   <Button
                     type="submit"
                     className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
@@ -190,16 +209,36 @@ export default function ChatMediaForm() {
               </div>
               {/* Card */}
               <div className="flex items-center justify-center w-full gap-2">
-                {Array.from({ length: 10 }).map((_, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex items-center justify-center w-10 h-10 bg-gray-500 rounded-sm"
-                    >
-                      <PlusIcon />
-                    </div>
-                  );
-                })}
+                {chat.length > 0 &&
+                  chat.map(({ file, fileUrl, fileType }, i) => {
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => setSelectedIndex(i)}
+                        className={`w-12 h-12 rounded-sm overflow-hidden ${selectedIndex === i ? "border-blue-500 border-3" : "border-1"}`}
+                      >
+                        {fileType === "image" ? (
+                          <img
+                            className="w-full h-full object-cover"
+                            src={fileUrl}
+                            alt={file.name}
+                          />
+                        ) : fileType === "video" ? (
+                          <video
+                            src={fileUrl}
+                            className="w-full h-full object-cover"
+                          ></video>
+                        ) : (
+                          <div className="w-full h-full p-1">
+                            <Music2Icon
+                              strokeWidth={2}
+                              className="w-full h-full text-white"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
             </section>
           </motion.form>
