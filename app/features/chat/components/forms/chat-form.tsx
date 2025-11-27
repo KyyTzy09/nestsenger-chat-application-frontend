@@ -65,7 +65,7 @@ export default function ChatForm({ roomId }: ChatFormProps) {
       <ChatEmojiPicker
         isOpen={showEmoji}
         onClose={() => setShowEmoji(false)}
-        onSelect={setMessage}
+        onSelect={(emoji) => setMessage((prev) => prev + emoji)}
       />
       <MediaDropdown
         isOpen={showMediaDropdown}

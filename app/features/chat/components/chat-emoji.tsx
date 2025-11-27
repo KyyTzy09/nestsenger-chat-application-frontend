@@ -4,7 +4,7 @@ import React from "react";
 
 interface ChatEmojiPickerProps {
   isOpen: boolean;
-  onSelect: React.Dispatch<React.SetStateAction<string>>;
+  onSelect: (value: string) => void;
   onClose: () => void;
 }
 
@@ -40,7 +40,7 @@ export default function ChatEmojiPicker({
             lazyLoadEmojis={true}
             theme={Theme.DARK}
             open={isOpen}
-            onEmojiClick={(emoji) => onSelect((prev) => prev + emoji.emoji)}
+            onEmojiClick={(emoji) => onSelect(emoji.emoji)}
           />
         </motion.div>
       )}

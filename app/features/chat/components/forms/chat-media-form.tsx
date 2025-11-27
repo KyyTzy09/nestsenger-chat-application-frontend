@@ -36,6 +36,8 @@ export default function ChatMediaForm() {
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
 
+  const isValid = selectedIndex >= 0 && selectedIndex < message?.length;
+
   const { mutate: createChatMutation, isPending: createChatLoading } =
     useCreateChatWithMedia();
   const headerMenu = [
@@ -82,22 +84,21 @@ export default function ChatMediaForm() {
   ) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (chat && chat?.length > 0) {
-        await Promise.all(
-          chat?.map((chat, i) => {
-            createChatMutation({
-              roomId: roomId!,
-              file: chat.file,
-              message: message[i] ? message[i].message : "",
-              parentId: chat?.parent?.parentId,
-            });
-          })
-        );
-
-        resetState();
-      }
+      handleSubmit(e as any);
     }
   };
+
+  React.useEffect(() => {
+    if ((chat?.length as number) > 0) {
+      const initialMessage = chat?.map((_, i) => {
+        return {
+          i,
+          message: "",
+        };
+      }) as [];
+      setMessage(initialMessage);
+    }
+  }, [chat]);
 
   return (
     <AnimatePresence>
@@ -113,13 +114,22 @@ export default function ChatMediaForm() {
               setShowAlert(false);
             }}
           />
-          {/* <ChatEmojiPicker
+          <ChatEmojiPicker
             isOpen={showEmoji}
             onClose={() => setShowEmoji(false)}
-            onSelect={(prev) =>
-              setMessage({ index: selectedIndex, message: prev as string })
+            onSelect={(emoji) =>
+              setMessage((prev) =>
+                prev.map((item, i) =>
+                  i === selectedIndex
+                    ? {
+                        ...item,
+                        message: item.message + emoji,
+                      }
+                    : item
+                )
+              )
             }
-          /> */}
+          />
           <motion.div
             onClick={() => setShowAlert(true)}
             className="top-0 left-0 fixed w-full h-full bg-black/60 z-40"
@@ -147,7 +157,7 @@ export default function ChatMediaForm() {
               })}
             </section>
             {selectedMedia && (
-              <section className="flex items-center justify-center max-w-[90%] max-h-[60vh] overflow-hidden bg-black/20">
+              <section className="flex items-center justify-center min-w-[40%] max-w-[90%] max-h-[60vh] overflow-hidden bg-black/20">
                 {selectedMedia.fileType === "image" ? (
                   <img
                     className="w-auto h-auto max-w-full max-h-full object-contain"
@@ -174,18 +184,13 @@ export default function ChatMediaForm() {
                   <SmileIcon />
                 </Button>
                 <TextAreaAutoSize
-                  value={
-                    message[selectedIndex] ? message[selectedIndex].message : ""
-                  }
+                  value={isValid ? message[selectedIndex]?.message : ""}
                   onKeyDown={handleEnterSubmit}
                   onChange={(e) => {
                     setMessage((prev) =>
                       prev.map((item, i) =>
                         i === selectedIndex
-                          ? {
-                              ...item,
-                              message: e.target.value,
-                            }
+                          ? { ...item, message: e.target.value }
                           : item
                       )
                     );
@@ -214,7 +219,7 @@ export default function ChatMediaForm() {
               </div>
               {/* Card */}
               <div className="flex items-center justify-center w-full gap-2">
-                {chat.length > 0 &&
+                {chat?.length > 0 &&
                   chat.map(({ file, fileUrl, fileType }, i) => {
                     return (
                       <div
