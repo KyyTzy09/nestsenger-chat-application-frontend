@@ -82,8 +82,9 @@ export default function ChatMediaForm() {
         setDeletedMediaUrl((prev) => [...prev]);
       } else {
         setDeletedMediaUrl((prev) => [...prev, mediaUrl]);
-        setSelectedIndex((filteredMedia?.length!) - 1);
+        console.log("ini sukses", filteredMedia?.length! - 1);
       }
+      setSelectedIndex(filteredMedia?.length! - 2);
     }
   };
 
