@@ -13,6 +13,8 @@ import { useGetNonFileMedia } from "../hooks/chat-media-hook";
 import { useParams } from "react-router";
 import { useMediaPreviewStore } from "../stores/media-preview-store";
 import ChatMediaCard from "./cards/chat-media-card";
+import { useUserStore } from "~/features/user/stores/user-store";
+import ChatMenu from "./chat-menu";
 
 export default function ChatMediaPreview() {
   // Refs
@@ -21,13 +23,26 @@ export default function ChatMediaPreview() {
 
   // State
   const [selectedIndex, setSelectedIndex] = React.useState<number>();
+  const [openMenu, setOpenMenu] = React.useState<boolean>(false);
+  const [menuPosition, setMenuPosition] = React.useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const { user } = useUserStore();
   const { openPreview, setOpenPreview, chatId, resetState } =
     useMediaPreviewStore();
-
   const { roomId } = useParams<{ roomId: string }>() as { roomId: string };
   const { data: nonFileMediaResponse, isPending } = useGetNonFileMedia({
     roomId,
   });
+
+  // Handler
+  const handleShowMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuPosition({ x: e.clientX, y: e.clientY });
+    setOpenMenu(true);
+  };
 
   const handleScroll = (index: number) => {
     if (index >= 0 && mediaRefs.current[index]) {
@@ -73,6 +88,7 @@ export default function ChatMediaPreview() {
     return () => observer.disconnect();
   }, [openPreview, setSelectedIndex]);
 
+  console.log(user?.userId)
   return (
     <AnimatePresence>
       {openPreview && (
@@ -108,53 +124,67 @@ export default function ChatMediaPreview() {
             </Button>
             <div
               ref={scrollRef}
+              onContextMenu={handleShowMenu}
               className="flex overflow-x-auto snap-x snap-mandatory w-full h-full no-scrollbar"
             >
               {nonFileMediaResponse?.data.length! > 0 &&
                 nonFileMediaResponse?.data.map(
-                  ({ chatId, mediaUrl, mediaType, chat: { message } }, i) => {
+                  (
+                    { chatId, mediaUrl, mediaType, chat: { userId, message } },
+                    i
+                  ) => {
                     return (
-                      <div
-                        key={i}
-                        data-index={i}
-                        id={chatId}
-                        className="relative w-full h-full flex items-center justify-center shrink-0 snap-center"
-                        ref={(el) => {
-                          if (mediaRefs.current) {
-                            mediaRefs.current[i] = el;
-                          }
-                        }}
-                      >
-                        {selectedIndex === i && mediaType === "image" ? (
-                          <img
-                            src={mediaUrl}
-                            alt="yaya"
-                            className="w-auto h-auto max-h-full object-cover"
-                          />
-                        ) : selectedIndex === i && mediaType === "video" ? (
-                          <video
-                            className="w-auto h-full  max-h-full object-cover"
-                            src={mediaUrl}
-                            controls
-                          ></video>
-                        ) : selectedIndex === i && mediaType === "audio" ? (
-                          <div className="flex flex-col items-center justify-center w-auto h-full min-w-[40%] p-2 gap-1">
-                            <div className="flex items-center justify-center w-full h-[90%] bg-blue-500 rounded-t-md">
-                              <Music2Icon className="w-32 h-32 text-white" />
-                            </div>
-                            <audio
+                      <React.Fragment key={i}>
+                        <ChatMenu
+                          open={openMenu}
+                          onClose={() => setOpenMenu(false)}
+                          chatData={{ chatId, media: { mediaUrl, mediaType }, message}}
+                          isChatDeleted={false}
+                          isChatOwner={userId === user?.userId}
+                          position={menuPosition!}
+                          setPosition={setMenuPosition}
+                        />
+                        <div
+                          data-index={i}
+                          id={chatId}
+                          className="relative w-full h-full flex items-center justify-center shrink-0 snap-center"
+                          ref={(el) => {
+                            if (mediaRefs.current) {
+                              mediaRefs.current[i] = el;
+                            }
+                          }}
+                        >
+                          {selectedIndex === i && mediaType === "image" ? (
+                            <img
                               src={mediaUrl}
-                              className="w-full rounded-sm h-12"
+                              alt="yaya"
+                              className="w-auto h-auto max-h-full object-cover"
+                            />
+                          ) : selectedIndex === i && mediaType === "video" ? (
+                            <video
+                              className="w-auto h-full  max-h-full object-cover"
+                              src={mediaUrl}
                               controls
-                            ></audio>
-                          </div>
-                        ) : null}
-                        {message && (
-                          <div className="absolute w-auto max-w-[200px] h-auto line-clamp-2 text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
-                            {message}
-                          </div>
-                        )}
-                      </div>
+                            ></video>
+                          ) : selectedIndex === i && mediaType === "audio" ? (
+                            <div className="flex flex-col items-center justify-center w-auto h-full min-w-[40%] p-2 gap-1">
+                              <div className="flex items-center justify-center w-full h-[90%] bg-blue-500 rounded-t-md">
+                                <Music2Icon className="w-32 h-32 text-white" />
+                              </div>
+                              <audio
+                                src={mediaUrl}
+                                className="w-full rounded-sm h-12"
+                                controls
+                              ></audio>
+                            </div>
+                          ) : null}
+                          {message && (
+                            <div className="absolute w-auto max-w-[200px] h-auto line-clamp-2 text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
+                              {message}
+                            </div>
+                          )}
+                        </div>
+                      </React.Fragment>
                     );
                   }
                 )}

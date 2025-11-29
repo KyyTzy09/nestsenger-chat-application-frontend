@@ -24,9 +24,9 @@ interface ChatMenuProps {
   open: boolean;
   chatData: {
     chatId: string;
-    media?: ChatMediaType | null;
-    alias: string;
-    message: string;
+    media?: Partial<ChatMediaType> | null;
+    alias?: string;
+    message?: string;
   };
   position: { x: number; y: number };
   setPosition: React.Dispatch<
@@ -94,9 +94,9 @@ export default function ChatMenu({
         setParent({
           parent: {
             parentId: chatData?.chatId,
-            alias: chatData?.alias,
-            message: chatData?.message,
-            media: chatData?.media,
+            alias: chatData?.alias || "",
+            message: chatData?.message || "",
+            media: chatData?.media as ChatMediaType,
           },
         });
         onClose();
@@ -107,7 +107,7 @@ export default function ChatMenu({
       Icon: CopyIcon,
       text: "Salin",
       action: () => {
-        navigator.clipboard.writeText(chatData?.message);
+        navigator.clipboard.writeText(chatData?.message || "");
         onClose();
       },
     },
