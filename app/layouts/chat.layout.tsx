@@ -11,8 +11,10 @@ export const clientLoader = ({}: Route.ClientLoaderArgs) => {
 export default function ChatLayout() {
   return (
     <div className="flex w-full min-h-screen">
-      <ChatSidebar />
-      <section className="flex w-[70%] h-full">
+      <section className="hidden md:flex w-[30%] h-screen">
+        <ChatSidebar />
+      </section>
+      <section className="md:flex md:w-[70%] w-full h-full ">
         <Outlet />
       </section>
     </div>
