@@ -145,7 +145,7 @@ export default function ChatMenu({
         {open && (
           <>
             <motion.div
-              className="fixed inset-0 z-40 bg-transparent"
+              className="fixed inset-0 z-90 bg-transparent"
               onClick={onClose}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -157,7 +157,7 @@ export default function ChatMenu({
               animate={{ opacity: 1, scale: 1, translateY: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="fixed z-50 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur"
+              className="fixed z-100 flex flex-col w-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur"
               style={{
                 top: position?.y,
                 left: position?.x,
