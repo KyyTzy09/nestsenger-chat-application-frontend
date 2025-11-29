@@ -133,7 +133,7 @@ export default function ChatMediaPreview() {
                           />
                         ) : selectedIndex === i && mediaType === "video" ? (
                           <video
-                            className="w-auto h-auto min-w-[40%] max-h-full object-cover"
+                            className="w-auto h-full  max-h-full object-cover"
                             src={mediaUrl}
                             controls
                           ></video>
@@ -149,7 +149,7 @@ export default function ChatMediaPreview() {
                             ></audio>
                           </div>
                         ) : null}
-                        {message !== null && (
+                        {message && (
                           <div className="absolute w-auto max-w-[200px] h-auto line-clamp-2 text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
                             {message}
                           </div>
