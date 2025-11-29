@@ -48,9 +48,11 @@ export default function ChatForm({ roomId }: ChatFormProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createChatMutate({ message, parentId: chatParentState?.parentId });
-    setMessage("");
-    resetState();
+    if (message.length > 0) {
+      createChatMutate({ message, parentId: chatParentState?.parentId });
+      setMessage("");
+      resetState();
+    }
   };
 
   const handleEnterSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

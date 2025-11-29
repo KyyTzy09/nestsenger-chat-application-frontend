@@ -2,10 +2,8 @@ import {
   CropIcon,
   Loader2Icon,
   Music2Icon,
-  PlusIcon,
   RedoDotIcon,
   SendIcon,
-  Smile,
   SmileIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -30,38 +28,46 @@ export default function ChatMediaForm() {
 
   // State
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
-  const [message, setMessage] = React.useState<
+  const [chatMessages, setChatMessages] = React.useState<
     { index: number; message: string }[]
   >([]);
   const [showEmoji, setShowEmoji] = React.useState<boolean>(false);
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
 
-  const isValid = selectedIndex >= 0 && selectedIndex < message?.length;
+  const isValidMessage =
+    selectedIndex >= 0 && selectedIndex < chatMessages?.length;
 
+  // Mutation
   const { mutate: createChatMutation, isPending: createChatLoading } =
     useCreateChatWithMedia();
+
+  // Data
+  const selectedMedia = chat?.find((_, i) => {
+    return i === selectedIndex;
+  });
+
   const headerMenu = [
     {
       title: "Potong",
       Icon: CropIcon,
       action: () => {},
+      enable: selectedMedia?.fileType === "image",
     },
     {
       title: "Putar",
       Icon: RedoDotIcon,
       action: () => {},
+      enable: selectedMedia?.fileType === "image",
     },
     {
       title: "Hapus",
       Icon: Trash2Icon,
       action: () => resetState(),
+      enable:true
     },
   ];
 
-  const selectedMedia = chat?.find((_, i) => {
-    return i === selectedIndex;
-  });
-
+  // Handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (chat && chat?.length > 0) {
@@ -70,8 +76,8 @@ export default function ChatMediaForm() {
           createChatMutation({
             roomId: roomId!,
             file: chat.file,
-            message: message[i] ? message[i].message : "",
-            parentId: chat?.parent?.parentId,
+            message: chatMessages[i] ? chatMessages[i].message : "",
+            parentId: parent?.parentId,
           });
         })
       );
@@ -89,6 +95,7 @@ export default function ChatMediaForm() {
   };
 
   React.useEffect(() => {
+    setSelectedIndex(0);
     if ((chat?.length as number) > 0) {
       const initialMessage = chat?.map((_, i) => {
         return {
@@ -96,13 +103,13 @@ export default function ChatMediaForm() {
           message: "",
         };
       }) as [];
-      setMessage(initialMessage);
+      setChatMessages(initialMessage);
     }
   }, [chat]);
 
   return (
     <AnimatePresence>
-      {chat !== null && (
+      {chat && (
         <>
           <AlertModal
             onOpen={showAlert}
@@ -118,7 +125,7 @@ export default function ChatMediaForm() {
             isOpen={showEmoji}
             onClose={() => setShowEmoji(false)}
             onSelect={(emoji) =>
-              setMessage((prev) =>
+              setChatMessages((prev) =>
                 prev.map((item, i) =>
                   i === selectedIndex
                     ? {
@@ -142,17 +149,21 @@ export default function ChatMediaForm() {
             className="absolute flex flex-col items-center justify-between min-w-[40%] min-h-[60%] w-auto max-w-[50%] max-h-[90%] rounded-sm bg-[#252525]/70 text-white shadow-lg backdrop-blur border-black border bottom-5 left-10 z-50 overflow-hidden"
           >
             <section className="flex items-center justify-start w-full h-[10%] bg-[#141414] px-2 py-1 gap-2">
-              {headerMenu.map(({ title, Icon, action }, i) => {
+              {headerMenu.map(({ title, Icon, action, enable }, i) => {
                 return (
-                  <Button
-                    key={i}
-                    title={title}
-                    onClick={action}
-                    type="button"
-                    className="w-10 h-10 p-1 bg-transparent hover:bg-gray-600"
-                  >
-                    <Icon />
-                  </Button>
+                  <React.Fragment key={i}>
+                    {enable && (
+                      <Button
+                        key={i}
+                        title={title}
+                        onClick={action}
+                        type="button"
+                        className="w-10 h-10 p-1 bg-transparent hover:bg-gray-600"
+                      >
+                        <Icon />
+                      </Button>
+                    )}
+                  </React.Fragment>
                 );
               })}
             </section>
@@ -184,10 +195,12 @@ export default function ChatMediaForm() {
                   <SmileIcon />
                 </Button>
                 <TextAreaAutoSize
-                  value={isValid ? message[selectedIndex]?.message : ""}
+                  value={
+                    isValidMessage ? chatMessages[selectedIndex]?.message : ""
+                  }
                   onKeyDown={handleEnterSubmit}
                   onChange={(e) => {
-                    setMessage((prev) =>
+                    setChatMessages((prev) =>
                       prev.map((item, i) =>
                         i === selectedIndex
                           ? { ...item, message: e.target.value }
@@ -197,30 +210,27 @@ export default function ChatMediaForm() {
                   }}
                   minRows={1}
                   maxRows={5}
-                  required
                   placeholder="Ketik Pesan"
                   className={cn(
                     "w-full min-h-7 text-white resize-none no-scrollbar text-justify p-2 text-sm",
                     "focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring"
                   )}
                 />
-                {(message[selectedIndex]?.message?.length as number) > 0 && (
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
-                  >
-                    {createChatLoading ? (
-                      <Loader2Icon className="w-full h-full animate-spin" />
-                    ) : (
-                      <SendIcon className="w-full h-full " />
-                    )}
-                  </Button>
-                )}
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
+                >
+                  {createChatLoading ? (
+                    <Loader2Icon className="w-full h-full animate-spin" />
+                  ) : (
+                    <SendIcon className="w-full h-full " />
+                  )}
+                </Button>
               </div>
               {/* Card */}
               <div className="flex items-center justify-center w-full gap-2">
-                {chat?.length > 0 &&
-                  chat.map(({ file, fileUrl, fileType }, i) => {
+                {(chat?.length as number) > 0 &&
+                  chat?.map(({ file, fileUrl, fileType }, i) => {
                     return (
                       <div
                         key={i}
