@@ -90,9 +90,9 @@ export default function ChatMediaForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (chat && chat?.length > 0) {
+    if (filteredMedia && filteredMedia?.length > 0) {
       await Promise.all(
-        chat?.map((chat, i) => {
+        filteredMedia?.map((chat, i) => {
           createChatMutation({
             roomId: roomId!,
             file: chat.file,
