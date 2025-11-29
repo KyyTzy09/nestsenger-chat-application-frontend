@@ -97,7 +97,7 @@ export default function PrivateChatCard({
             >
               <div
                 onContextMenu={(e) => handleShowContextMenu(e, chatId)}
-                className={`${senderId === currentUserId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[55%] min-w-[120px] ${!isChatDeletedLogic(deletedData as [], { currentUserId, chatId }) && media ? "w-[35%]" : "w-auto"} h-auto text-white p-2 rounded-sm gap-1 shadow`}
+                className={`${senderId === currentUserId ? "self-end bg-blue-500 rounded-tr-none" : "self-start bg-[#303030] rounded-tl-none"} relative flex flex-col max-w-[80%] md:max-w-[55%] min-w-[120px] ${!isChatDeletedLogic(deletedData as [], { currentUserId, chatId }) && media ? "w-[80%] md:w-[35%]" : "w-auto"} h-auto text-white p-2 rounded-sm gap-1 shadow`}
               >
                 {/* Reply section */}
                 {!isChatDeletedLogic(deletedData as [], {
