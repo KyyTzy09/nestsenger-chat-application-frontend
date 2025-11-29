@@ -19,7 +19,7 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
 export default function DefaultLayout() {
   const { data } = useSession();
   return (
-    <SidebarProvider>
+    <SidebarProvider >
       <div className="flex w-screen h-full min-h-screen">
         <DefaultSideBar />
         <div className="flex-1 ml-16">

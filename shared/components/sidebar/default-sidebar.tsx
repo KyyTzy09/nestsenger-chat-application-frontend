@@ -36,7 +36,7 @@ export default function DefaultSideBar() {
   ];
 
   return (
-    <Sidebar className=" border-none">
+    <Sidebar side="left" className="border-none block">
       <SidebarContent className="w-16 flex flex-col bg-[#202020] h-screen pt-10 pb-5 px-2 z-20 items-center justify-between">
         <SidebarGroupLabel className="w-full flex items-center justify-center">
           <Menu className="text-white" />
@@ -47,7 +47,7 @@ export default function DefaultSideBar() {
               <Link
                 to={route}
                 key={i}
-                className={`${location.pathname.startsWith(route) ? "bg-[#45494f]" : "bg-tra"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
+                className={`${location.pathname.startsWith(route) ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
               >
                 <Icon className={`text-white w-5 h-5`} />
               </Link>
