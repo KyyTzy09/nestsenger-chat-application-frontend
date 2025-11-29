@@ -28,6 +28,7 @@ export default function ChatMediaForm() {
 
   // State
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
+  const [deletedMediaUrl, setDeletedMediaUrl] = React.useState<string[]>([]);
   const [chatMessages, setChatMessages] = React.useState<
     { index: number; message: string }[]
   >([]);
@@ -42,7 +43,11 @@ export default function ChatMediaForm() {
     useCreateChatWithMedia();
 
   // Data
-  const selectedMedia = chat?.find((_, i) => {
+  const filteredMedia = chat?.filter(({ fileUrl }) => {
+    return !deletedMediaUrl.includes(fileUrl);
+  });
+
+  const selectedMedia = filteredMedia?.find((_, i) => {
     return i === selectedIndex;
   });
 
@@ -62,12 +67,26 @@ export default function ChatMediaForm() {
     {
       title: "Hapus",
       Icon: Trash2Icon,
-      action: () => resetState(),
-      enable:true
+      action: () => handleDelete(selectedMedia?.fileUrl || ""),
+      enable: true,
     },
   ];
 
+  console.log(deletedMediaUrl);
+  console.log(selectedIndex);
+
   // Handler
+  const handleDelete = (mediaUrl: string) => {
+    if (mediaUrl !== "") {
+      if (deletedMediaUrl?.length > 0 && deletedMediaUrl.includes(mediaUrl)) {
+        setDeletedMediaUrl((prev) => [...prev]);
+      } else {
+        setDeletedMediaUrl((prev) => [...prev, mediaUrl]);
+        setSelectedIndex((filteredMedia?.length!) - 1);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (chat && chat?.length > 0) {
@@ -95,8 +114,9 @@ export default function ChatMediaForm() {
   };
 
   React.useEffect(() => {
-    setSelectedIndex(0);
+    setDeletedMediaUrl([]);
     if ((chat?.length as number) > 0) {
+      setSelectedIndex((chat?.length as number) - 1);
       const initialMessage = chat?.map((_, i) => {
         return {
           i,
@@ -109,7 +129,7 @@ export default function ChatMediaForm() {
 
   return (
     <AnimatePresence>
-      {chat && (
+      {chat && (filteredMedia?.length as number) > 0 && (
         <>
           <AlertModal
             onOpen={showAlert}
@@ -230,7 +250,7 @@ export default function ChatMediaForm() {
               {/* Card */}
               <div className="flex items-center justify-center w-full gap-2">
                 {(chat?.length as number) > 0 &&
-                  chat?.map(({ file, fileUrl, fileType }, i) => {
+                  filteredMedia?.map(({ file, fileUrl, fileType }, i) => {
                     return (
                       <div
                         key={i}
