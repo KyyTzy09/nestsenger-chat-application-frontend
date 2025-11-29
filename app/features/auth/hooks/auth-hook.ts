@@ -1,8 +1,24 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { loginType, registerType } from "shared/schemas/auth-schema";
 import { AuthService } from "../services/auth-sevice";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useUserStore } from "~/features/user/stores/user-store";
+
+export const useSession = () => {
+    const { setUser } = useUserStore()
+    return useQuery({
+        queryKey: ['session'],
+        queryFn: async () => {
+            const data = await AuthService.Session()
+            if (data?.data) {
+                setUser(data?.data)
+            }
+            return data
+        },
+        staleTime: Infinity
+    })
+}
 
 export const useLogin = () => {
     const navigate = useNavigate()
