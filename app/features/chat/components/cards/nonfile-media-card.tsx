@@ -4,13 +4,11 @@ import type { ChatMediaType } from "shared/types/media-type";
 
 interface ChatNonFIleMediaCardProps {
   data: ChatMediaType[];
-  selectedIndex: number;
   onClickAction: (i: string) => void;
 }
 
 export default function NonFileMediaCard({
   data,
-  selectedIndex,
   onClickAction,
 }: ChatNonFIleMediaCardProps) {
   return (

@@ -25,7 +25,6 @@ export default function RoomMediaSection({ media }: RoomMediaSectionProps) {
               setOpenPreview(true);
             }
           }}
-          selectedIndex={0}
         />
       </div>
     </section>
