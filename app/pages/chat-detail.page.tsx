@@ -2,7 +2,7 @@ import { RoomTypeEnum } from "shared/enums/room-type";
 import PrivateChatCard from "~/features/chat/components/cards/private-chat-card";
 import GroupChatCard from "~/features/chat/components/cards/group-chat-card";
 import ChatForm from "~/features/chat/components/forms/chat-form";
-import ChatNavbar from "~/features/chat/components/chat-navbar";
+import ChatNavbar from "~/features/room/components/room-navbar";
 import {
   useGetChats,
   useGetDeletedChats,
@@ -20,6 +20,8 @@ import { ReadChatService } from "~/features/chat/services/readchat-service";
 import { toast } from "sonner";
 import ChatSection from "~/features/chat/components/sections/chat-section";
 import ChatMediaForm from "~/features/chat/components/forms/chat-media-form";
+import { useUserStore } from "~/features/user/stores/user-store";
+import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -30,14 +32,15 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: roomInfoResponse, isPending: isRoomInfoLoading } =
     useGetRoomById({ roomId });
   const { data: chatResponse } = useGetChats({ roomId });
-  const { data: profileResponse } = useGetProfile();
   const { data: memberResponse } = useGetRoomMember({ roomId });
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId });
+  const { data: media } = useGetNonFileMedia({ roomId });
+  const { user } = useUserStore();
 
   React.useEffect(() => {
     const handler = async (newChat: ChatType) => {
       if (newChat.roomId) {
-        if (newChat.userId !== profileResponse?.data.userId) {
+        if (newChat.userId !== user?.userId) {
           await ReadChatService.readChat({ roomId: roomId });
         }
         queryClient.invalidateQueries({
@@ -113,16 +116,17 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       <ChatMediaForm />
       {!isRoomInfoLoading && (
         <ChatNavbar
-          currentUserId={profileResponse?.data.userId || ""}
+          currentUserId={user?.userId || ""}
           roomInfo={roomInfoResponse?.data!}
           memberInfo={memberResponse?.data as []}
+          media={media?.data as []}
         />
       )}
       <ChatSection
         roomData={roomInfoResponse?.data!}
         chatsData={chatResponse?.data as []}
         deletedChatsData={deletedChatResponse?.data as []}
-        currentUserId={profileResponse?.data?.userId as string}
+        currentUserId={user?.userId || ""}
       />
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
         <ChatForm roomId={roomId} />

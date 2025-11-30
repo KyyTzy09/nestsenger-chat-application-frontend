@@ -5,12 +5,13 @@ import { defaultImage } from "shared/constants/image-default";
 import { RoomTypeEnum } from "shared/enums/room-type";
 import { Label } from "shared/shadcn/label";
 import type { FriendType } from "shared/types/friend-type";
+import type { ChatMediaType } from "shared/types/media-type";
 import type { MemberType } from "shared/types/member-type";
 import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
 import RoomInfoDropdown from "~/features/room/components/interactions/room-dropdown";
 
-interface ChatNavbarProps {
+interface RoomNavbarProps {
   roomInfo: {
     room: RoomType;
     alias: FriendType | UserType | null;
@@ -19,14 +20,16 @@ interface ChatNavbarProps {
     member: MemberType;
     alias: FriendType | UserType | null;
   }[];
+  media: ChatMediaType[];
   currentUserId: string;
 }
 
-export default function ChatNavbar({
+export default function RoomNavbar({
   roomInfo,
   memberInfo,
   currentUserId,
-}: ChatNavbarProps) {
+  media
+}: RoomNavbarProps) {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [showPreview, setShowPreview] = React.useState<boolean>(false);
 
@@ -76,6 +79,7 @@ export default function ChatNavbar({
         showImagePreviewChange={setShowPreview}
         info={roomInfo}
         member={memberInfo}
+        media={media}
         currentUserId={currentUserId}
       />
       <nav className="flex items-center justify-between w-full h-[70px] bg-[#252525] border border-black p-5">

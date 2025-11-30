@@ -16,6 +16,8 @@ import { RoomTypeEnum } from "shared/enums/room-type";
 import RoomMemberSection from "../section/room-member-section";
 import type { MemberType } from "shared/types/member-type";
 import { AnimatePresence, motion } from "motion/react";
+import RoomMediaSection from "../section/room-media-section";
+import type { ChatMediaType } from "shared/types/media-type";
 
 interface RoomInfoDropDownProps {
   open: boolean;
@@ -28,6 +30,7 @@ interface RoomInfoDropDownProps {
     member: MemberType;
     alias: FriendType | UserType | null;
   }[];
+  media: ChatMediaType[]
   currentUserId: string;
   showImagePreviewChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -37,6 +40,7 @@ export default function RoomInfoDropdown({
   onOpenChange,
   info,
   member,
+  media,
   currentUserId,
   showImagePreviewChange,
 }: RoomInfoDropDownProps) {
@@ -91,7 +95,7 @@ export default function RoomInfoDropdown({
               duration: 0.2,
               ease: "easeInOut",
             }}
-            className="absolute flex min-w-[480px] h-[30rem] z-40 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
+            className="absolute flex w-[480px] h-[30rem] z-40 text-white shadow-sm shadow-black left-0 top-2 rounded-lg overflow-hidden"
           >
             <section className="flex flex-col items-center justify-between w-[30%] min-h-full p-2 bg-[#282828]/70 backdrop-blur">
               <div className="flex flex-col items-center justify-start w-full gap-2">
@@ -128,6 +132,7 @@ export default function RoomInfoDropdown({
                   currentUserId={currentUserId}
                 />
               )}
+              {openedTab === "media" && <RoomMediaSection media={media} />}
             </section>
           </motion.div>
         </>
