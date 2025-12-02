@@ -15,15 +15,21 @@ import {
 } from "../logic/deleted-chat-logic";
 import ReadChatMark from "../sections/readchat-mark-section";
 import ChatMediaSection from "../sections/chat-media-section";
+import type { ReactionType } from "shared/types/reaction-type";
+import type { ReadChatType } from "shared/types/readchat-type";
 
 interface GroupChatCardProps {
-  data: { chat: ChatType; user: AliasType }[] | [];
+  chatsData: { chat: ChatType; user: AliasType }[] | [];
+  reactionsData: { reaction: ReactionType; alias: AliasType }[];
+  readersData: { readChat: ReadChatType; alias: AliasType }[];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
 
 export default function GroupChatCard({
-  data,
+  chatsData,
+  reactionsData,
+  readersData,
   deletedData,
   currentUserId,
 }: GroupChatCardProps) {
@@ -68,19 +74,19 @@ export default function GroupChatCard({
 
   React.useEffect(() => {
     setSelectedIndex([]);
-    if (data) {
-      if (data.length > prevChatLength.current) {
+    if (chatsData) {
+      if (chatsData?.length > prevChatLength.current) {
         setTimeout(() => {
           bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
       }
-      prevChatLength.current = data.length;
+      prevChatLength.current = chatsData?.length;
     }
-  }, [data, setSelectedIndex]);
+  }, [chatsData, setSelectedIndex]);
 
   return (
     <div className="flex flex-col w-full h-full gap-2">
-      {data?.map(
+      {chatsData?.map(
         (
           {
             chat: {
@@ -208,6 +214,11 @@ export default function GroupChatCard({
                 }) &&
                   reactions.length > 0 && (
                     <ReactionModal
+                      reactions={reactionsData?.filter(
+                        ({ reaction: { chatId: reactionChatId } }) => {
+                          return reactionChatId === chatId;
+                        }
+                      )}
                       currentUserId={currentUserId}
                       chatId={chatId}
                     />
@@ -221,6 +232,11 @@ export default function GroupChatCard({
                     user && currentUserId === senderId ? "Anda" : user.alias,
                   message,
                   media,
+                  readers: readersData.filter(
+                    ({ readChat: { chatId: readChatId } }) => {
+                      return readChatId === chatId;
+                    }
+                  ),
                 }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}
