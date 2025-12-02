@@ -14,15 +14,18 @@ import {
 import { AnimatePresence } from "motion/react";
 import ReadChatMark from "../sections/readchat-mark-section";
 import ChatMediaSection from "../sections/chat-media-section";
+import type { ReactionType } from "shared/types/reaction-type";
 
 interface PrivateChatCardProps {
-  data: { chat: ChatType; user: AliasType }[] | [];
+  chatsData: { chat: ChatType; user: AliasType }[] | [];
+  reactionsData: { reaction: ReactionType; alias: AliasType }[];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
 
 export default function PrivateChatCard({
-  data,
+  chatsData,
+  reactionsData,
   deletedData,
   currentUserId,
 }: PrivateChatCardProps) {
@@ -63,19 +66,19 @@ export default function PrivateChatCard({
 
   React.useEffect(() => {
     setSelectedIndex([]);
-    if (data) {
-      if (data.length > prevChatLength.current) {
+    if (chatsData) {
+      if (chatsData.length > prevChatLength.current) {
         setTimeout(() => {
           bottomRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 150);
       }
-      prevChatLength.current = data.length;
+      prevChatLength.current = chatsData.length;
     }
-  }, [data, setSelectedIndex]);
+  }, [chatsData, setSelectedIndex]);
 
   return (
     <div className="flex flex-col w-full h-full gap-2">
-      {data?.map(
+      {chatsData?.map(
         (
           {
             chat: {
@@ -182,6 +185,11 @@ export default function PrivateChatCard({
                   }) &&
                     reactions?.length > 0 && (
                       <ReactionModal
+                        reactions={reactionsData?.filter(
+                          ({ reaction: { chatId: reactionChatId } }) => {
+                            return reactionChatId === chatId;
+                          }
+                        )}
                         currentUserId={currentUserId}
                         chatId={chatId}
                       />

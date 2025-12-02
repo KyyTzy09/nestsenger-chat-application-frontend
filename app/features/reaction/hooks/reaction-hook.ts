@@ -18,6 +18,14 @@ export const useCreateReaction = () => {
     })
 }
 
+export const useGetChatReactionsByRoomId = (data: { roomId: string }) => {
+    return useQuery({
+        queryKey: ['reactions-room', data.roomId],
+        queryFn: async () => await ReactionService.getChatReactionsByRoomId(data),
+        staleTime: 1000 * 60 * 1
+    })
+}
+
 export const useGetChatReactions = (data: { chatId: string }) => {
     return useQuery({
         queryKey: ['reaction', data.chatId],

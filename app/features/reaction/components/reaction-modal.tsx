@@ -15,26 +15,25 @@ import { useParams } from "react-router";
 import { toast } from "sonner";
 import type { ReactionType } from "shared/types/reaction-type";
 import ReactionCard from "./cards/reaction-card";
+import type { AliasType } from "shared/types/alias-type";
 
 interface ReactionModalProps {
+  reactions: { reaction: ReactionType; alias: AliasType }[];
   chatId: string;
   currentUserId: string;
 }
 
 export default function ReactionModal({
   chatId,
+  reactions,
   currentUserId,
 }: ReactionModalProps) {
-  // Query
-  const { data: chatReactionResponse, isPending } = useGetChatReactions({
-    chatId,
-  });
   // Groupping
-  const grouppedReaction = reactionGroupper(chatReactionResponse?.data as []);
+  const grouppedReaction = reactionGroupper(reactions as []);
 
   // Filtering
   const [currentEmoji, setCurrentEmoji] = React.useState<string>("");
-  const filteredReaction = chatReactionResponse?.data?.filter(
+  const filteredReaction = reactions?.filter(
     ({ reaction }) => {
       if (currentEmoji !== "") {
         return reaction.content.includes(currentEmoji);
@@ -86,7 +85,7 @@ export default function ReactionModal({
 
   return (
     <>
-      {chatReactionResponse?.data! && !isPending && (
+      {reactions &&  (
         <>
           {/* Modal trigger */}
           <button
@@ -104,7 +103,7 @@ export default function ReactionModal({
                 })}
             </div>
             <p className="text-sm text-gray-400">
-              {chatReactionResponse?.data?.length || 0}
+              {reactions.length || 0}
             </p>
           </button>
           <AnimatePresence>
@@ -142,7 +141,7 @@ export default function ReactionModal({
                       onClick={() => setCurrentEmoji("")}
                       className={`${currentEmoji === "" ? "border-b-2 border-blue-500" : "border-b-0 border-none"} flex items-center text-sm justify-center h-10 bg-transparent rounded-b-none hover:bg-transparent p-1 px-2 font-normal transition-all`}
                     >
-                      <p>Semua {chatReactionResponse?.data?.length}</p>
+                      <p>Semua {reactions?.length}</p>
                     </Button>
                     {grouppedReaction?.map(({ emoji, count }) => {
                       return (
@@ -159,7 +158,7 @@ export default function ReactionModal({
                     })}
                   </section>
                   <ReactionCard
-                    data={sortedReactionsData!}
+                    data={sortedReactionsData as []}
                     currentUserId={currentUserId}
                     chatId={chatId}
                   />

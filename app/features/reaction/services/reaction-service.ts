@@ -11,6 +11,9 @@ export const ReactionService = {
     async getChatReactions(data: { chatId: string }) {
         return await apiClient<{ statusCode: string, data: { reaction: ReactionType, alias: AliasType }[] | [] }>({ url: `/reaction/${data.chatId}/chat/get`, withCredentials: true })
     },
+    async getChatReactionsByRoomId(data: { roomId: string }) {
+        return await apiClient<{ statusCode: string, data: { reaction: ReactionType, alias: AliasType }[] | [] }>({ url: `/reaction/${data.roomId}/room/get`, withCredentials: true })
+    },
     async getUserReaction(data: { chatId: string }) {
         return await apiClient<{ statusCode: string, data: ReactionType }>({ url: `/reaction/${data.chatId}/user/get`, withCredentials: true })
     },

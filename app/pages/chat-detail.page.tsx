@@ -22,6 +22,7 @@ import ChatSection from "~/features/chat/components/sections/chat-section";
 import ChatMediaForm from "~/features/chat/components/forms/chat-media-form";
 import { useUserStore } from "~/features/user/stores/user-store";
 import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
+import { useGetChatReactionsByRoomId } from "~/features/reaction/hooks/reaction-hook";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -35,6 +36,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: memberResponse } = useGetRoomMember({ roomId });
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId });
   const { data: media } = useGetNonFileMedia({ roomId });
+  const { data: reactionsResponse } = useGetChatReactionsByRoomId({ roomId });
   const { user } = useUserStore();
 
   React.useEffect(() => {
@@ -69,7 +71,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
           refetchType: "all",
         });
         queryClient.invalidateQueries({
-          queryKey: ["reaction", reaction.chatId],
+          queryKey: ["reactions-room", roomId],
           refetchType: "all",
         });
       }
@@ -125,6 +127,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       <ChatSection
         roomData={roomInfoResponse?.data!}
         chatsData={chatResponse?.data as []}
+        reactionsData={reactionsResponse?.data as []}
         deletedChatsData={deletedChatResponse?.data as []}
         currentUserId={user?.userId || ""}
       />
