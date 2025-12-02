@@ -9,6 +9,14 @@ export const useGetReadChats = (data: { chatId: string }) => {
     })
 }
 
+export const useGetReadChatsByRoomId = (data: { roomId: string }) => {
+    return useQuery({
+        queryKey: ['read-chats-room', data.roomId],
+        queryFn: async () => await ReadChatService.getReadChatsByRoomId(data),
+        staleTime: 1000 * 60 * 2,
+    })
+}
+
 export const useCountRoomUnreadChats = (data: { roomId: string }) => {
     return useQuery({
         queryKey: ['unread-chat', data.roomId],

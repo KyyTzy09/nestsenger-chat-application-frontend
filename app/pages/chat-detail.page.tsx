@@ -23,6 +23,7 @@ import ChatMediaForm from "~/features/chat/components/forms/chat-media-form";
 import { useUserStore } from "~/features/user/stores/user-store";
 import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
 import { useGetChatReactionsByRoomId } from "~/features/reaction/hooks/reaction-hook";
+import { useGetReadChatsByRoomId } from "~/features/chat/hooks/readchat-hook";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -37,8 +38,23 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId });
   const { data: media } = useGetNonFileMedia({ roomId });
   const { data: reactionsResponse } = useGetChatReactionsByRoomId({ roomId });
+  const { data: readChatsResponse } = useGetReadChatsByRoomId({ roomId });
   const { user } = useUserStore();
 
+  const params = {
+    roomData: roomInfoResponse?.data!,
+    chatsData: chatResponse?.data as [],
+    reactionsData: reactionsResponse?.data as [],
+    readerChatsData: readChatsResponse?.data as [],
+    deletedChatsData: deletedChatResponse?.data as [],
+    currentUserId: user?.userId || "",
+  };
+
+  // roomData={roomInfoResponse?.data!}
+  //       chatsData={chatResponse?.data as []}
+  //       reactionsData={reactionsResponse?.data as []}
+  //       deletedChatsData={deletedChatResponse?.data as []}
+  //       currentUserId={user?.userId || ""}
   React.useEffect(() => {
     const handler = async (newChat: ChatType) => {
       if (newChat.roomId) {
@@ -124,13 +140,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
           media={media?.data as []}
         />
       )}
-      <ChatSection
-        roomData={roomInfoResponse?.data!}
-        chatsData={chatResponse?.data as []}
-        reactionsData={reactionsResponse?.data as []}
-        deletedChatsData={deletedChatResponse?.data as []}
-        currentUserId={user?.userId || ""}
-      />
+      <ChatSection {...params} />
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
         <ChatForm roomId={roomId} />
       </section>

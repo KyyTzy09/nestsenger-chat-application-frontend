@@ -15,10 +15,12 @@ import { AnimatePresence } from "motion/react";
 import ReadChatMark from "../sections/readchat-mark-section";
 import ChatMediaSection from "../sections/chat-media-section";
 import type { ReactionType } from "shared/types/reaction-type";
+import type { ReadChatType } from "shared/types/readchat-type";
 
 interface PrivateChatCardProps {
   chatsData: { chat: ChatType; user: AliasType }[] | [];
   reactionsData: { reaction: ReactionType; alias: AliasType }[];
+  readersData: { readChat: ReadChatType; alias: AliasType }[];
   deletedData?: DeletedChatType[];
   currentUserId: string;
 }
@@ -26,6 +28,7 @@ interface PrivateChatCardProps {
 export default function PrivateChatCard({
   chatsData,
   reactionsData,
+  readersData,
   deletedData,
   currentUserId,
 }: PrivateChatCardProps) {
@@ -203,6 +206,11 @@ export default function PrivateChatCard({
                   alias: currentUserId === senderId ? "Anda" : user.alias,
                   message,
                   media,
+                  readers: readersData?.filter(
+                    ({ readChat: { chatId: readChatId } }) => {
+                      return readChatId === chatId;
+                    }
+                  ),
                 }}
                 position={menuPosition!}
                 setPosition={setMenuPosition}

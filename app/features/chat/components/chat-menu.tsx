@@ -19,6 +19,8 @@ import { useDeleteChatForSelf } from "../hooks/chat-hook";
 import { useParams } from "react-router";
 import ChatInfoSection from "./sections/chat-info-section";
 import type { ChatMediaType } from "shared/types/media-type";
+import type { ReadChatType } from "shared/types/readchat-type";
+import type { AliasType } from "shared/types/alias-type";
 
 interface ChatMenuProps {
   open: boolean;
@@ -27,6 +29,7 @@ interface ChatMenuProps {
     media?: Partial<ChatMediaType> | null;
     alias?: string;
     message?: string;
+    readers: { readChat: ReadChatType; alias: AliasType }[];
   };
   position: { x: number; y: number };
   setPosition: React.Dispatch<
@@ -207,7 +210,7 @@ export default function ChatMenu({
                   )}
                 </motion.div>
               ) : display === "info" ? (
-                <ChatInfoSection chatId={chatData?.chatId} />
+                <ChatInfoSection readersData={chatData?.readers} chatId={chatData?.chatId} />
               ) : (
                 <motion.div className="flex w-full max-w-full h-full gap-1">
                   <EmojiPicker

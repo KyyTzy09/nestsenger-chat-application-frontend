@@ -8,6 +8,9 @@ export const ReadChatService = {
     async getReadChats(data: { chatId: string }) {
         return await apiClient<{ data: { readChat: ReadChatType, user: AliasType }[] }>({ url: `/readchat/${data.chatId}/get`, withCredentials: true })
     },
+    async getReadChatsByRoomId(data: { roomId: string }) {
+        return await apiClient<{ data: { readChat: ReadChatType, user: AliasType }[] }>({ url: `/readchat/${data.roomId}/room/get`, withCredentials: true })
+    },
     async readChat(data: { roomId: string }) {
         try {
             return await axios<{ data: { data: ReadChatType } }>({ url: `${baseUrl}/readchat/${data.roomId}/patch`, method: "patch", withCredentials: true })
