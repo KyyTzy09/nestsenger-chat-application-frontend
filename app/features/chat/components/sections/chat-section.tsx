@@ -57,7 +57,9 @@ export default function ChatSection({
                     <GroupChatCard
                       deletedData={deletedChatsData}
                       currentUserId={currentUserId}
-                      data={chats}
+                      chatsData={chats}
+                      reactionsData={reactionsData}
+                      readersData={readerChatsData}
                     />
                   )}
                 </div>
