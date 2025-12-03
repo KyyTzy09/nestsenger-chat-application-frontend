@@ -57,6 +57,7 @@ export const useDeleteChatForAll = (roomId: string, onSuccess: () => void) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['chat', roomId], type: "all" })
             queryClient.invalidateQueries({ queryKey: ['deleted-chats', roomId], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ['media-non-file', roomId], type: "all" })
             onSuccess()
         },
         onError: (err) => {
@@ -73,6 +74,7 @@ export const useDeleteChatForSelf = (roomId: string, onSuccess: () => void) => {
         onSuccess: () => {
             queryClient.refetchQueries({ queryKey: ['chat', roomId], type: "all" })
             queryClient.refetchQueries({ queryKey: ['deleted-chats', roomId], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ['media-non-file', roomId], type: "all" })
             onSuccess()
         },
         onError: (err) => {
