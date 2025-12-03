@@ -15,6 +15,7 @@ import type { AliasType } from "shared/types/alias-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { UserType } from "shared/types/user-type";
 import { useUpdateFriendAlias } from "../hooks/friend-hook";
+import { useParams } from "react-router";
 
 interface EditFriendDialogProps {
   data: FriendType | UserType | null;
@@ -27,7 +28,11 @@ export default function EditFriendDialog({
   isOpen,
   setIsOpen,
 }: EditFriendDialogProps) {
-  const { mutate: updateAlias, isPending } = useUpdateFriendAlias();
+  const { roomId } = useParams<{ roomId: string }>();
+  const { mutate: updateAlias, isPending } = useUpdateFriendAlias(
+    () => setIsOpen(false),
+    roomId!
+  );
   const {
     register,
     resetField,

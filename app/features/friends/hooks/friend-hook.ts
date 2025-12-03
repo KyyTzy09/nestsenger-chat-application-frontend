@@ -41,16 +41,20 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
     })
 }
 
-export const useUpdateFriendAlias = () => {
+export const useUpdateFriendAlias = (onSuccess: () => void, roomId:string) => {
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
+
     return useMutation({
         mutationKey: ["update-friend"],
         mutationFn: async (data: { alias: string, friendId: string }) => await FriendService.updateAlias(data),
-        onSuccess: (response) => {
-            toast.success(response?.message)
+        onSuccess: () => {
+            onSuccess()
+            navigate("/chat")
             queryClient.invalidateQueries({ queryKey: ['friend'] })
             queryClient.invalidateQueries({ queryKey: ['user-friend'] })
-            queryClient.invalidateQueries({ queryKey: ['user-room'] })
+            queryClient.invalidateQueries({ queryKey: ['current-room'] })
+            queryClient.invalidateQueries({ queryKey: ['room', roomId] })
         },
         onError: (err) => {
             toast.error(err.message)
