@@ -9,6 +9,7 @@ import type { FriendType } from "shared/types/friend-type";
 import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
 import { useOutGroup } from "../../hooks/room-hooks";
+import EditFriendDialog from "~/features/friends/components/edit-friend-dialog";
 
 interface RoomInfoSectionProps {
   data: {
@@ -23,19 +24,13 @@ export default function RoomInfoSection({
   showImagePreviewChange,
 }: RoomInfoSectionProps) {
   const {
-    room: {
-      roomId,
-      type: roomType,
-      avatar: roomAvatar,
-      createdAt,
-      members,
-      roomName,
-    },
+    room: { roomId, type: roomType, avatar: roomAvatar, createdAt, roomName },
     alias,
   } = data;
 
   // Out group handle
   const [showModal, setShowModal] = React.useState<boolean>(false);
+  const [editAlias, setEditAlias] = React.useState<boolean>(false);
   const { mutate: outGroupMutate, isPending: onOutGroupLoad } = useOutGroup();
   return (
     <>
@@ -46,7 +41,18 @@ export default function RoomInfoSection({
         setOnOpen={setShowModal}
         onConfirm={() => outGroupMutate({ roomId: roomId })}
       />
-      <section className="flex flex-col justify-start w-full h-full gap-4">
+      <EditFriendDialog
+        isOpen={editAlias}
+        setIsOpen={setEditAlias}
+        data={data?.alias}
+      />
+      <section className="relative flex flex-col justify-start w-full h-full gap-4">
+        <Button
+          onClick={() => setEditAlias(true)}
+          className="absolute flex items-center justify-center w-8 h-8 p-2 bg-transparent hover:bg-[#202020] top-0 right-0 duration-700 transition"
+        >
+          <PencilIcon />
+        </Button>
         {roomType === RoomTypeEnum.PRIVATE ? (
           // Private
           <>

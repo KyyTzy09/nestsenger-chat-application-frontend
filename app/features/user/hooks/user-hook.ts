@@ -11,7 +11,7 @@ export const useGetUser = () => {
 
 export const useGetUserById = (data: { userId: string }) => {
     return useQuery({
-        queryKey: ['userId', data.userId],
+        queryKey: ['user-byId', data.userId],
         queryFn: async () => await UserService.getUserById(data),
         staleTime: 1000 * 60 * 2,
         enabled: !!data.userId
