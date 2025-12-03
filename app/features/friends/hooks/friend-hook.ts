@@ -42,9 +42,19 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
 }
 
 export const useUpdateFriendAlias = () => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["update-friend"],
         mutationFn: async (data: { alias: string, friendId: string }) => await FriendService.updateAlias(data),
+        onSuccess: (response) => {
+            toast.success(response?.message)
+            queryClient.invalidateQueries({ queryKey: ['friend'] })
+            queryClient.invalidateQueries({ queryKey: ['user-friend'] })
+            queryClient.invalidateQueries({ queryKey: ['user-room'] })
+        },
+        onError: (err) => {
+            toast.error(err.message)
+        }
     })
 }
 

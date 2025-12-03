@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import type { Route } from "./+types";
-import IndexPage from "~/pages/index.page";
+import IndexPage from "~/routes/pages/index.page";
 import { getSession } from "~/features/auth/services/get-session";
 export function meta({}: Route.MetaArgs) {
   return [
