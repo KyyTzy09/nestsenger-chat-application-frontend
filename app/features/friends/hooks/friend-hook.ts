@@ -41,6 +41,13 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
     })
 }
 
+export const useUpdateFriendAlias = () => {
+    return useMutation({
+        mutationKey: ["update-friend"],
+        mutationFn: async (data: { alias: string, friendId: string }) => await FriendService.updateAlias(data),
+    })
+}
+
 export const useGetNonFriendUsers = () => {
     return useQuery({
         queryKey: ["non-friends"],

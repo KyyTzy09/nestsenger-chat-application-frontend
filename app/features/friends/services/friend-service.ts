@@ -16,6 +16,10 @@ export const FriendService = {
         return await apiClient<{ message: string, statusCode: number, data: { friend: FriendType, room: RoomType } }>({ url: "/friend/add-friend/post", data, method: "post", withCredentials: true })
     },
 
+    async updateAlias(data: { alias: string, friendId: string }) {
+        return await apiClient<{ message: string, statusCode: number }>({ url: `/friend/update-alias/patch`, data, method: "patch", withCredentials: true })
+    },
+
     async getNonFriendUsers() {
         return await apiClient<{ data: UserType[] }>({ url: "/friend/non-friends/get", withCredentials: true })
     }
