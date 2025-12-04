@@ -20,7 +20,7 @@ import type { ReadChatType } from "shared/types/readchat-type";
 
 interface GroupChatCardProps {
   chatsData: { chat: ChatType; user: AliasType }[] | [];
-  reactionsData: { reaction: ReactionType; alias: AliasType }[];
+  reactionsData: { reaction: ReactionType; user: AliasType }[];
   readersData: { readChat: ReadChatType; alias: AliasType }[];
   deletedData?: DeletedChatType[];
   currentUserId: string;

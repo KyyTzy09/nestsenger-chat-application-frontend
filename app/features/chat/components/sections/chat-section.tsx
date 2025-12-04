@@ -14,7 +14,7 @@ import type { ReadChatType } from "shared/types/readchat-type";
 
 interface ChatSectionProps {
   chatsData: { date: string; chats: { chat: ChatType; user: AliasType }[] }[];
-  reactionsData: { reaction: ReactionType; alias: AliasType }[];
+  reactionsData: { reaction: ReactionType; user: AliasType }[];
   readerChatsData: { readChat: ReadChatType; alias: AliasType }[];
   deletedChatsData: DeletedChatType[];
   roomData: { room: RoomType; alias: FriendType | UserType | null };

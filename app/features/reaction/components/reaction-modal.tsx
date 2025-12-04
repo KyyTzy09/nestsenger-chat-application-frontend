@@ -18,7 +18,7 @@ import ReactionCard from "./cards/reaction-card";
 import type { AliasType } from "shared/types/alias-type";
 
 interface ReactionModalProps {
-  reactions: { reaction: ReactionType; alias: AliasType }[];
+  reactions: { reaction: ReactionType; user: AliasType }[];
   chatId: string;
   currentUserId: string;
 }
@@ -36,13 +36,14 @@ export default function ReactionModal({
   const filteredReaction = reactions?.filter(
     ({ reaction }) => {
       if (currentEmoji !== "") {
-        return reaction.content.includes(currentEmoji);
+        return reaction?.content?.includes(currentEmoji);
       } else {
         return true;
       }
     }
   );
 
+  console.log()
   const sortedReactionsData = filteredReaction?.sort((a) => {
     return a?.reaction?.userId === currentUserId ? -1 : 0;
   });

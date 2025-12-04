@@ -15,13 +15,13 @@ export default function ReactionCard({
   currentUserId,
   chatId,
 }: ReactionCardProps) {
-  const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } =
-    useDeleteReactionById({ chatId });
+  const { mutate: deleteReactionMutation, isPending: deleteReactionLoading } = useDeleteReactionById({ chatId });
   return (
     <section className="flex flex-col w-full overflow-y-auto custom-scrollbar">
       {data?.map(({ reaction: { reactionId, userId, content }, user }, i) => {
         return (
           <motion.button
+            key={i}
             initial={{ translateY: 20 }}
             whileInView={{ translateY: 0 }}
             whileTap={{ scale: 0.95 }}

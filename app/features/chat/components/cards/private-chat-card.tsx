@@ -19,7 +19,7 @@ import type { ReadChatType } from "shared/types/readchat-type";
 
 interface PrivateChatCardProps {
   chatsData: { chat: ChatType; user: AliasType }[] | [];
-  reactionsData: { reaction: ReactionType; alias: AliasType }[];
+  reactionsData: { reaction: ReactionType; user: AliasType }[];
   readersData: { readChat: ReadChatType; alias: AliasType }[];
   deletedData?: DeletedChatType[];
   currentUserId: string;
@@ -189,7 +189,8 @@ export default function PrivateChatCard({
                     reactions?.length > 0 && (
                       <ReactionModal
                         reactions={reactionsData?.filter(
-                          ({ reaction: { chatId: reactionChatId } }) => {
+                          ({ reaction: { chatId: rChatId } }) => {
+                            const reactionChatId = rChatId
                             return reactionChatId === chatId;
                           }
                         )}
