@@ -9,9 +9,6 @@ import {
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
 import type { FriendType } from "shared/types/friend-type";
-import type { RoomType } from "shared/types/room-type";
-import type { UserType } from "shared/types/user-type";
-import RoomCard from "~/features/room/components/cards/room-card";
 import AddFriendDialog from "../add-friend-dialog";
 import FriendCard from "../cards/friend-card";
 import AddGroupSection from "~/features/room/components/section/add-group-section";
@@ -21,22 +18,25 @@ interface AddFriendDropdownProps {
 }
 
 export default function AddFriendDropdown({ friends }: AddFriendDropdownProps) {
-  const [display, setDisplay] = React.useState<"addChat" | "addGroup">(
-    "addChat"
-  );
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [tab, setTab] = React.useState<"addChat" | "addGroup">("addChat");
   const [isOpenFriend, setIsOpenFriend] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setTab("addChat");
+  }, [isOpen]);
 
   return (
     <>
       <AddFriendDialog isOpen={isOpenFriend} setIsOpen={setIsOpenFriend} />
-      <DropdownMenu>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <Button className="bg-transparent p-0">
             <EditIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col items-center justify-between w-[350px] h-[36rem] bg-[#252525] overflow-hidden p-2 gap-2">
-          {display === "addChat" && (
+          {tab === "addChat" && (
             <>
               <section className="flex flex-col w-full p-2 gap-2">
                 <div className="flex items-center justify-between w-full">
@@ -65,7 +65,7 @@ export default function AddFriendDropdown({ friends }: AddFriendDropdownProps) {
                   <Label className="font-semibold text-white">Teman Baru</Label>
                 </Button>
                 <Button
-                  onClick={() => setDisplay("addGroup")}
+                  onClick={() => setTab("addGroup")}
                   className="flex item-center justify-start w-full h-14 bg-transparent px-2 gap-3 hover:bg-[#45494f]"
                 >
                   <div className="flex items-center justify-center w-12 h-12 bg-[#353535] rounded-full">
@@ -77,8 +77,11 @@ export default function AddFriendDropdown({ friends }: AddFriendDropdownProps) {
               </section>
             </>
           )}
-          {display === "addGroup" && (
-            <AddGroupSection friends={friends} onClose={() => setDisplay("addChat")} />
+          {tab === "addGroup" && (
+            <AddGroupSection
+              friends={friends}
+              onClose={() => setTab("addChat")}
+            />
           )}
         </DropdownMenuContent>
       </DropdownMenu>

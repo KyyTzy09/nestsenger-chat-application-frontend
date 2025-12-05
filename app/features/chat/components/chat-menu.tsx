@@ -29,7 +29,7 @@ interface ChatMenuProps {
     media?: Partial<ChatMediaType> | null;
     alias?: string;
     message?: string;
-    readers: { readChat: ReadChatType; alias: AliasType }[];
+    readers?: { readChat: ReadChatType; alias: AliasType }[];
   };
   position: { x: number; y: number };
   setPosition: React.Dispatch<
@@ -209,8 +209,11 @@ export default function ChatMenu({
                     </div>
                   )}
                 </motion.div>
-              ) : display === "info" ? (
-                <ChatInfoSection readersData={chatData?.readers} chatId={chatData?.chatId} />
+              ) : display === "info" && chatData?.readers ? (
+                <ChatInfoSection
+                  readersData={chatData?.readers}
+                  chatId={chatData?.chatId}
+                />
               ) : (
                 <motion.div className="flex w-full max-w-full h-full gap-1">
                   <EmojiPicker

@@ -88,7 +88,7 @@ export default function ChatMediaPreview() {
     return () => observer.disconnect();
   }, [openPreview, setSelectedIndex]);
 
-  console.log(user?.userId)
+  console.log(user?.userId);
   return (
     <AnimatePresence>
       {openPreview && (
@@ -138,7 +138,12 @@ export default function ChatMediaPreview() {
                         <ChatMenu
                           open={openMenu}
                           onClose={() => setOpenMenu(false)}
-                          chatData={{ chatId, media: { mediaUrl, mediaType }, message}}
+                          chatData={{
+                            chatId,
+                            media: { mediaUrl, mediaType },
+                            message,
+                            readers: undefined,
+                          }}
                           isChatDeleted={false}
                           isChatOwner={userId === user?.userId}
                           position={menuPosition!}
