@@ -1,4 +1,4 @@
-import { EditIcon, SearchIcon, UserPlus2Icon } from "lucide-react";
+import { EditIcon, SearchIcon, UserPlus2Icon, Users2Icon } from "lucide-react";
 import React from "react";
 import { Button } from "shared/shadcn/button";
 import {
@@ -14,16 +14,21 @@ import type { UserType } from "shared/types/user-type";
 import RoomCard from "~/features/room/components/cards/room-card";
 import AddFriendDialog from "../add-friend-dialog";
 import FriendCard from "../cards/friend-card";
+import AddGroupSection from "~/features/room/components/section/add-group-section";
 
 interface AddFriendDropdownProps {
   friends: FriendType[];
 }
 
 export default function AddFriendDropdown({ friends }: AddFriendDropdownProps) {
-  const [showDialog, setShowDialog] = React.useState<boolean>(false);
+  const [display, setDisplay] = React.useState<"addChat" | "addGroup">(
+    "addChat"
+  );
+  const [isOpenFriend, setIsOpenFriend] = React.useState<boolean>(false);
+
   return (
     <>
-      <AddFriendDialog isOpen={showDialog} setIsOpen={setShowDialog} />
+      <AddFriendDialog isOpen={isOpenFriend} setIsOpen={setIsOpenFriend} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="bg-transparent p-0">
@@ -31,34 +36,50 @@ export default function AddFriendDropdown({ friends }: AddFriendDropdownProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col items-center justify-between w-[350px] h-[36rem] bg-[#252525] overflow-hidden p-2 gap-2">
-          <section className="flex flex-col w-full p-2 gap-2">
-            <div className="flex items-center justify-between w-full">
-              <Label className="text-white font-semibold text-lg">
-                Chat Baru
-              </Label>
-            </div>
-            <div className="relative flex w-full h-full text-white">
-              <Input
-                className="flex w-full bg-[#404040] border-blue-600 border-b-2 border-t-0 border-x-0 pl-8"
-                placeholder="Cari chat atau mulai chat baru"
-              />
-              <div className="absolute top-0 left-0 flex items-center justify-center w-6 h-full pl-2">
-                <SearchIcon className="w-4 h-full" />
-              </div>
-            </div>
-          </section>
-          <section className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll custom-scrollbar gap-1">
-            <Button
-              onClick={() => setShowDialog(true)}
-              className="flex item-center justify-start w-full h-14 bg-transparent px-2 gap-3 hover:bg-[#45494f]"
-            >
-              <div className="flex items-center justify-center w-12 h-12 bg-[#353535] rounded-full">
-                <UserPlus2Icon className="w-5 h-5" />
-              </div>
-              <Label className="font-semibold text-white">Tambah Teman</Label>
-            </Button>
-            <FriendCard data={friends} />
-          </section>
+          {display === "addChat" && (
+            <>
+              <section className="flex flex-col w-full p-2 gap-2">
+                <div className="flex items-center justify-between w-full">
+                  <Label className="text-white font-semibold text-lg">
+                    Chat Baru
+                  </Label>
+                </div>
+                <div className="relative flex w-full h-full text-white">
+                  <Input
+                    className="flex w-full bg-[#404040] border-blue-600 border-b-2 border-t-0 border-x-0 pl-8"
+                    placeholder="Cari chat atau mulai chat baru"
+                  />
+                  <div className="absolute top-0 left-0 flex items-center justify-center w-6 h-full pl-2">
+                    <SearchIcon className="w-4 h-full" />
+                  </div>
+                </div>
+              </section>
+              <section className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll custom-scrollbar gap-1">
+                <Button
+                  onClick={() => setIsOpenFriend(true)}
+                  className="flex item-center justify-start w-full h-14 bg-transparent px-2 gap-3 hover:bg-[#45494f]"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 bg-[#353535] rounded-full">
+                    <UserPlus2Icon className="w-5 h-5" />
+                  </div>
+                  <Label className="font-semibold text-white">Teman Baru</Label>
+                </Button>
+                <Button
+                  onClick={() => setDisplay("addGroup")}
+                  className="flex item-center justify-start w-full h-14 bg-transparent px-2 gap-3 hover:bg-[#45494f]"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 bg-[#353535] rounded-full">
+                    <Users2Icon className="w-5 h-5" />
+                  </div>
+                  <Label className="font-semibold text-white">Grup Baru</Label>
+                </Button>
+                <FriendCard data={friends} />
+              </section>
+            </>
+          )}
+          {display === "addGroup" && (
+            <AddGroupSection friends={friends} onClose={() => setDisplay("addChat")} />
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
