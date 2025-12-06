@@ -21,6 +21,14 @@ export const RoomService = {
     async createPrivateRoom(data: { userIdB: string }) {
         return await apiClient<{ statusCode: number, data: RoomType }>({ url: "/room/private-room/post", data, withCredentials: true, method: "post" })
     },
+    async createGroupRoom(data: { userIds: string[], file: File }) {
+        const formData = new FormData()
+        formData.append("avatar", data.file)
+        data.userIds.forEach((id) => {
+            formData.append("userIds", id)
+        })
+        return await apiClient<{ message: string, data: { room: RoomType } }>({ url: `/room/group-room/post`, withCredentials: true, data: formData, method: "post" })
+    },
     async outGroup(data: { roomId: string }) {
         return await apiClient<{ message: string, data: MemberType }>({ url: `/room/${data.roomId}/out-group/delete`, withCredentials: true, method: "delete" })
     }

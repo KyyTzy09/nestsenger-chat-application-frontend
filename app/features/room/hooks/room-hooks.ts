@@ -17,6 +17,20 @@ export const useCreateOrGetRoom = () => {
     })
 }
 
+export const useCreateGroupRoom = () => {
+    const navigate = useNavigate()
+    return useMutation({
+        mutationKey: ["creat-group"],
+        mutationFn: async (data: { userIds: string[], file: File }) => await RoomService.createGroupRoom(data),
+        onSuccess: (data) => {
+            navigate(`/chat/${data?.data?.room?.roomId}`)
+        },
+        onError: (err) => {
+            toast.error(err.message)
+        }
+    })
+}
+
 export const useGetCurrentUserRoom = () => {
     return useQuery({
         queryKey: ['current-room'],
