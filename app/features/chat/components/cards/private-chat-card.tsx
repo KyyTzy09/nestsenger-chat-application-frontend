@@ -173,7 +173,14 @@ export default function PrivateChatCard({
                       chatId,
                     }) &&
                       currentUserId === senderId && (
-                        <ReadChatMark chatId={chatId} />
+                        <ReadChatMark
+                          readersData={readersData?.filter(
+                            ({ readChat: { chatId: readChatId } }) => {
+                              return readChatId === chatId;
+                            }
+                          )}
+                          chatId={chatId}
+                        />
                       )}
                   </div>
                 </div>
@@ -190,7 +197,7 @@ export default function PrivateChatCard({
                       <ReactionModal
                         reactions={reactionsData?.filter(
                           ({ reaction: { chatId: rChatId } }) => {
-                            const reactionChatId = rChatId
+                            const reactionChatId = rChatId;
                             return reactionChatId === chatId;
                           }
                         )}

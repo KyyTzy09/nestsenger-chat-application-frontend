@@ -200,7 +200,14 @@ export default function GroupChatCard({
                       chatId,
                     }) &&
                       currentUserId === senderId && (
-                        <ReadChatMark chatId={chatId} />
+                        <ReadChatMark
+                          readersData={readersData?.filter(
+                            ({ readChat: { chatId: readChatId } }) => {
+                              return readChatId === chatId;
+                            }
+                          )}
+                          chatId={chatId}
+                        />
                       )}
                   </div>
                 </div>
@@ -232,7 +239,7 @@ export default function GroupChatCard({
                     user && currentUserId === senderId ? "Anda" : user.alias,
                   message,
                   media,
-                  readers: readersData.filter(
+                  readers: readersData?.filter(
                     ({ readChat: { chatId: readChatId } }) => {
                       return readChatId === chatId;
                     }
