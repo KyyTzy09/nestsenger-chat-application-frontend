@@ -21,7 +21,7 @@ export const useCreateGroupRoom = () => {
     const navigate = useNavigate()
     return useMutation({
         mutationKey: ["creat-group"],
-        mutationFn: async (data: { userIds: string[], file: File }) => await RoomService.createGroupRoom(data),
+        mutationFn: async (data: { roomName:string, userIds: string[], file: File }) => await RoomService.createGroupRoom(data),
         onSuccess: (data) => {
             navigate(`/chat/${data?.data?.room?.roomId}`)
         },

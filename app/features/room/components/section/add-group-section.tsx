@@ -131,7 +131,14 @@ export default function AddGroupSection({
               );
             }
           )}
-        {tab === "form" && <AddGroupForm />}
+        {tab === "form" && (
+          <AddGroupForm
+            onClose={onClose}
+            userIds={selectedUsers.map(({ userId }) => {
+              return userId;
+            })}
+          />
+        )}
       </div>
     </section>
   );

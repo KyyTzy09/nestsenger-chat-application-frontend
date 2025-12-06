@@ -21,8 +21,9 @@ export const RoomService = {
     async createPrivateRoom(data: { userIdB: string }) {
         return await apiClient<{ statusCode: number, data: RoomType }>({ url: "/room/private-room/post", data, withCredentials: true, method: "post" })
     },
-    async createGroupRoom(data: { userIds: string[], file: File }) {
+    async createGroupRoom(data: { roomName: string, userIds: string[], file: File }) {
         const formData = new FormData()
+        formData.append("roomName", data.roomName)
         formData.append("avatar", data.file)
         data.userIds.forEach((id) => {
             formData.append("userIds", id)
