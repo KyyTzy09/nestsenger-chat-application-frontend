@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { RoomTypeEnum } from "shared/enums/room-type";
 import { generateDateText2 } from "shared/helpers/generate-date";
+import { Label } from "shared/shadcn/label";
 import type { AliasType } from "shared/types/alias-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { ProfileType } from "shared/types/profile-type";
@@ -63,7 +64,7 @@ export default function RoomLastChatSection({
         </p>
       </div>
       <div className="flex items-center justify-between w-full text-[14px] text-gray-300 gap-1">
-        <p className="flex items-center w-full gap-1">
+        <Label className="flex items-center justify-start w-full gap-1">
           {!room?.lastChat?.media ||
           room?.lastChat?.message === "Pesan ini telah dihapus" ? null : room
               ?.lastChat?.media?.mediaType === "image" ? (
@@ -77,11 +78,10 @@ export default function RoomLastChatSection({
           )}
 
           {displayLastChatSender()}
-          <span className="flex items-center gap-1 line-clamp-1">
-            {room?.lastChat?.message === "Pesan ini telah dihapus" && (
-              <BanIcon className="w-3 h-3" />
-            )}
-
+          {room?.lastChat?.message === "Pesan ini telah dihapus" && (
+            <BanIcon className="w-3 h-3" />
+          )}
+          <span className="max-w-[80%] gap-1 line-clamp-1">
             {profileResponse?.data.userId === room.lastChat.userId &&
             room?.lastChat?.message === "Pesan ini telah dihapus"
               ? "Anda menghapus pesan ini"
@@ -89,7 +89,7 @@ export default function RoomLastChatSection({
                 ? room?.lastChat?.media?.mediaType
                 : room?.lastChat?.message}
           </span>
-        </p>
+        </Label>
         {unreadChatsResponse?.data && (
           <p className="flex items-center justify-center bg-blue-500 px-2 rounded-md">
             {unreadChatsResponse?.data}

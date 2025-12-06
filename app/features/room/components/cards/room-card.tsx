@@ -37,7 +37,7 @@ export default function RoomCard({ data }: RoomCardProps) {
               key={index}
               className="flex w-full h-full gap-2"
             >
-              <section className="w-[65px] h-full rounded-full overflow-hidden">
+              <section className="min-w-[55px] h-full rounded-full overflow-hidden">
                 <img
                   src={
                     user && room.type === RoomTypeEnum.PRIVATE
