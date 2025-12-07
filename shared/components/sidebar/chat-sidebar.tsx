@@ -14,17 +14,23 @@ export default function ChatSidebar() {
   const queryClient = useQueryClient();
   const { data: currentUserRoomResponse } = useGetCurrentUserRoom();
   const { data: userFriendsResponse } = useGetUserFriends();
-  
+
   React.useEffect(() => {
-    const handler = () => {
+    const handler = (roomId: string) => {
       queryClient.invalidateQueries({
         queryKey: ["current-room"],
         type: "all",
       });
+
+      if (roomId) {
+        queryClient.invalidateQueries({
+          queryKey: ["room", roomId],
+          type: "all",
+        });
+      }
     };
 
     socket.on("refreshRoom", handler);
-
     return () => {
       socket.off("refreshRoom", handler);
     };

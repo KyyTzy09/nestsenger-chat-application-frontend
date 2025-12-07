@@ -31,12 +31,12 @@ export const useCreateGroupRoom = () => {
     })
 }
 
-export const updateRoomName = (roomId: string) => {
+export const useUpdateRoomName = (roomId: string, onSuccess: () => void) => {
     return useMutation({
         mutationKey: ['update-room-name', roomId],
         mutationFn: async (roomName: string) => await RoomService.updateRoomName({ roomId, roomName }),
         onSuccess: () => {
-            
+            onSuccess()
         },
         onError: (err) => {
             toast.error(err.message || "Gagal mengubah nama grup")
