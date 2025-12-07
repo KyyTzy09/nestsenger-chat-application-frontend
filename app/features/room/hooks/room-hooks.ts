@@ -21,12 +21,25 @@ export const useCreateGroupRoom = () => {
     const navigate = useNavigate()
     return useMutation({
         mutationKey: ["creat-group"],
-        mutationFn: async (data: { roomName:string, userIds: string[], file: File }) => await RoomService.createGroupRoom(data),
+        mutationFn: async (data: { roomName: string, userIds: string[], file: File }) => await RoomService.createGroupRoom(data),
         onSuccess: (data) => {
             navigate(`/chat/${data?.data?.room?.roomId}`)
         },
         onError: (err) => {
             toast.error(err.message)
+        }
+    })
+}
+
+export const updateRoomName = (roomId: string) => {
+    return useMutation({
+        mutationKey: ['update-room-name', roomId],
+        mutationFn: async (roomName: string) => await RoomService.updateRoomName({ roomId, roomName }),
+        onSuccess: () => {
+            
+        },
+        onError: (err) => {
+            toast.error(err.message || "Gagal mengubah nama grup")
         }
     })
 }

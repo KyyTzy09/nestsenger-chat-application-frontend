@@ -30,6 +30,9 @@ export const RoomService = {
         })
         return await apiClient<{ message: string, data: { room: RoomType } }>({ url: `/room/group-room/post`, withCredentials: true, data: formData, method: "post" })
     },
+    async updateRoomName(data: { roomId: string, roomName: string }) {
+        return await apiClient<{ message: string, data: Partial<RoomType> }>({ url: `/room/${data.roomId}/name/patch`, data: { roomName: data.roomName }, withCredentials: true, method: "patch" })
+    },
     async outGroup(data: { roomId: string }) {
         return await apiClient<{ message: string, data: MemberType }>({ url: `/room/${data.roomId}/out-group/delete`, withCredentials: true, method: "delete" })
     }
