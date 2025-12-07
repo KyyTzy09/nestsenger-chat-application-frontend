@@ -196,7 +196,7 @@ export default function ChatMenu({
                       );
                     }
                   )}
-                  {isChatOwner && (
+                  {isChatOwner && chatData?.readers && (
                     <div className="flex flex-col w-full gap-1">
                       <Separator className="opacity-70" />
                       <Button

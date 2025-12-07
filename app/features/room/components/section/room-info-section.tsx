@@ -10,6 +10,7 @@ import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
 import { useOutGroup } from "../../hooks/room-hooks";
 import EditFriendDialog from "~/features/friends/components/edit-friend-dialog";
+import GroupInfoForm from "../form/group-info-form";
 
 interface RoomInfoSectionProps {
   data: {
@@ -35,7 +36,7 @@ export default function RoomInfoSection({
   return (
     <>
       <AlertModal
-        alertTitle="Apakah kamu yakin ingin keluar dari grup ?"
+        alertTitle="Yakin ingin keluar dari grup?"
         alertDesc="konfirmasi keluar dari grup"
         onOpen={showModal}
         setOnOpen={setShowModal}
@@ -47,15 +48,15 @@ export default function RoomInfoSection({
         data={data?.alias}
       />
       <section className="relative flex flex-col justify-start w-full h-full gap-4">
-        <Button
-          onClick={() => setEditAlias(true)}
-          className="absolute flex items-center justify-center w-8 h-8 p-2 bg-transparent hover:bg-[#202020] top-0 right-0 duration-700 transition"
-        >
-          <PencilIcon />
-        </Button>
         {roomType === RoomTypeEnum.PRIVATE ? (
           // Private
           <>
+            <Button
+              onClick={() => setEditAlias(true)}
+              className="absolute flex items-center justify-center w-8 h-8 p-2 bg-transparent hover:bg-[#202020] top-0 right-0 duration-700 transition"
+            >
+              <PencilIcon />
+            </Button>
             <button
               onClick={() => showImagePreviewChange(true)}
               className="flex w-full items-center justify-center"
@@ -109,48 +110,11 @@ export default function RoomInfoSection({
           </>
         ) : (
           // Group
-          <>
-            <button
-              onClick={() => showImagePreviewChange(true)}
-              className="flex w-full items-center justify-center"
-            >
-              <img
-                src={roomAvatar || defaultImage}
-                alt="avatar"
-                className="w-24 h-24 rounded-full"
-              />
-            </button>
-            <div className="flex items-center justify-center w-full text-white gap-2">
-              <p className="font-bold text-xl text-center">{roomName}</p>
-              <Button className="flex items-center justify-center w-7 h-7 bg-transparent hover:bg-[#202020] p-1">
-                <PencilIcon className="w-full h-full" />
-              </Button>
-            </div>
-            <Separator />
-            <div className="flex flex-col w-full text-[14px] gap-2">
-              <div className="flex flex-col items-start justify-center w-full">
-                <p className="text-gray-300">Dibuat </p>
-                <p className="text-white break-words">
-                  {new Date(createdAt).toLocaleString("id-ID", {
-                    dateStyle: "full",
-                  })}
-                </p>
-              </div>
-              <div className="flex flex-col items-start justify-center w-full">
-                <p className="text-gray-300">Deskripsi :</p>
-                <p className="text-white">{"Deskripsi grup"}</p>
-              </div>
-            </div>
-            <Separator />
-            <div className="flex self-end-safe w-full">
-              <Button
-                onClick={() => setShowModal(true)}
-                className="bg-[#252525]"
-              >
-                Keluar dari grup
-              </Button>
-            </div>
-          </>
+          <GroupInfoForm
+            roomData={data}
+            showDeleteModal={setShowModal}
+            showImagePreview={showImagePreviewChange}
+          />
         )}
       </section>
     </>

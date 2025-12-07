@@ -15,6 +15,7 @@ import { useMediaPreviewStore } from "../stores/media-preview-store";
 import ChatMediaCard from "./cards/chat-media-card";
 import { useUserStore } from "~/features/user/stores/user-store";
 import ChatMenu from "./chat-menu";
+import { Label } from "shared/shadcn/label";
 
 export default function ChatMediaPreview() {
   // Refs
@@ -184,9 +185,9 @@ export default function ChatMediaPreview() {
                             </div>
                           ) : null}
                           {message && (
-                            <div className="absolute w-auto max-w-[200px] h-auto line-clamp-2 text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
+                            <Label className="absolute max-w-[200px] h-auto max-h-[60px] line-clamp-2 text-center text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
                               {message}
-                            </div>
+                            </Label>
                           )}
                         </div>
                       </React.Fragment>
