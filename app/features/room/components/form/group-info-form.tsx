@@ -26,7 +26,7 @@ export default function GroupInfoForm({
   const inputRefDesc = React.useRef<HTMLTextAreaElement>(null);
 
   const {
-    room: { roomId, avatar: roomAvatar, createdAt, roomName },
+    room: { roomId, avatar: roomAvatar, createdAt, roomName, description },
   } = roomData;
   const [showInput, setShowInput] = React.useState<"name" | "desc" | null>(
     null
@@ -34,7 +34,7 @@ export default function GroupInfoForm({
 
   // Form Handle
   const [name, setName] = React.useState<string>(roomName);
-  const [desc, setDesc] = React.useState<string>("");
+  const [desc, setDesc] = React.useState<string>(description || "");
 
   // Reusable change handle
   const onChangeHandler = (
@@ -55,8 +55,10 @@ export default function GroupInfoForm({
   }, [showInput]);
 
   // Mutation
-  const { mutate: updateNameMutation, isPending: updateNameLoading } = useUpdateRoomName(roomId, () => setShowInput(null));
-  const { mutate:updateDescMutation, isPending:updateDescLoading } = useUpdateRoomDesc(roomId, () => setShowInput(null))
+  const { mutate: updateNameMutation, isPending: updateNameLoading } =
+    useUpdateRoomName(roomId, () => setShowInput(null));
+  const { mutate: updateDescMutation, isPending: updateDescLoading } =
+    useUpdateRoomDesc(roomId, () => setShowInput(null));
 
   // Wrapper handle click
   React.useEffect(() => {
@@ -66,7 +68,7 @@ export default function GroupInfoForm({
         !wrapperRef.current.contains(e.target as Node)
       ) {
         setName(roomName);
-        setDesc("");
+        setDesc(description || "");
         setShowInput(null);
       }
     };
@@ -160,10 +162,10 @@ export default function GroupInfoForm({
                     value={desc}
                     maxLength={200}
                     onChange={(e) => onChangeHandler(e, setDesc)}
-                    className={`w-full h-full min-h-[30px] resize-none text-white md:text-[12px] border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1`}
+                    className={`w-full h-full min-h-[30px] resize-none text-white border-x-0 border-t-0 border-b-0 focus-visible:border-blue-600 focus-visible:ring-0 focus-visible:border-b-2 focus-visible:bg-gray-800 px-1`}
                   />
                 ) : (
-                  <p className="text-white">{"Deskripsi grup"}</p>
+                  <p className="text-white">{description}</p>
                 )}
                 {showInput !== "desc" && (
                   <Button
