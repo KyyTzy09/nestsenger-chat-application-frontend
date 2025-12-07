@@ -8,7 +8,7 @@ import { Textarea } from "shared/shadcn/textarea";
 import type { FriendType } from "shared/types/friend-type";
 import type { RoomType } from "shared/types/room-type";
 import type { UserType } from "shared/types/user-type";
-import { useUpdateRoomName } from "../../hooks/room-hooks";
+import { useUpdateRoomDesc, useUpdateRoomName } from "../../hooks/room-hooks";
 
 interface GroupInfoFormProps {
   roomData: { room: RoomType; alias: FriendType | UserType | null };
@@ -56,7 +56,7 @@ export default function GroupInfoForm({
 
   // Mutation
   const { mutate: updateNameMutation, isPending: updateNameLoading } = useUpdateRoomName(roomId, () => setShowInput(null));
-  // const { mutate:updateDescMutation, isPending:updateDescLoading } = useUpdateRoomDesc(roomId)
+  const { mutate:updateDescMutation, isPending:updateDescLoading } = useUpdateRoomDesc(roomId, () => setShowInput(null))
 
   // Wrapper handle click
   React.useEffect(() => {
@@ -179,12 +179,13 @@ export default function GroupInfoForm({
               </div>
               {showInput == "desc" && (
                 <button
+                  onClick={() => updateDescMutation(desc)}
                   type="button"
                   // disabled={patchNamePending}
                   // onClick={() => onPatchName({ userName: name })}
                   className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700"
                 >
-                  {false ? (
+                  {updateDescLoading ? (
                     <LoaderIcon className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
