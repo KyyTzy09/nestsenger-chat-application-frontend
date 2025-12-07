@@ -27,21 +27,32 @@ export const useGetDeletedChats = (data: { roomId: string }) => {
 }
 
 export const useCreateChat = (roomId: string,) => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ['create-chat'],
         mutationFn: async (data: { message: string, parentId?: string }) => await ChatService.createChat({ message: data.message, roomId, parentId: data.parentId }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["read-chats-room", roomId],
+                refetchType: "all",
+            });
+        },
         onError: (err) => {
             toast.error(err.message || "Gagal mengirim chat")
         }
     })
 }
 
-export const useCreateChatWithMedia = () => {
+export const useCreateChatWithMedia = (roomId: string) => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationKey: ["create-chat-media"],
-        mutationFn: async (data: { roomId: string, file: File, message: string, parentId?: string }) => await ChatService.createChatWithMedia(data),
+        mutationFn: async (data: { file: File, message: string, parentId?: string }) => await ChatService.createChatWithMedia({ roomId, ...data }),
         onSuccess: () => {
-            toast.success("Berhasil kirim pesan")
+            queryClient.invalidateQueries({
+                queryKey: ["read-chats-room", roomId],
+                refetchType: "all",
+            });
         },
         onError: (err) => {
             toast.error(err.message || "Gagal kirim pesan")

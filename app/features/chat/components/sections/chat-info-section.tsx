@@ -22,7 +22,6 @@ export default function ChatInfoSection({
     }) as [];
   };
 
-  console.log(readersData)
   // Handle contents
   const infoContents = [
     {

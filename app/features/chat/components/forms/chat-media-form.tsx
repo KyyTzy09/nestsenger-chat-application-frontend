@@ -40,7 +40,7 @@ export default function ChatMediaForm() {
 
   // Mutation
   const { mutate: createChatMutation, isPending: createChatLoading } =
-    useCreateChatWithMedia();
+    useCreateChatWithMedia(roomId as string);
 
   // Data
   const filteredMedia = chat?.filter(({ fileUrl }) => {
@@ -94,7 +94,6 @@ export default function ChatMediaForm() {
       await Promise.all(
         filteredMedia?.map((chat, i) => {
           createChatMutation({
-            roomId: roomId!,
             file: chat.file,
             message: chatMessages[i] ? chatMessages[i].message : "",
             parentId: parent?.parentId,

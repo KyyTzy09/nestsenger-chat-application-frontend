@@ -114,11 +114,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   React.useEffect(() => {
     const handler = () => {
       queryClient.invalidateQueries({
-        queryKey: ["read-chats"],
-        refetchType: "all",
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["ischatread"],
+        queryKey: ["read-chats-room", roomId],
         refetchType: "all",
       });
     };
