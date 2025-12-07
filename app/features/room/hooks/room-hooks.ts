@@ -44,6 +44,20 @@ export const useUpdateRoomName = (roomId: string, onSuccess: () => void) => {
     })
 }
 
+export const useUpdateRoomDesc = (roomId: string, onSuccess: () => void) => {
+    return useMutation({
+        mutationKey: ['update-room-desc', roomId],
+        mutationFn: async (description: string) => await RoomService.updateRoomDesc({ roomId, description }),
+        onSuccess: () => {
+            onSuccess()
+        },
+        onError: (err) => {
+            toast.error(err.message || "Gagal mengubah deskripsi grup")
+        }
+    })
+}
+
+
 export const useGetCurrentUserRoom = () => {
     return useQuery({
         queryKey: ['current-room'],
