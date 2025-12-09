@@ -20,16 +20,18 @@ export default function StatusSidebar() {
       <div className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll custom-scrollbar gap-4">
         <section className="relative flex flex-col items-start justify-center w-full h-[15%] gap-6 px-5 ">
           <div className="relative flex w-full h-full">
-            <div className="flex items-center justify-start w-full h-16 gap-3">
-              <div className="w-14 h-14 border-[3px] border-blue-500 rounded-full">
+            <main className="flex items-center justify-start w-full h-16 gap-3">
+              <section className="w-14 h-14 border-[3px] border-blue-500 rounded-full">
                 <img
-                  src={defaultImage}
-                  alt={"profile"}
+                  src={
+                    "https://i.pinimg.com/736x/55/f6/27/55f62793829b337449ff9b0b8ee3aed0.jpg"
+                  }
+                  alt={defaultImage}
                   className="w-full h-full object-cover rounded-full"
                 />
-              </div>
-              <div className="flex flex-col items-start justify-center h-full text-white">
-                <p className="font-semibold text-[14px]">Fiky Ganteng 1</p>
+              </section>
+              <section className="flex flex-col items-start justify-center h-full text-white">
+                <p className="font-semibold text-[14px]">Status Anda</p>
                 <p className="text-sm">
                   {new Date().toLocaleDateString("id-ID", {
                     weekday: "long",
@@ -40,8 +42,8 @@ export default function StatusSidebar() {
                     minute: "2-digit",
                   })}
                 </p>
-              </div>
-            </div>
+              </section>
+            </main>
           </div>
         </section>
         <section className="flex flex-col w-full h-[90%] px-5 gap-2">
@@ -55,7 +57,9 @@ export default function StatusSidebar() {
                 <div className="flex items-center justify-start w-full h-16 gap-3 py-2">
                   <div className="w-14 h-14 border-[3px] border-blue-500 rounded-full">
                     <img
-                      src={defaultImage}
+                      src={
+                        "https://i.pinimg.com/736x/8d/b9/77/8db9773d4e8576969efbffa06e35a878.jpg"
+                      }
                       alt={"profile"}
                       className="w-full h-full object-cover rounded-full"
                     />
