@@ -9,6 +9,10 @@ export default [
                 route(":roomId", "routes/chat/chat-detail.tsx")
             ])
         ]),
-        route("status", "routes/status/status.tsx")
+        ...prefix("status", [
+            layout("layouts/status.layout.tsx", [
+                index("routes/status/status.tsx")
+            ])
+        ])
     ]),
 ] satisfies RouteConfig;

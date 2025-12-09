@@ -1,5 +1,5 @@
 import React from "react";
-import ChatDetailPage from "~/routes/pages/chat-detail.page";
+import ChatDetailPage from "~/pages/chat-detail.page";
 import type { Route } from "../+types";
 import { socket } from "shared/configs/socket";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
