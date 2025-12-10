@@ -2,28 +2,34 @@ import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { generateDateText2 } from "shared/helpers/generate-date";
 import type { StatusType } from "shared/types/status-type";
+import StatusRing from "../status-ring";
 
 interface StatusCardProps {
   userName: string;
   createdDate: Date;
   imageUrl: string;
+  statusLength: number;
 }
 
 export default function StatusCard({
   userName,
   imageUrl,
   createdDate,
+  statusLength,
 }: StatusCardProps) {
   return (
     <div className="relative flex w-full h-full">
       <main className="flex items-center justify-start w-full h-16 gap-3">
-        <section className="w-14 h-14 border-[3px] border-blue-500 rounded-full">
+        <StatusRing
+          count={statusLength}
+          className="flex items-center justify-center w-14 h-14 rounded-full"
+        >
           <img
             src={imageUrl || defaultImage}
             alt={defaultImage}
             className="w-full h-full object-cover rounded-full"
           />
-        </section>
+        </StatusRing>
         <section className="flex flex-col items-start justify-center h-full text-white">
           <p className="font-semibold text-[14px]">{userName}</p>
           <p className="text-sm">

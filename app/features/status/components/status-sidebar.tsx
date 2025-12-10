@@ -13,6 +13,7 @@ export default function StatusSidebar() {
       <div className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll custom-scrollbar">
         <section className="relative flex flex-col items-start justify-center w-full h-[14%] gap-6 px-5 ">
           <StatusCard
+            statusLength={2}
             userName="Status Anda"
             createdDate={new Date()}
             imageUrl="https://i.pinimg.com/736x/55/f6/27/55f62793829b337449ff9b0b8ee3aed0.jpg"
@@ -31,6 +32,7 @@ export default function StatusSidebar() {
                   userName={alias.alias}
                   createdDate={statuses[statuses.length - 1].createdAt}
                   imageUrl={alias.avatar}
+                  statusLength={statuses.length}
                 />
               );
             })}
