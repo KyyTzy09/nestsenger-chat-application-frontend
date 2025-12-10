@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { RoomTypeEnum } from "shared/enums/room-type";
-import { generateDateText2 } from "shared/helpers/generate-date";
+import { generateDateText2, generateTimeText } from "shared/helpers/generate-date";
 import { Label } from "shared/shadcn/label";
 import type { AliasType } from "shared/types/alias-type";
 import type { FriendType } from "shared/types/friend-type";
@@ -59,7 +59,7 @@ export default function RoomLastChatSection({
         </p>
         <p className="text-[12px] font-normal">
           {room?.lastChat
-            ? generateDateText2({ date: new Date(room.lastChat.createdAt) })
+            ? generateTimeText({ date: new Date(room.lastChat.createdAt) })
             : ""}
         </p>
       </div>

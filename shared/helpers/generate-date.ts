@@ -37,6 +37,33 @@ export function generateDateText2(data: { date: Date }) {
 
     const matchedMonthAndYear = currentMonth === month && currentYear === year
     if (matchedMonthAndYear && Number(currentDate) - Number(date) === 0) {
+        result = "Hari Ini"
+    } else if (matchedMonthAndYear && Number(currentDate) - Number(date) === 1) {
+        result = "Kemarin"
+    } else {
+        result = formatedDate
+    }
+
+    return result
+}
+
+export function generateTimeText(data: { date: Date }) {
+    let result = ""
+
+    // Time
+    const formatedDate = format(data.date, "MM/dd/yyyy")
+    const date = formatedDate.split("/")[1]
+    const month = formatedDate.split('/')[0]
+    const year = formatedDate.split('/')[2]
+
+    // Current time
+    const current = format(new Date(), "MM/dd/yyyy")
+    const currentDate = current.split("/")[1]
+    const currentMonth = current.split('/')[0]
+    const currentYear = current.split('/')[2]
+
+    const matchedMonthAndYear = currentMonth === month && currentYear === year
+    if (matchedMonthAndYear && Number(currentDate) - Number(date) === 0) {
         result = data.date.toLocaleTimeString("id-ID", {
             hour: "2-digit",
             minute: "2-digit"
