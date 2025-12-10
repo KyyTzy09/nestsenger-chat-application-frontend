@@ -6,7 +6,7 @@ import StatusCard from "./cards/status-card";
 export default function StatusSidebar() {
   const { data: statusesTodayResponse } = useGetTodayStatuses();
   return (
-    <aside className="relative z-0 flex flex-col w-full h-full bg-[#252525] pt-10 text-white gap-2">
+    <aside className="relative z-0 flex flex-col w-full h-full bg-[#252525] pt-10 text-white">
       <div className="flex items-center justify-between w-full px-5">
         <Label className="text-white font-semibold text-lg">Status</Label>
       </div>

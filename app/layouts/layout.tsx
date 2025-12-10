@@ -7,6 +7,7 @@ import { getSession } from "~/features/auth/services/get-session";
 import AvatarCropper from "~/features/profile/components/cropper-dialog";
 import ChatMediaPreview from "~/features/chat/components/chat-media-preview";
 import { useSession } from "~/features/auth/hooks/auth-hook";
+import StatusPreview from "~/features/status/components/status-preview";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const session = await getSession();
@@ -19,13 +20,14 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
 export default function DefaultLayout() {
   const { data } = useSession();
   return (
-    <SidebarProvider >
+    <SidebarProvider>
       <div className="flex w-screen h-full min-h-screen">
         <DefaultSideBar />
         <div className="flex-1 ml-16">
           <Outlet />
         </div>
       </div>
+      <StatusPreview />
       <ChatMediaPreview />
       <AvatarCropper />
     </SidebarProvider>
