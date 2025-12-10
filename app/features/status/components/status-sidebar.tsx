@@ -1,11 +1,15 @@
 import { TimerIcon } from "lucide-react";
 import { Label } from "shared/shadcn/label";
-import { useGetTodayStatuses } from "../hooks/status-hook";
+import {
+  useGetTodayStatuses,
+  useGetTodayUserStatuses,
+} from "../hooks/status-hook";
 import StatusCard from "./cards/status-card";
 import { useStatusPreviewStore } from "../stores/status-store";
 
 export default function StatusSidebar() {
   const { data: statusesTodayResponse } = useGetTodayStatuses();
+  const { data: statusesUserResponse } = useGetTodayUserStatuses();
   const { setStatusId, setOpenPreview, setStatus } = useStatusPreviewStore();
 
   return (
@@ -17,11 +21,23 @@ export default function StatusSidebar() {
         <section className="relative flex flex-col items-start justify-center w-full h-[14%] gap-6 px-1">
           <div className="flex items-center justify-start w-full h-full">
             <StatusCard
-              action={() => {}}
-              statusLength={2}
-              userName="Status Anda"
-              createdDate={new Date()}
-              imageUrl="https://i.pinimg.com/736x/55/f6/27/55f62793829b337449ff9b0b8ee3aed0.jpg"
+              action={() => {
+                setStatus(statusesUserResponse?.data!);
+                setStatusId(
+                  statusesUserResponse?.data?.statuses[
+                    statusesUserResponse?.data?.statuses?.length - 1
+                  ].statusId || ""
+                );
+                setOpenPreview(true);
+              }}
+              statusLength={statusesUserResponse?.data?.statuses?.length || 0}
+              userName={"Status Anda"}
+              createdDate={
+                statusesUserResponse?.data?.statuses[
+                  statusesUserResponse?.data?.statuses?.length - 1
+                ]?.createdAt || new Date()
+              }
+              imageUrl={statusesUserResponse?.data?.alias?.avatar || ""}
             />
           </div>
         </section>

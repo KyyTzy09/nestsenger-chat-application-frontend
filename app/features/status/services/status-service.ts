@@ -7,6 +7,6 @@ export const StatusService = {
         return await apiClient<{ data: { alias: AliasType, statuses: StatusType[] }[] }>({ url: "/status/today/get", withCredentials: true })
     },
     async getTodayUserStatuses() {
-        return await apiClient<{ data: { alias: AliasType, statuses: StatusType } }>({ url: "/status/today-user/get", withCredentials: true })
+        return await apiClient<{ data: { alias: AliasType, statuses: StatusType[] } }>({ url: "/status/today-user/get", withCredentials: true })
     }
 }
