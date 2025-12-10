@@ -28,6 +28,7 @@ export default function StatusPreview() {
     e.preventDefault();
   };
 
+  const currentStatus = data?.statuses[selectedIndex!]
   const handleScroll = (index: number) => {
     if (index >= 0 && statusRefs.current[index]) {
       statusRefs.current[index]?.scrollIntoView({
@@ -74,6 +75,7 @@ export default function StatusPreview() {
     return () => observer.disconnect();
   }, [openPreview, setSelectedIndex]);
 
+  console.log(data?.statuses)
   return (
     <AnimatePresence>
       {openPreview && data && (
@@ -112,7 +114,7 @@ export default function StatusPreview() {
               className="flex overflow-x-auto snap-x snap-mandatory w-full h-full no-scrollbar"
             >
               {data?.statuses?.map(
-                ({ statusId, mediaType, mediaUrl, message, createdAt }, i) => {
+                ({ statusId, mediaType, mediaUrl, message, createdAt, creatorId }, i) => {
                   return (
                     <React.Fragment key={i}>
                       <div
@@ -140,18 +142,18 @@ export default function StatusPreview() {
                             ></video>
                           ) : null}
                           {/* Profile section */}
-                          <div className="absolute flex flex-col w-full h-20 top-3 gap-4 px-5">
-                            <section className="flex items-center justify-center w-full gap-1">
+                          <div className="fixed flex flex-col items-center justify-center w-full h-20 top-3 left-0 gap-4 px-5 z-100">
+                            <section className="flex items-center justify-center w-[40%] gap-1">
                               {data?.statuses?.map((_, i) => {
                                 return (
                                   <div
                                     key={i}
-                                    className="bg-blue-500 w-full h-1 rounded-md"
+                                    className={`${i === selectedIndex ? "bg-blue-500" : "bg-gray-400"} w-full h-1 rounded-md`}
                                   />
                                 );
                               })}
                             </section>
-                            <section className="flex w-full gap-4">
+                            <section className="flex w-[40%] gap-4">
                               <img
                                 src={data.alias.avatar || defaultImage}
                                 alt="status-profile"
@@ -159,20 +161,21 @@ export default function StatusPreview() {
                               />
                               <section className="flex flex-col items-start justify-center h-full text-white">
                                 <p className="font-semibold text-[14px]">
-                                  {data.alias.alias}
+                                  {user?.userId === creatorId ? "Status Anda" : data.alias.alias}
                                 </p>
                                 <p className="text-sm">
                                   {generateDateText2({
-                                    date: new Date(createdAt),
+                                    date: new Date(currentStatus?.createdAt || new Date()),
                                   })}
                                   {", "}
-                                  {new Date(createdAt).toLocaleTimeString(
-                                    "id-ID",
-                                    {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                    }
-                                  )}
+                                  <span className="bg-transparent backdrop-blur px-2 rounded-md">
+                                    {new Date(currentStatus?.createdAt || new Date()).toLocaleTimeString("id-ID",
+                                      {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      }
+                                    )}
+                                  </span>
                                 </p>
                               </section>
                             </section>
@@ -190,7 +193,9 @@ export default function StatusPreview() {
               )}
             </div>
             <Button
-              disabled={selectedIndex === (data?.statuses?.length as number) - 1}
+              disabled={
+                selectedIndex === (data?.statuses?.length as number) - 1
+              }
               onClick={() => {
                 if (selectedIndex !== null && selectedIndex !== undefined) {
                   handleScroll(selectedIndex + 1);
