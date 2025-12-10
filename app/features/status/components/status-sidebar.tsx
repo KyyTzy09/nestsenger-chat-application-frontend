@@ -2,9 +2,12 @@ import { TimerIcon } from "lucide-react";
 import { Label } from "shared/shadcn/label";
 import { useGetTodayStatuses } from "../hooks/status-hook";
 import StatusCard from "./cards/status-card";
+import { useStatusPreviewStore } from "../stores/status-store";
 
 export default function StatusSidebar() {
   const { data: statusesTodayResponse } = useGetTodayStatuses();
+  const { setStatusId, setOpenPreview, setStatus } = useStatusPreviewStore();
+
   return (
     <aside className="relative z-0 flex flex-col w-full h-full bg-[#252525] pt-10 text-white">
       <div className="flex items-center justify-between w-full px-5">
@@ -14,6 +17,7 @@ export default function StatusSidebar() {
         <section className="relative flex flex-col items-start justify-center w-full h-[14%] gap-6 px-1">
           <div className="flex items-center justify-start w-full h-full">
             <StatusCard
+              action={() => {}}
               statusLength={2}
               userName="Status Anda"
               createdDate={new Date()}
@@ -27,14 +31,23 @@ export default function StatusSidebar() {
             Pembaruan Terkini
           </Label>
           <div className="flex flex-col w-full h-full gap-2 px-1">
-            {statusesTodayResponse?.data?.map(({ alias, statuses }, i) => {
+            {statusesTodayResponse?.data?.map((data, i) => {
               return (
                 <StatusCard
                   key={i}
-                  userName={alias.alias}
-                  createdDate={statuses[statuses.length - 1].createdAt}
-                  imageUrl={alias.avatar}
-                  statusLength={statuses.length}
+                  action={() => {
+                    setStatus(data);
+                    setStatusId(
+                      data.statuses[data.statuses.length - 1].statusId
+                    );
+                    setOpenPreview(true);
+                  }}
+                  userName={data.alias.alias}
+                  createdDate={
+                    data.statuses[data.statuses.length - 1].createdAt
+                  }
+                  imageUrl={data.alias.avatar}
+                  statusLength={data.statuses.length}
                 />
               );
             })}

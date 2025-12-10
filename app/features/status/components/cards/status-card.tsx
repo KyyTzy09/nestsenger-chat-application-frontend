@@ -9,6 +9,7 @@ interface StatusCardProps {
   createdDate: Date;
   imageUrl: string;
   statusLength: number;
+  action: () => void;
 }
 
 export default function StatusCard({
@@ -16,9 +17,13 @@ export default function StatusCard({
   imageUrl,
   createdDate,
   statusLength,
+  action,
 }: StatusCardProps) {
   return (
-    <main className="flex items-center justify-start w-full h-16 gap-3 hover:bg-[#45494f] px-5 rounded-md">
+    <main
+      onClick={action}
+      className="flex items-center justify-start w-full h-16 gap-3 hover:bg-[#45494f] px-5 rounded-md"
+    >
       <StatusRing
         count={statusLength}
         className="flex items-center justify-center w-14 h-14 rounded-full"
