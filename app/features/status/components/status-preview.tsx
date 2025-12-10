@@ -12,11 +12,14 @@ import { Label } from "shared/shadcn/label";
 import { generateDateText2 } from "shared/helpers/generate-date";
 import { defaultImage } from "shared/constants/image-default";
 import { useStatusPreviewStore } from "../stores/status-store";
+import ProgressSection from "./progress-section";
+import { useStatusProgress } from "../hooks/progress-hook";
 
 export default function StatusPreview() {
   // Refs
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
   const statusRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+  const videoRefs = React.useRef<(HTMLVideoElement | null)[]>([]);
 
   // State
   const [selectedIndex, setSelectedIndex] = React.useState<number>();
@@ -28,7 +31,7 @@ export default function StatusPreview() {
     e.preventDefault();
   };
 
-  const currentStatus = data?.statuses[selectedIndex!]
+  const currentStatus = data?.statuses[selectedIndex!];
   const handleScroll = (index: number) => {
     if (index >= 0 && statusRefs.current[index]) {
       statusRefs.current[index]?.scrollIntoView({
@@ -53,6 +56,21 @@ export default function StatusPreview() {
     }
   }, []);
 
+  // Handle Progress
+  const progress = useStatusProgress({
+    selectedIndex,
+    isOpen: openPreview,
+    statuses: data?.statuses || [],
+    videoRefs,
+    onFinish: () => {
+      if (selectedIndex === data?.statuses?.length! - 1) {
+        resetState();
+      } else {
+        handleScroll(selectedIndex! + 1);
+      }
+    },
+  });
+
   //   Get Media Index
   React.useEffect(() => {
     if (!statusRefs.current) return;
@@ -75,7 +93,6 @@ export default function StatusPreview() {
     return () => observer.disconnect();
   }, [openPreview, setSelectedIndex]);
 
-  console.log(data?.statuses)
   return (
     <AnimatePresence>
       {openPreview && data && (
@@ -86,7 +103,7 @@ export default function StatusPreview() {
           className={`flex fixed flex-col w-full min-h-screen bg-[#232323]/80 z-50 top-0 bottom-0 left-0 right-0 backdrop-blur-md gap-1 px-3 py-2`}
         >
           {/* Header */}
-          <section className="flex items-center justify-between w-full absolute top-2">
+          <section className="flex items-center justify-between w-full absolute top-2 z-100">
             <Button
               onClick={() => {
                 resetState();
@@ -114,7 +131,7 @@ export default function StatusPreview() {
               className="flex overflow-x-auto snap-x snap-mandatory w-full h-full no-scrollbar"
             >
               {data?.statuses?.map(
-                ({ statusId, mediaType, mediaUrl, message, createdAt, creatorId }, i) => {
+                ({ statusId, mediaType, mediaUrl, message, creatorId }, i) => {
                   return (
                     <React.Fragment key={i}>
                       <div
@@ -137,22 +154,22 @@ export default function StatusPreview() {
                           ) : selectedIndex === i && mediaType === "video" ? (
                             <video
                               className="w-auto h-full  max-h-full object-cover"
+                              ref={(el) => {
+                                if (videoRefs.current) {
+                                  videoRefs.current[i] = el;
+                                }
+                              }}
                               src={mediaUrl}
                               autoPlay
                             ></video>
                           ) : null}
                           {/* Profile section */}
-                          <div className="fixed flex flex-col items-center justify-center w-full h-20 top-3 left-0 gap-4 px-5 z-100">
-                            <section className="flex items-center justify-center w-[40%] gap-1">
-                              {data?.statuses?.map((_, i) => {
-                                return (
-                                  <div
-                                    key={i}
-                                    className={`${i === selectedIndex ? "bg-blue-500" : "bg-gray-400"} w-full h-1 rounded-md`}
-                                  />
-                                );
-                              })}
-                            </section>
+                          <div className="fixed flex flex-col items-center justify-center w-full h-20 top-3 left-0 gap-4 px-5 z-90">
+                            <ProgressSection
+                              activeIndex={selectedIndex!}
+                              progress={progress}
+                              count={data?.statuses?.length}
+                            />
                             <section className="flex w-[40%] gap-4">
                               <img
                                 src={data.alias.avatar || defaultImage}
@@ -161,20 +178,24 @@ export default function StatusPreview() {
                               />
                               <section className="flex flex-col items-start justify-center h-full text-white">
                                 <p className="font-semibold text-[14px]">
-                                  {user?.userId === creatorId ? "Status Anda" : data.alias.alias}
+                                  {user?.userId === creatorId
+                                    ? "Status Anda"
+                                    : data.alias.alias}
                                 </p>
                                 <p className="text-sm">
                                   {generateDateText2({
-                                    date: new Date(currentStatus?.createdAt || new Date()),
+                                    date: new Date(
+                                      currentStatus?.createdAt || new Date()
+                                    ),
                                   })}
                                   {", "}
                                   <span className="bg-transparent backdrop-blur px-2 rounded-md">
-                                    {new Date(currentStatus?.createdAt || new Date()).toLocaleTimeString("id-ID",
-                                      {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                      }
-                                    )}
+                                    {new Date(
+                                      currentStatus?.createdAt || new Date()
+                                    ).toLocaleTimeString("id-ID", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
                                   </span>
                                 </p>
                               </section>

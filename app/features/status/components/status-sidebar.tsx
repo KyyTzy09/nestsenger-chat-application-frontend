@@ -35,7 +35,7 @@ export default function StatusSidebar() {
               createdDate={
                 statusesUserResponse?.data?.statuses[
                   statusesUserResponse?.data?.statuses?.length - 1
-                ]?.createdAt || new Date()
+                ]?.createdAt!
               }
               imageUrl={statusesUserResponse?.data?.alias?.avatar || ""}
             />

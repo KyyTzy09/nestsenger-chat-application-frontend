@@ -36,14 +36,16 @@ export default function StatusCard({
       </StatusRing>
       <section className="flex flex-col items-start justify-center h-full text-white">
         <p className="font-semibold text-[14px]">{userName}</p>
-        <p className="text-sm">
-          {generateDateText2({ date: new Date(createdDate) })}
-          {", "}
-          {new Date(createdDate).toLocaleTimeString("id-ID", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </p>
+        {createdDate && (
+          <p className="text-sm">
+            {generateDateText2({ date: new Date(createdDate) })}
+            {", "}
+            {new Date(createdDate).toLocaleTimeString("id-ID", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+        )}
       </section>
     </main>
   );
