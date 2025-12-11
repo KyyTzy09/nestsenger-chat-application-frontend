@@ -10,20 +10,20 @@ interface IStatusData {
 interface ICreateStatusStore {
     openModal: boolean
     setOpenModal: (open: boolean) => void
-    status: IStatusData[] | null
-    setChat: React.Dispatch<React.SetStateAction<IStatusData[] | null>>
+    statuses: IStatusData[] | null
+    setStatuses: React.Dispatch<React.SetStateAction<IStatusData[] | null>>
     resetState: () => void
 }
 
 const initialState = {
-    status: null,
+    statuses: null,
     openModal: false,
 }
 
 export const useCreateStatusStore = create<ICreateStatusStore>((set) => ({
     openModal: false,
-    status: null,
+    statuses: null,
     setOpenModal: (value: boolean) => set({ openModal: value }),
-    setChat: (status) => set({ status: status as [] }),
+    setStatuses: (statuses) => set({ statuses: statuses as [] }),
     resetState: () => set(initialState)
 }))
