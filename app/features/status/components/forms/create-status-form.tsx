@@ -16,6 +16,7 @@ import { cn } from "~/lib/utils";
 import AlertModal from "shared/components/modals/alert-modal";
 import { useCreateStatusStore } from "../../stores/create-status-store";
 import ChatEmojiPicker from "~/features/chat/components/chat-emoji";
+import { useCreateStatus } from "../../hooks/status-hook";
 
 export default function CreateStatusForm() {
   // Store
@@ -36,6 +37,8 @@ export default function CreateStatusForm() {
     selectedIndex >= 0 && selectedIndex < statusMessages?.length;
 
   // Mutation
+  const { mutate: createStatusMutate, isPending: createStatusLoading } =
+    useCreateStatus(() => resetState());
 
   // Data Mutation
   const filteredStatuses = statuses?.filter(({ fileUrl }) => {
@@ -87,8 +90,14 @@ export default function CreateStatusForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (filteredStatuses && filteredStatuses?.length > 0) {
-      await Promise.all(filteredStatuses?.map((status, i) => {}));
-      resetState();
+      await Promise.all(
+        filteredStatuses?.map((status, i) => {
+          createStatusMutate({
+            file: status.file,
+            message: statusMessages[i].message,
+          });
+        })
+      );
     }
   };
 
@@ -230,7 +239,7 @@ export default function CreateStatusForm() {
                   type="submit"
                   className="flex items-center justify-center w-8 h-8 p-1 bg-transparent hover:bg-gray-600"
                 >
-                  {false ? (
+                  {createStatusLoading ? (
                     <Loader2Icon className="w-full h-full animate-spin" />
                   ) : (
                     <SendIcon className="w-full h-full " />

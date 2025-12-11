@@ -5,6 +5,7 @@ interface IStatusData {
     file: File
     fileUrl: string
     fileType: "image" | "video" | "audio" | "file"
+    message:string
 }
 
 interface ICreateStatusStore {
