@@ -32,10 +32,10 @@ export default function CreateStatusForm() {
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
 
   // Message validation
-  const isValidMessage = selectedIndex >= 0 && selectedIndex < statusMessages?.length;
+  const isValidMessage =
+    selectedIndex >= 0 && selectedIndex < statusMessages?.length;
 
   // Mutation
-
 
   // Data Mutation
   const filteredStatuses = statuses?.filter(({ fileUrl }) => {
