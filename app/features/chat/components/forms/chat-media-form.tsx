@@ -188,19 +188,19 @@ export default function ChatMediaForm() {
               })}
             </section>
             {selectedMedia && (
-              <section className="flex items-center justify-center min-w-[40%] max-w-[90%] max-h-[60vh] overflow-hidden bg-black/20">
+              <section className="relative w-full aspect-video flex items-center justify-center bg-black/20 overflow-hidden">
                 {selectedMedia.fileType === "image" ? (
                   <img
-                    className="w-auto h-auto max-w-full max-h-full object-contain"
-                    src={selectedMedia.fileUrl ?? defaultImage}
-                    alt="default"
+                    src={selectedMedia.fileUrl}
+                    alt={defaultImage}
+                    className="w-full h-full object-contain"
                   />
                 ) : (
                   <video
-                    className="w-auto h-auto max-w-full max-h-full object-contain"
                     src={selectedMedia.fileUrl}
+                    className="w-full h-full object-contain"
                     controls
-                  ></video>
+                  />
                 )}
               </section>
             )}
