@@ -176,7 +176,7 @@ export default function StatusPreview() {
                                 alt="status-profile"
                                 className="w-12 h-12 object-cover rounded-full"
                               />
-                              <section className="flex flex-col items-start justify-center h-full text-white">
+                              <section className="flex flex-col items-start justify-center h-full text-white text-shadow-lg">
                                 <p className="font-semibold text-[14px]">
                                   {user?.userId === creatorId
                                     ? "Status Anda"
