@@ -41,6 +41,9 @@ export default function StatusCard({
     }
   };
 
+  React.useEffect(() => {
+    setStatuses(null);
+  }, [setStatuses]);
   return (
     <main
       onClick={action}
