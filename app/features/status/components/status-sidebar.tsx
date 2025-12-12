@@ -23,6 +23,7 @@ export default function StatusSidebar() {
           <div className="flex items-center justify-start w-full h-full">
             {statusesUserResponse?.data.statuses.length! > 0 ? (
               <StatusCard
+                showTrigger={true}
                 action={() => {
                   setStatus(statusesUserResponse?.data!);
                   setStatusId(
@@ -56,6 +57,7 @@ export default function StatusSidebar() {
               statusesTodayResponse?.data?.map((data, i) => {
                 return (
                   <StatusCard
+                    showTrigger={false}
                     key={i}
                     action={() => {
                       setStatus(data);

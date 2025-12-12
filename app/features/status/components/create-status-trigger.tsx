@@ -21,7 +21,7 @@ export default function CreateStatusTrigger() {
           fileType: GetMediaType(file.name),
         };
       });
-      setStatuses(statusData);
+      setStatuses(statusData as []);
     }
   };
 
