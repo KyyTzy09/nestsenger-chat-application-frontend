@@ -6,6 +6,6 @@ export const ViewerService = {
         return await apiClient<{ data: StatusViewer[] }>({ url: "/viewer/today-user/get", withCredentials: true })
     },
     async updateViewStatus(data: { viewerId: string, statusId: string }) {
-        return await apiClient<{ message: string, data: StatusViewer | null }>({ url: "/viewer/update/patch", data, withCredentials: true })
+        return await apiClient<{ message: string, data: StatusViewer | null }>({ url: "/viewer/update/patch", data, method: "patch", withCredentials: true })
     }
 }

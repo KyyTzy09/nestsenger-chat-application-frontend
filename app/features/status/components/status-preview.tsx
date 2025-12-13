@@ -74,7 +74,7 @@ export default function StatusPreview() {
         updateViewMutation({ statusId: currentStatus.statusId, viewerId });
       }
     }
-  });
+  }, [openPreview, currentStatus]);
 
   // Handle Progress
   const progress = useStatusProgress({
