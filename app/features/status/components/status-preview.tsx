@@ -2,7 +2,9 @@ import {
   ArrowLeftIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  EyeIcon,
   Music2Icon,
+  ViewIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React from "react";
@@ -15,7 +17,10 @@ import { useStatusPreviewStore } from "../stores/status-store";
 import ProgressSection from "./progress-section";
 import { useStatusProgress } from "../hooks/progress-hook";
 import { useGetComponentIndex } from "~/hooks/use-getIndex";
-import { useUpdateViewStatus } from "../hooks/status-viewer-hook";
+import {
+  useGetStatusViewer,
+  useUpdateViewStatus,
+} from "../hooks/status-viewer-hook";
 
 export default function StatusPreview() {
   const { mutate: updateViewMutation } = useUpdateViewStatus();
@@ -49,6 +54,10 @@ export default function StatusPreview() {
     }
   };
 
+  const { data: statusViewerResponse } = useGetStatusViewer(
+    currentStatus?.statusId!
+  );
+  const viewers = statusViewerResponse?.data;
   // Initial Scroll Handle
   React.useEffect(() => {
     if (statusRefs.current) {
@@ -112,7 +121,9 @@ export default function StatusPreview() {
             </Button>
           </section>
           {/* Preview */}
-          <section className="flex items-center justify-between w-full h-[90%] gap-5">
+          <section
+            className={`flex items-center justify-between w-full ${currentStatus?.creatorId === user?.userId ? "h-full" : "h-[90%]"} gap-5`}
+          >
             <Button
               disabled={selectedIndex === 0}
               onClick={() => {
@@ -200,11 +211,19 @@ export default function StatusPreview() {
                             </section>
                           </div>
                         </div>
-                        {message && (
-                          <Label className="absolute max-w-[200px] h-auto max-h-[60px] line-clamp-2 text-center text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm bottom-2">
-                            {message}
-                          </Label>
-                        )}
+                        <section className="absolute flex flex-col items-center justify-center bottom-2 gap-2">
+                          {message && (
+                            <Label className="max-w-[200px] h-auto max-h-[60px] line-clamp-2 text-center text-sm bg-black/30 backdrop-blur text-white p-3 rounded-sm">
+                              {message}
+                            </Label>
+                          )}
+                          {creatorId === user?.userId && (
+                            <Button className="flex items-center justify-center text-center text-sm backdrop-blur text-white p-3 rounded-full hover:bg-black">
+                              <EyeIcon className="w-5 h-5" />
+                              {viewers?.length || 0}
+                            </Button>
+                          )}
+                        </section>
                       </div>
                     </React.Fragment>
                   );
