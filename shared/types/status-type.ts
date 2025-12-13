@@ -19,7 +19,6 @@ export type StatusViewer = {
     viewerId: string
 
     statusId: string
-    friendId: string
 
     isViewed: boolean | false
 

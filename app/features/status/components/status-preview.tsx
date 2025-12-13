@@ -15,8 +15,10 @@ import { useStatusPreviewStore } from "../stores/status-store";
 import ProgressSection from "./progress-section";
 import { useStatusProgress } from "../hooks/progress-hook";
 import { useGetComponentIndex } from "~/hooks/use-getIndex";
+import { useUpdateViewStatus } from "../hooks/status-viewer-hook";
 
 export default function StatusPreview() {
+  const { mutate: updateViewMutation } = useUpdateViewStatus();
   // Refs
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
   const statusRefs = React.useRef<(HTMLDivElement | null)[]>([]);
@@ -61,6 +63,18 @@ export default function StatusPreview() {
       }
     }
   }, []);
+
+  React.useEffect(() => {
+    if (currentStatus) {
+      const viewerId = currentStatus?.viewers?.find(({ friend }) => {
+        return friend.friendId === user?.userId;
+      })?.viewerId;
+
+      if (viewerId) {
+        updateViewMutation({ statusId: currentStatus.statusId, viewerId });
+      }
+    }
+  });
 
   // Handle Progress
   const progress = useStatusProgress({
