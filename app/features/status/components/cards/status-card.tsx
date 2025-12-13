@@ -1,7 +1,7 @@
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { generateDateText2 } from "shared/helpers/generate-date";
-import type { StatusType } from "shared/types/status-type";
+import type { StatusType, StatusViewer } from "shared/types/status-type";
 import StatusRing from "../status-ring";
 import { PlusIcon } from "lucide-react";
 import { Label } from "shared/shadcn/label";
@@ -11,9 +11,10 @@ import { useCreateStatusStore } from "../../stores/create-status-store";
 
 interface StatusCardProps {
   userName: string;
-  createdDate: Date;
   imageUrl: string;
-  statusLength: number;
+  statuses: StatusType[];
+  viewers: StatusViewer[];
+  createdDate: Date;
   showTrigger: boolean;
   action: () => void;
 }
@@ -23,7 +24,8 @@ export default function StatusCard({
   imageUrl,
   createdDate,
   showTrigger,
-  statusLength,
+  statuses,
+  viewers,
   action,
 }: StatusCardProps) {
   const { setStatuses } = useCreateStatusStore();
@@ -50,7 +52,8 @@ export default function StatusCard({
       className="flex items-center justify-start w-full h-16 gap-3 hover:bg-[#45494f] px-5 rounded-md z-10"
     >
       <StatusRing
-        count={statusLength}
+        statuses={statuses}
+        viewers={viewers}
         className="relative flex items-center justify-center w-14 h-14 rounded-full"
       >
         <img

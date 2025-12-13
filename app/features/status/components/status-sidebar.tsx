@@ -7,11 +7,17 @@ import {
 import StatusCard from "./cards/status-card";
 import { useStatusPreviewStore } from "../stores/status-store";
 import CreateStatusTrigger from "./create-status-trigger";
+import { useGetTodayUserViewers } from "../hooks/status-viewer-hook";
 
 export default function StatusSidebar() {
   const { data: statusesTodayResponse } = useGetTodayStatuses();
   const { data: statusesUserResponse } = useGetTodayUserStatuses();
+  const { data: userStatusesViewersResponse } = useGetTodayUserViewers();
+
   const { setStatusId, setOpenPreview, setStatus } = useStatusPreviewStore();
+
+  const statuses = statusesUserResponse?.data?.statuses;
+  const viewers = userStatusesViewersResponse?.data;
 
   return (
     <aside className="relative z-0 flex flex-col w-full h-full bg-[#252525] pt-10 text-white">
@@ -33,7 +39,8 @@ export default function StatusSidebar() {
                   );
                   setOpenPreview(true);
                 }}
-                statusLength={statusesUserResponse?.data?.statuses?.length || 0}
+                statuses={statuses || []}
+                viewers={viewers || []}
                 userName={"Status Anda"}
                 createdDate={
                   statusesUserResponse?.data?.statuses[
@@ -53,10 +60,12 @@ export default function StatusSidebar() {
             Pembaruan Terkini
           </Label>
           <div className="flex flex-col w-full h-full gap-2 px-1">
-            {statusesTodayResponse?.data.length! > 0 ? (
+            {statusesTodayResponse?.data?.length! > 0 ? (
               statusesTodayResponse?.data?.map((data, i) => {
                 return (
                   <StatusCard
+                    statuses={data?.statuses || []}
+                    viewers={viewers || []}
                     showTrigger={false}
                     key={i}
                     action={() => {
@@ -71,7 +80,6 @@ export default function StatusSidebar() {
                       data.statuses[data.statuses.length - 1].createdAt
                     }
                     imageUrl={data.alias.avatar}
-                    statusLength={data.statuses.length}
                   />
                 );
               })

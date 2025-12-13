@@ -1,28 +1,33 @@
 import React from "react";
+import type { StatusType, StatusViewer } from "shared/types/status-type";
+import { IsStatusViewed } from "./logic/isViewed-logic";
 
 interface StatusRingProps {
-  count: number;
+  statuses: StatusType[];
+  viewers: StatusViewer[];
   children: React.ReactNode;
   className: string;
 }
 
 export default function StatusRing({
-  count = 1,
+  statuses,
+  viewers,
   children,
   className,
 }: StatusRingProps) {
-  const gap = count === 1 ? 0 : count <= 20 ? 4 : 3;
-  const step = 360 / count;
+  const gap = statuses?.length === 1 ? 0 : statuses?.length <= 20 ? 4 : 3;
+  const step = 360 / statuses?.length;
 
-  let gradients = [];
+  let gradients: string[] = [];
 
-  for (let i = 0; i < count; i++) {
+  statuses.forEach(({ statusId }, i) => {
     const start = i * step;
     const end = start + step - gap;
+    const color = IsStatusViewed(statusId, viewers) ? '#9CA3AF' : "#3B82F6";
 
-    gradients.push(`#3B82F6 ${start}deg ${end}deg`);
+    gradients.push(`${color} ${start}deg ${end}deg`);
     gradients.push(`transparent ${end}deg ${(i + 1) * step}deg`);
-  }
+  });
 
   const ringStyle = {
     padding: "3px",

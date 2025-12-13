@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { ViewerService } from "../services/status-viewer-service"
 
-export const useGetTodayViewers = () => {
+export const useGetTodayUserViewers = () => {
     return useQuery({
         queryKey: ['viewers-user'],
         queryFn: async () => await ViewerService.getTodayUserViewers(),
