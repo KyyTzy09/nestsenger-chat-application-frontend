@@ -2,6 +2,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ViewerService } from "../services/status-viewer-service"
 import { toast } from "sonner"
 
+export const useGetStatusViewer = (statusId: string) => {
+    return useQuery({
+        queryKey: ['viewers-user', statusId],
+        queryFn: async () => await ViewerService.getStatusViewers(statusId),
+        enabled: !!statusId,
+        staleTime: 2000 * 60 * 60
+    })
+}
+
 export const useGetTodayUserViewers = () => {
     return useQuery({
         queryKey: ['viewers-user'],

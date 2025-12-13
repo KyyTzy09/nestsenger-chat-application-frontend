@@ -2,6 +2,9 @@ import { apiClient } from "shared/helpers/axios"
 import type { StatusViewer } from "shared/types/status-type"
 
 export const ViewerService = {
+    async getStatusViewers(statusId: string) {
+        return await apiClient<{ data: StatusViewer[] }>({ url: `/viewer/${statusId}/status/get`, withCredentials: true })
+    },
     async getTodayUserViewers() {
         return await apiClient<{ data: StatusViewer[] }>({ url: "/viewer/today-user/get", withCredentials: true })
     },

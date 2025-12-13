@@ -27,7 +27,7 @@ export default function StatusRing({
     const end = start + step - gap;
     const color =
       IsStatusViewed(statusId, viewers) || creatorId === user?.userId
-        ? "#9CA3AF"
+        ? "#FFFFFF"
         : "#3B82F6";
 
     gradients.push(`${color} ${start}deg ${end}deg`);
