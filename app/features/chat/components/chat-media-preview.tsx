@@ -16,6 +16,7 @@ import ChatMediaCard from "./cards/chat-media-card";
 import { useUserStore } from "~/features/user/stores/user-store";
 import ChatMenu from "./chat-menu";
 import { Label } from "shared/shadcn/label";
+import { useGetComponentIndex } from "~/hooks/use-getIndex";
 
 export default function ChatMediaPreview() {
   // Refs
@@ -23,7 +24,6 @@ export default function ChatMediaPreview() {
   const mediaRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
   // State
-  const [selectedIndex, setSelectedIndex] = React.useState<number>();
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const [menuPosition, setMenuPosition] = React.useState<{
     x: number;
@@ -36,6 +36,11 @@ export default function ChatMediaPreview() {
   const { roomId } = useParams<{ roomId: string }>() as { roomId: string };
   const { data: nonFileMediaResponse, isPending } = useGetNonFileMedia({
     roomId,
+  });
+
+  const selectedIndex = useGetComponentIndex({
+    cardRefs: mediaRefs,
+    isOpen: openPreview,
   });
 
   // Handler
@@ -67,29 +72,6 @@ export default function ChatMediaPreview() {
     }
   }, [openPreview, chatId]);
 
-  // Get Media Index
-  React.useEffect(() => {
-    if (!mediaRefs.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number(entry.target.getAttribute("data-index"));
-            setSelectedIndex(index);
-          }
-        });
-      },
-      { threshold: 0.8 }
-    );
-
-    mediaRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [openPreview, setSelectedIndex]);
-
-  console.log(user?.userId);
   return (
     <AnimatePresence>
       {openPreview && (

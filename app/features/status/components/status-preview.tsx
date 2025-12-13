@@ -14,6 +14,7 @@ import { defaultImage } from "shared/constants/image-default";
 import { useStatusPreviewStore } from "../stores/status-store";
 import ProgressSection from "./progress-section";
 import { useStatusProgress } from "../hooks/progress-hook";
+import { useGetComponentIndex } from "~/hooks/use-getIndex";
 
 export default function StatusPreview() {
   // Refs
@@ -22,9 +23,14 @@ export default function StatusPreview() {
   const videoRefs = React.useRef<(HTMLVideoElement | null)[]>([]);
 
   // State
-  const [selectedIndex, setSelectedIndex] = React.useState<number>();
   const { user } = useUserStore();
   const { data, statusId, openPreview, resetState } = useStatusPreviewStore();
+
+  // Get Status Index
+  const selectedIndex = useGetComponentIndex({
+    cardRefs: statusRefs,
+    isOpen: openPreview,
+  });
 
   // Handler
   const handleShowMenu = (e: React.MouseEvent) => {
@@ -70,28 +76,6 @@ export default function StatusPreview() {
       }
     },
   });
-
-  //   Get Media Index
-  React.useEffect(() => {
-    if (!statusRefs.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number(entry.target.getAttribute("data-index"));
-            setSelectedIndex(index);
-          }
-        });
-      },
-      { threshold: 0.8 }
-    );
-
-    statusRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [openPreview, setSelectedIndex]);
 
   return (
     <AnimatePresence>
