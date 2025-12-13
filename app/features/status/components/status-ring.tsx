@@ -1,6 +1,7 @@
 import React from "react";
 import type { StatusType, StatusViewer } from "shared/types/status-type";
 import { IsStatusViewed } from "./logic/isViewed-logic";
+import { useUserStore } from "~/features/user/stores/user-store";
 
 interface StatusRingProps {
   statuses: StatusType[];
@@ -15,15 +16,19 @@ export default function StatusRing({
   children,
   className,
 }: StatusRingProps) {
+  const { user } = useUserStore();
   const gap = statuses?.length === 1 ? 0 : statuses?.length <= 20 ? 4 : 3;
   const step = 360 / statuses?.length;
 
   let gradients: string[] = [];
 
-  statuses.forEach(({ statusId }, i) => {
+  statuses.forEach(({ statusId, creatorId }, i) => {
     const start = i * step;
     const end = start + step - gap;
-    const color = IsStatusViewed(statusId, viewers) ? '#9CA3AF' : "#3B82F6";
+    const color =
+      IsStatusViewed(statusId, viewers) || creatorId === user?.userId
+        ? "#9CA3AF"
+        : "#3B82F6";
 
     gradients.push(`${color} ${start}deg ${end}deg`);
     gradients.push(`transparent ${end}deg ${(i + 1) * step}deg`);
