@@ -21,12 +21,21 @@ export default function ViewerPreview({
       {isOpen && (
         <>
           <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onCloseAction}
             className="fixed w-full h-full top-0 z-80"
           />
-          <motion.div className="fixed z-100 flex flex-col w-[300px] max-h-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur bottom-4 left-[40%] p-4 gap-2">
+          <motion.div
+            initial={{ opacity: 0, translateY: 30 }}
+            animate={{ opacity: 1, scale: 1, translateY: 0 }}
+            exit={{ opacity: 0, translateY: 30 }}
+            transition={{ duration: 0.15 }}
+            className="fixed z-100 flex flex-col w-[300px] max-h-[300px] bg-[#252525]/70 text-white rounded-md shadow-lg backdrop-blur bottom-4 left-[40%] p-4 gap-2"
+          >
             <section className="flex items-center justify-start w-full gap-2">
-              <p className="text-gray-200 text-[18px]">
+              <p className="text-gray-200 text-[16px]">
                 Dilihat oleh: {viewers?.length}
               </p>
             </section>
