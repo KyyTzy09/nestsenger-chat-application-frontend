@@ -1,6 +1,6 @@
 import React from "react";
 import type { StatusType, StatusViewer } from "shared/types/status-type";
-import { IsStatusViewed } from "./logic/isViewed-logic";
+import { IsStatusViewed } from "../logic/isViewed-logic";
 import { useUserStore } from "~/features/user/stores/user-store";
 
 interface StatusRingProps {

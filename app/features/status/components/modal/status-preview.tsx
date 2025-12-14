@@ -3,8 +3,6 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EyeIcon,
-  Music2Icon,
-  ViewIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React from "react";
@@ -13,14 +11,15 @@ import { useUserStore } from "~/features/user/stores/user-store";
 import { Label } from "shared/shadcn/label";
 import { generateDateText2 } from "shared/helpers/generate-date";
 import { defaultImage } from "shared/constants/image-default";
-import { useStatusPreviewStore } from "../stores/status-store";
-import ProgressSection from "./progress-section";
-import { useStatusProgress } from "../hooks/progress-hook";
+import { useStatusPreviewStore } from "../../stores/status-store";
+import ProgressSection from "../section/progress-section";
+import { useStatusProgress } from "../../hooks/progress-hook";
 import { useGetComponentIndex } from "~/hooks/use-getIndex";
 import {
   useGetStatusViewer,
   useUpdateViewStatus,
-} from "../hooks/status-viewer-hook";
+} from "../../hooks/status-viewer-hook";
+import ViewerPreview from "./viewer-preview";
 
 export default function StatusPreview() {
   const { mutate: updateViewMutation } = useUpdateViewStatus();
@@ -30,6 +29,7 @@ export default function StatusPreview() {
   const videoRefs = React.useRef<(HTMLVideoElement | null)[]>([]);
 
   // State
+  const [showViewers, setShowViewers] = React.useState<boolean>(false);
   const { user } = useUserStore();
   const { data, statusId, openPreview, resetState } = useStatusPreviewStore();
 
@@ -74,6 +74,7 @@ export default function StatusPreview() {
   }, []);
 
   React.useEffect(() => {
+    setShowViewers(false);
     if (currentStatus) {
       const viewerId = currentStatus?.viewers?.find(({ friend }) => {
         return friend.friendId === user?.userId;
@@ -102,6 +103,11 @@ export default function StatusPreview() {
 
   return (
     <AnimatePresence>
+      <ViewerPreview
+        isOpen={showViewers}
+        viewers={viewers || []}
+        onCloseAction={() => setShowViewers(false)}
+      />
       {openPreview && data && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -158,7 +164,7 @@ export default function StatusPreview() {
                             <img
                               src={mediaUrl}
                               alt="yaya"
-                              className="w-auto h-auto max-h-full object-cover"
+                              className="w-auto h-auto min-h-full object-cover"
                             />
                           ) : selectedIndex === i && mediaType === "video" ? (
                             <video
@@ -218,7 +224,10 @@ export default function StatusPreview() {
                             </Label>
                           )}
                           {creatorId === user?.userId && (
-                            <Button className="flex items-center justify-center text-center text-sm backdrop-blur text-white p-3 rounded-full hover:bg-black">
+                            <Button
+                              onClick={() => setShowViewers(true)}
+                              className="flex items-center justify-center text-center text-sm backdrop-blur text-white p-3 rounded-full hover:bg-black"
+                            >
                               <EyeIcon className="w-5 h-5" />
                               {viewers?.length || 0}
                             </Button>

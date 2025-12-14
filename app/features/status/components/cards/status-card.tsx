@@ -2,7 +2,7 @@ import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { generateDateText2 } from "shared/helpers/generate-date";
 import type { StatusType, StatusViewer } from "shared/types/status-type";
-import StatusRing from "../status-ring";
+import StatusRing from "../section/status-ring";
 import { PlusIcon } from "lucide-react";
 import { Label } from "shared/shadcn/label";
 import { Input } from "shared/shadcn/input";
