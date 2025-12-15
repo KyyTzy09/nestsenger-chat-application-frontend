@@ -18,13 +18,14 @@ import type { MemberType } from "shared/types/member-type";
 import { AnimatePresence, motion } from "motion/react";
 import RoomMediaSection from "../section/room-media-section";
 import type { ChatMediaType } from "shared/types/media-type";
+import type { AliasType } from "shared/types/alias-type";
 
 interface RoomInfoDropDownProps {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
   info: {
     room: RoomType;
-    alias: FriendType | UserType | null;
+    user: AliasType | null;
   };
   member: {
     member: MemberType;

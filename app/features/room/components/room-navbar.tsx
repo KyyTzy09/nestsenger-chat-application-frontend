@@ -1,9 +1,11 @@
+import { CircleIcon } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import React from "react";
 import PreviewImageModal from "shared/components/modals/preview-modal";
 import { defaultImage } from "shared/constants/image-default";
 import { RoomTypeEnum } from "shared/enums/room-type";
 import { Label } from "shared/shadcn/label";
+import type { AliasType } from "shared/types/alias-type";
 import type { FriendType } from "shared/types/friend-type";
 import type { ChatMediaType } from "shared/types/media-type";
 import type { MemberType } from "shared/types/member-type";
@@ -14,7 +16,7 @@ import RoomInfoDropdown from "~/features/room/components/interactions/room-dropd
 interface RoomNavbarProps {
   roomInfo: {
     room: RoomType;
-    alias: FriendType | UserType | null;
+    user: AliasType | null;
   };
   memberInfo: {
     member: MemberType;
@@ -38,10 +40,8 @@ export default function RoomNavbar({
     if (roomInfo?.room?.type === RoomTypeEnum.GROUP) {
       result = roomInfo?.room?.avatar;
     } else {
-      if (roomInfo?.alias && (roomInfo?.alias as FriendType)) {
-        result =
-          (roomInfo?.alias as FriendType)?.friend?.avatar ||
-          (roomInfo?.alias as UserType)?.profile?.avatar;
+      if (roomInfo?.user) {
+        result = roomInfo?.user?.avatar;
       } else {
         result = defaultImage;
       }
@@ -85,9 +85,8 @@ export default function RoomNavbar({
           <div className="w-10 h-10">
             <img
               src={
-                roomInfo?.alias && roomInfo?.room?.type === RoomTypeEnum.PRIVATE
-                  ? (roomInfo?.alias as UserType)?.profile?.avatar ||
-                    (roomInfo?.alias as FriendType)?.friend?.avatar
+                roomInfo?.user && roomInfo?.room?.type === RoomTypeEnum.PRIVATE
+                  ? roomInfo?.user?.avatar
                   : roomInfo?.room?.avatar || defaultImage
               }
               alt="yaya"
@@ -98,13 +97,21 @@ export default function RoomNavbar({
             <Label className="">
               {roomInfo?.room?.type === RoomTypeEnum.GROUP
                 ? roomInfo?.room?.roomName
-                : (roomInfo?.alias && (roomInfo?.alias as UserType)?.email) ||
-                  (roomInfo?.alias as FriendType)?.alias}
+                : roomInfo?.user?.alias}
             </Label>
-            <Label className="text-[10px] text-gray-300 font-normal">
-              Klik untuk info{" "}
-              {roomInfo?.room?.type === RoomTypeEnum.GROUP ? "Grup" : "Kontak"}
-            </Label>
+            {roomInfo?.user && roomInfo?.user?.isOnline ? (
+              <Label className="flex items-center justify-center text-[10px] text-gray-300 font-normal gap-1">
+                <CircleIcon className="fill-blue-500 w-2 h-2 text-blue-500" />{" "}
+                Online
+              </Label>
+            ) : (
+              <Label className="text-[10px] text-gray-300 font-normal">
+                Klik untuk info{" "}
+                {roomInfo?.room?.type === RoomTypeEnum.GROUP
+                  ? "Grup"
+                  : "Kontak"}
+              </Label>
+            )}
           </div>
         </button>
       </nav>

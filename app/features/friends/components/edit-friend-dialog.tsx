@@ -18,7 +18,7 @@ import { useUpdateFriendAlias } from "../hooks/friend-hook";
 import { useParams } from "react-router";
 
 interface EditFriendDialogProps {
-  data: FriendType | UserType | null;
+  data: AliasType | null;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -41,7 +41,7 @@ export default function EditFriendDialog({
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      alias: data ? (data as FriendType)?.alias : "",
+      alias: data ? data.alias : "",
     },
     resolver: zodResolver(updateFriendSchema),
   });
@@ -49,9 +49,7 @@ export default function EditFriendDialog({
   const onSubmit = (state: updateFriendType) => {
     updateAlias({
       alias: state?.alias,
-      friendId: data
-        ? (data as FriendType)?.friendId || (data as UserType)?.userId
-        : "",
+      friendId: data ? data.userId : "",
     });
   };
 
@@ -72,8 +70,7 @@ export default function EditFriendDialog({
               className="flex w-24 h-24 object-cover rounded-full"
               src={
                 data
-                  ? (data as UserType)?.profile?.avatar ||
-                    (data as FriendType)?.friend?.avatar
+                  ? data?.avatar
                   : defaultImage
               }
               alt="profile"
@@ -93,8 +90,7 @@ export default function EditFriendDialog({
               disabled
               value={
                 data
-                  ? (data as UserType)?.email ||
-                    (data as FriendType)?.friend?.user?.email
+                  ? ''
                   : ""
               }
               id="email"

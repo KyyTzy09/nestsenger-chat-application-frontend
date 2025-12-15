@@ -5,13 +5,12 @@ import { Button } from "shared/shadcn/button";
 import { Input } from "shared/shadcn/input";
 import { Separator } from "shared/shadcn/separator";
 import { Textarea } from "shared/shadcn/textarea";
-import type { FriendType } from "shared/types/friend-type";
 import type { RoomType } from "shared/types/room-type";
-import type { UserType } from "shared/types/user-type";
 import { useUpdateRoomDesc, useUpdateRoomName } from "../../hooks/room-hooks";
+import type { AliasType } from "shared/types/alias-type";
 
 interface GroupInfoFormProps {
-  roomData: { room: RoomType; alias: FriendType | UserType | null };
+  roomData: { room: RoomType; user: AliasType | null };
   showImagePreview: React.Dispatch<React.SetStateAction<boolean>>;
   showDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

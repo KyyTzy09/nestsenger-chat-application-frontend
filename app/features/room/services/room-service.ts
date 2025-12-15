@@ -16,7 +16,7 @@ export const RoomService = {
         return await apiClient<{ statusCode: number, data: { room: RoomType, alias: FriendType | UserType | null }[] | [] }>({ url: '/room/user/get', withCredentials: true })
     },
     async getRoomById(data: { roomId: string }) {
-        return await apiClient<{ statusCode: number, data: { room: RoomType, alias: FriendType | UserType | null } }>({ url: `/room/${data.roomId}/get`, withCredentials: true })
+        return await apiClient<{ statusCode: number, data: { room: RoomType, user: AliasType | null} }>({ url: `/room/${data.roomId}/get`, withCredentials: true })
     },
     async createPrivateRoom(data: { userIdB: string }) {
         return await apiClient<{ statusCode: number, data: RoomType }>({ url: "/room/private-room/post", data, withCredentials: true, method: "post" })

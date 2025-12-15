@@ -1,4 +1,4 @@
-import { EditIcon, PencilIcon } from "lucide-react";
+import { CircleIcon, EditIcon, PencilIcon } from "lucide-react";
 import React from "react";
 import AlertModal from "shared/components/modals/alert-modal";
 import { defaultImage } from "shared/constants/image-default";
@@ -11,11 +11,13 @@ import type { UserType } from "shared/types/user-type";
 import { useOutGroup } from "../../hooks/room-hooks";
 import EditFriendDialog from "~/features/friends/components/edit-friend-dialog";
 import GroupInfoForm from "../form/group-info-form";
+import type { AliasType } from "shared/types/alias-type";
+import { Label } from "@radix-ui/react-label";
 
 interface RoomInfoSectionProps {
   data: {
     room: RoomType;
-    alias: FriendType | UserType | null;
+    user: AliasType | null;
   };
   showImagePreviewChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -26,7 +28,7 @@ export default function RoomInfoSection({
 }: RoomInfoSectionProps) {
   const {
     room: { roomId, type: roomType, avatar: roomAvatar, createdAt, roomName },
-    alias,
+    user,
   } = data;
 
   // Out group handle
@@ -45,7 +47,7 @@ export default function RoomInfoSection({
       <EditFriendDialog
         isOpen={editAlias}
         setIsOpen={setEditAlias}
-        data={data?.alias}
+        data={data?.user}
       />
       <section className="relative flex flex-col justify-start w-full h-full gap-4">
         {roomType === RoomTypeEnum.PRIVATE ? (
@@ -62,49 +64,37 @@ export default function RoomInfoSection({
               className="flex w-full items-center justify-center"
             >
               <img
-                src={
-                  alias
-                    ? (alias as UserType)?.profile?.avatar ||
-                      (alias as FriendType)?.friend?.avatar
-                    : defaultImage
-                }
+                src={user ? user?.avatar : defaultImage}
                 alt="profil"
                 className="w-24 h-24 rounded-full"
               />
             </button>
             <div className="flex flex-col items-center justify-center w-full text-white">
               <p className="font-bold text-xl text-center">
-                {alias
-                  ? (alias as UserType)?.email || (alias as FriendType)?.alias
-                  : ""}
+                {user ? user?.alias : ""}
               </p>
-              <p className="text-sm text-center font-sans">
-                ~
-                {alias
-                  ? (alias as UserType)?.profile?.userName ||
-                    (alias as FriendType)?.friend?.userName
-                  : ""}
-              </p>
+              {user && user?.isOnline ? (
+                <Label className="flex items-center justify-center text-sm text-gray-300 font-normal gap-1">
+                  <CircleIcon className="fill-blue-500 w-2 h-2 text-blue-500" />{" "}
+                  Online
+                </Label>
+              ) : (
+                <p className="text-sm text-center font-sans">
+                  ~{user ? user?.userName : ""}
+                </p>
+              )}
             </div>
             <Separator />
             <div className="flex flex-col w-full text-[14px] gap-2">
               <div className="flex flex-col items-start justify-center w-full">
                 <p className="text-gray-300">Info :</p>
                 <p className="text-white break-words">
-                  {alias
-                    ? (alias as UserType)?.profile?.bio ||
-                      (alias as FriendType)?.friend?.bio
-                    : ""}
+                  {user ? user?.bio : ""}
                 </p>
               </div>
               <div className="flex flex-col items-start justify-center w-full">
                 <p className="text-gray-300">Email :</p>
-                <p className="text-white">
-                  {alias
-                    ? (alias as UserType)?.email ||
-                      (alias as FriendType)?.friend?.user?.email
-                    : ""}
-                </p>
+                <p className="text-white">{user ? user.email : ""}</p>
               </div>
             </div>
           </>
