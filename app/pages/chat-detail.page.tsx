@@ -24,6 +24,9 @@ import { useUserStore } from "~/features/user/stores/user-store";
 import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
 import { useGetChatReactionsByRoomId } from "~/features/reaction/hooks/reaction-hook";
 import { useGetReadChatsByRoomId } from "~/features/chat/hooks/readchat-hook";
+import type { RoomType } from "shared/types/room-type";
+import type { UserType } from "shared/types/user-type";
+import type { FriendType } from "shared/types/friend-type";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -31,8 +34,7 @@ interface ChatDetailPageProps {
 
 export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const queryClient = useQueryClient();
-  const { data: roomInfoResponse, isPending: isRoomInfoLoading } =
-    useGetRoomById({ roomId });
+  const { data: roomInfoResponse } = useGetRoomById({ roomId });
   const { data: chatResponse } = useGetChats({ roomId });
   const { data: memberResponse } = useGetRoomMember({ roomId });
   const { data: deletedChatResponse } = useGetDeletedChats({ roomId });
@@ -50,11 +52,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     currentUserId: user?.userId || "",
   };
 
-  // roomData={roomInfoResponse?.data!}
-  //       chatsData={chatResponse?.data as []}
-  //       reactionsData={reactionsResponse?.data as []}
-  //       deletedChatsData={deletedChatResponse?.data as []}
-  //       currentUserId={user?.userId || ""}
+
   React.useEffect(() => {
     const handler = async (newChat: ChatType) => {
       if (newChat.roomId) {
@@ -128,14 +126,12 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   return (
     <div className="relative flex flex-col w-full h-screen max-h-screen bg-chat-pattern bg-black">
       <ChatMediaForm />
-      {!isRoomInfoLoading && (
-        <ChatNavbar
-          currentUserId={user?.userId || ""}
-          roomInfo={roomInfoResponse?.data!}
-          memberInfo={memberResponse?.data as []}
-          media={media?.data as []}
-        />
-      )}
+      <ChatNavbar
+        currentUserId={user?.userId || ""}
+        roomInfo={roomInfoResponse?.data as { room:RoomType, alias: UserType | FriendType }}
+        memberInfo={memberResponse?.data as []}
+        media={media?.data as []}
+      />
       <ChatSection {...params} />
       <section className="flex items-center justify-center w-full bg-[#252525] border border-black transition-all duration-200">
         <ChatForm roomId={roomId} />

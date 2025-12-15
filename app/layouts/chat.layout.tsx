@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import ChatSidebar from "shared/components/sidebar/chat-sidebar";
+import ChatSidebar from "~/features/chat/components/chat-sidebar";
 import type { Route } from "../+types/root";
 import { socket } from "shared/configs/socket";
 

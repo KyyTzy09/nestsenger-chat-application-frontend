@@ -28,25 +28,20 @@ export default function RoomNavbar({
   roomInfo,
   memberInfo,
   currentUserId,
-  media
+  media,
 }: RoomNavbarProps) {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [showPreview, setShowPreview] = React.useState<boolean>(false);
 
-  const {
-    room: { roomName, type, avatar },
-    alias,
-  } = roomInfo;
-
   const previewImageUrl = (): string => {
     let result = "";
-    if (type === RoomTypeEnum.GROUP) {
-      result = avatar;
+    if (roomInfo?.room?.type === RoomTypeEnum.GROUP) {
+      result = roomInfo?.room?.avatar;
     } else {
-      if (alias && (alias as FriendType)) {
+      if (roomInfo?.alias && (roomInfo?.alias as FriendType)) {
         result =
-          (alias as FriendType)?.friend?.avatar ||
-          (alias as UserType)?.profile?.avatar;
+          (roomInfo?.alias as FriendType)?.friend?.avatar ||
+          (roomInfo?.alias as UserType)?.profile?.avatar;
       } else {
         result = defaultImage;
       }
@@ -90,10 +85,10 @@ export default function RoomNavbar({
           <div className="w-10 h-10">
             <img
               src={
-                alias && type === RoomTypeEnum.PRIVATE
-                  ? (alias as UserType)?.profile?.avatar ||
-                    (alias as FriendType)?.friend?.avatar
-                  : avatar || defaultImage
+                roomInfo?.alias && roomInfo?.room?.type === RoomTypeEnum.PRIVATE
+                  ? (roomInfo?.alias as UserType)?.profile?.avatar ||
+                    (roomInfo?.alias as FriendType)?.friend?.avatar
+                  : roomInfo?.room?.avatar || defaultImage
               }
               alt="yaya"
               className="w-full h-full rounded-full group-hover:opacity-75"
@@ -101,13 +96,14 @@ export default function RoomNavbar({
           </div>
           <div className="flex flex-col items-start font-semibold text-white gap-1">
             <Label className="">
-              {type === RoomTypeEnum.GROUP
-                ? roomName
-                : (alias && (alias as UserType)?.email) ||
-                  (alias as FriendType)?.alias}
+              {roomInfo?.room?.type === RoomTypeEnum.GROUP
+                ? roomInfo?.room?.roomName
+                : (roomInfo?.alias && (roomInfo?.alias as UserType)?.email) ||
+                  (roomInfo?.alias as FriendType)?.alias}
             </Label>
             <Label className="text-[10px] text-gray-300 font-normal">
-              Klik untuk info {type === RoomTypeEnum.GROUP ? "Grup" : "Kontak"}
+              Klik untuk info{" "}
+              {roomInfo?.room?.type === RoomTypeEnum.GROUP ? "Grup" : "Kontak"}
             </Label>
           </div>
         </button>

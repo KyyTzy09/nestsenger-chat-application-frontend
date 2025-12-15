@@ -1,6 +1,6 @@
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import ChatSidebar from "shared/components/sidebar/chat-sidebar";
+import ChatSidebar from "~/features/chat/components/chat-sidebar";
 
 export default function ChatPage() {
   return (

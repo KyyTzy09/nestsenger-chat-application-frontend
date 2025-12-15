@@ -30,7 +30,7 @@ interface RoomInfoDropDownProps {
     member: MemberType;
     alias: FriendType | UserType | null;
   }[];
-  media: ChatMediaType[]
+  media: ChatMediaType[];
   currentUserId: string;
   showImagePreviewChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -57,7 +57,7 @@ export default function RoomInfoDropdown({
       onClickEvent: () => setOpenedTab("info"),
     },
     {
-      enable: info.room.type === RoomTypeEnum.GROUP,
+      enable: info?.room?.type === RoomTypeEnum.GROUP,
       Icon: UsersRoundIcon,
       text: "member",
       tab: "member",
@@ -120,7 +120,7 @@ export default function RoomInfoDropdown({
               </div>
             </section>
             <section className="relative w-[70%] h-full bg-[#303030] py-4 px-5 overflow-y-auto">
-              {openedTab === "info" && (
+              {openedTab === "info" && info && (
                 <RoomInfoSection
                   data={info}
                   showImagePreviewChange={showImagePreviewChange}
