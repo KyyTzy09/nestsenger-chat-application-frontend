@@ -9,11 +9,28 @@ import React from "react";
 import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
 import { FaWhatsapp } from "react-icons/fa";
+import { RoomTypeEnum } from "shared/enums/room-type";
 
 export default function ChatSidebar() {
+  // State
+  const [search, setSearch] = React.useState<string>("");
+
+  // Data
   const queryClient = useQueryClient();
   const { data: currentUserRoomResponse } = useGetCurrentUserRoom();
   const { data: userFriendsResponse } = useGetUserFriends();
+
+  const filteredRooms = currentUserRoomResponse?.data?.filter(
+    ({ room: { roomName, type }, user }) => {
+      const keyword = search.toLowerCase();
+      if (type === RoomTypeEnum.PRIVATE) {
+        return (user?.alias ?? "").toLowerCase().includes(keyword);
+      } else if (type === RoomTypeEnum.GROUP) {
+        return (roomName).toLowerCase().includes(keyword);
+      }
+      return false;
+    }
+  );
 
   React.useEffect(() => {
     const handler = (roomId: string) => {
@@ -45,6 +62,7 @@ export default function ChatSidebar() {
         </div>
         <div className="relative flex w-full h-full">
           <Input
+            onChange={(e) => setSearch(e.target.value)}
             className="flex w-full bg-[#404040] border-blue-600 border-b-2 border-t-0 border-x-0 pl-8"
             placeholder="Cari chat atau mulai chat baru"
           />
@@ -55,7 +73,7 @@ export default function ChatSidebar() {
       </section>
       <section className="flex w-full h-[90%] overflow-y-scroll custom-scrollbar px-5">
         {(currentUserRoomResponse?.data?.length as number) > 0 ? (
-          <RoomCard data={currentUserRoomResponse?.data!} />
+          <RoomCard data={filteredRooms as []} />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <FaWhatsapp className="w-16 h-16" />
