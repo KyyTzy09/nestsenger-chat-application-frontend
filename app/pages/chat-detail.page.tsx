@@ -72,10 +72,10 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       }
     };
 
-    socket.on("newMessage", handler);
+    socket.on("chat:new", handler);
 
     return () => {
-      socket.off("newMessage", handler);
+      socket.off("chat:new", handler);
     };
   }, [queryClient]);
 
@@ -105,9 +105,9 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
         refetchType: "all",
       });
     };
-    socket.on("deletedChat", handler);
+    socket.on("chat:delete", handler);
     return () => {
-      socket.off("deletedChat", handler);
+      socket.off("chat:delete", handler);
     };
   }, [queryClient]);
 

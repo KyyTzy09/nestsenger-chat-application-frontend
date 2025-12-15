@@ -8,13 +8,15 @@ import AvatarCropper from "~/features/profile/components/cropper-dialog";
 import ChatMediaPreview from "~/features/chat/components/chat-media-preview";
 import { useSession } from "~/features/auth/hooks/auth-hook";
 import StatusPreview from "~/features/status/components/modal/status-preview";
+import { socket } from "shared/configs/socket";
 
 export async function clientLoader({}: Route.ClientLoaderArgs) {
   const session = await getSession();
   if (!session) {
     throw redirect("/");
   }
-  return session;
+
+  return socket.emit("user:online");
 }
 
 export default function DefaultLayout() {

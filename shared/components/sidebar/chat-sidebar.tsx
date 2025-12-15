@@ -30,9 +30,9 @@ export default function ChatSidebar() {
       }
     };
 
-    socket.on("refreshRoom", handler);
+    socket.on("room:refresh", handler);
     return () => {
-      socket.off("refreshRoom", handler);
+      socket.off("room:refresh", handler);
     };
   }, [queryClient]);
 
