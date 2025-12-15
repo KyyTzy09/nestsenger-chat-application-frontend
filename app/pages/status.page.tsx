@@ -18,6 +18,19 @@ export default function StatusPage() {
     };
   });
 
+  // Handle Viewers Websocket events
+  React.useEffect(() => {
+    const handler = (statusId: string) => {
+      if (statusId)
+        queryClient.invalidateQueries({ queryKey: ["viewers-user", statusId] });
+    };
+
+    socket.on("viewer:update", handler);
+    return () => {
+      socket.off("viewer:update", handler);
+    };
+  });
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">
       <CreateStatusForm />

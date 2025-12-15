@@ -164,7 +164,7 @@ export default function StatusPreview() {
                             <img
                               src={mediaUrl}
                               alt="yaya"
-                              className="w-auto h-auto min-h-full object-cover"
+                              className="w-auto h-full object-cover"
                             />
                           ) : selectedIndex === i && mediaType === "video" ? (
                             <video
