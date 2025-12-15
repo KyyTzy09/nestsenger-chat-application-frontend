@@ -1,8 +1,23 @@
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
+import { socket } from "shared/configs/socket";
 import CreateStatusForm from "~/features/status/components/forms/create-status-form";
 import StatusSidebar from "~/features/status/components/status-sidebar";
 
 export default function StatusPage() {
+  const queryClient = useQueryClient();
+  // Handle Status Websocket events
+  React.useEffect(() => {
+    const handler = () => {
+      queryClient.invalidateQueries({ queryKey: ["status-today"] });
+    };
+
+    socket.on("status:update", handler);
+    return () => {
+      socket.off("status:update", handler);
+    };
+  });
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">
       <CreateStatusForm />
