@@ -28,17 +28,17 @@ export default function RoomLastChatSection({
 }: RoomLastChatSectionProps) {
   const { roomId, roomName, type: roomType } = room;
   const { data: friendResponse } = useGetFriendById({
-    friendId: room.lastChat?.userId,
+    friendId: room?.lastChat?.userId,
   });
   const { data: profileResponse } = useGetProfile();
   const { data: unreadChatsResponse } = useCountRoomUnreadChats({ roomId });
 
   const displayLastChatSender = () => {
     let result = "";
-    if (roomType === RoomTypeEnum.GROUP) {
+    if (room?.lastChat && roomType === RoomTypeEnum.GROUP) {
       if (friendResponse?.data) {
-        result = friendResponse.data.alias + ": ";
-      } else if (profileResponse?.data.userId === room?.lastChat?.userId) {
+        result = friendResponse.data?.alias + ": ";
+      } else if (profileResponse?.data?.userId === room?.lastChat?.userId) {
         result = "Anda :";
       } else {
         result = room?.lastChat?.sender?.email
@@ -59,7 +59,7 @@ export default function RoomLastChatSection({
         </p>
         <p className="text-[12px] font-normal">
           {room?.lastChat
-            ? generateTimeText({ date: new Date(room.lastChat.createdAt) })
+            ? generateTimeText({ date: new Date(room?.lastChat?.createdAt) })
             : ""}
         </p>
       </div>
@@ -82,7 +82,7 @@ export default function RoomLastChatSection({
             <BanIcon className="w-3 h-3" />
           )}
           <span className="max-w-[80%] gap-1 line-clamp-1">
-            {profileResponse?.data.userId === room.lastChat.userId &&
+            {profileResponse?.data?.userId === room?.lastChat?.userId &&
             room?.lastChat?.message === "Pesan ini telah dihapus"
               ? "Anda menghapus pesan ini"
               : !room?.lastChat?.message && room?.lastChat?.media

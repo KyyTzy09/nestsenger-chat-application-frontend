@@ -92,9 +92,9 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
         });
       }
     };
-    socket.on("updateReaction", handler);
+    socket.on("reaction:update", handler);
     return () => {
-      socket.off("updateReaction", handler);
+      socket.off("reaction:update", handler);
     };
   }, [queryClient]);
 
@@ -119,9 +119,9 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       });
     };
 
-    socket.on("readChatUpdate", handler);
+    socket.on("readchat:update", handler);
     return () => {
-      socket.off("readChatUpdate", handler);
+      socket.off("readchat:update", handler);
     };
   }, [queryClient]);
 
