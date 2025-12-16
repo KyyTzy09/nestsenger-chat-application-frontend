@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { FaWhatsapp } from "react-icons/fa";
 import { RoomTypeEnum } from "shared/enums/room-type";
 
+
 export default function ChatSidebar() {
   // State
   const [search, setSearch] = React.useState<string>("");
@@ -26,7 +27,7 @@ export default function ChatSidebar() {
       if (type === RoomTypeEnum.PRIVATE) {
         return (user?.alias ?? "").toLowerCase().includes(keyword);
       } else if (type === RoomTypeEnum.GROUP) {
-        return (roomName).toLowerCase().includes(keyword);
+        return roomName.toLowerCase().includes(keyword);
       }
       return false;
     }
@@ -43,6 +44,10 @@ export default function ChatSidebar() {
         queryClient.invalidateQueries({
           queryKey: ["room", roomId],
           type: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["unread-chat", roomId],
+          refetchType: "all",
         });
       }
     };

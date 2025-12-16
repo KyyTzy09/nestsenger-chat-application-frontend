@@ -1,6 +1,3 @@
-import { RoomTypeEnum } from "shared/enums/room-type";
-import PrivateChatCard from "~/features/chat/components/cards/private-chat-card";
-import GroupChatCard from "~/features/chat/components/cards/group-chat-card";
 import ChatForm from "~/features/chat/components/forms/chat-form";
 import ChatNavbar from "~/features/room/components/room-navbar";
 import {
@@ -17,16 +14,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { ChatType } from "shared/types/chat-type";
 import type { ReactionType } from "shared/types/reaction-type";
 import { ReadChatService } from "~/features/chat/services/readchat-service";
-import { toast } from "sonner";
 import ChatSection from "~/features/chat/components/sections/chat-section";
 import ChatMediaForm from "~/features/chat/components/forms/chat-media-form";
 import { useUserStore } from "~/features/user/stores/user-store";
 import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
 import { useGetChatReactionsByRoomId } from "~/features/reaction/hooks/reaction-hook";
 import { useGetReadChatsByRoomId } from "~/features/chat/hooks/readchat-hook";
-import type { RoomType } from "shared/types/room-type";
-import type { UserType } from "shared/types/user-type";
-import type { FriendType } from "shared/types/friend-type";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -88,7 +81,6 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     };
 
     socket.on("chat:new", handler);
-
     return () => {
       socket.off("chat:new", handler);
     };
@@ -107,6 +99,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
         });
       }
     };
+
     socket.on("reaction:update", handler);
     return () => {
       socket.off("reaction:update", handler);
@@ -120,6 +113,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
         refetchType: "all",
       });
     };
+
     socket.on("chat:delete", handler);
     return () => {
       socket.off("chat:delete", handler);
@@ -130,6 +124,10 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     const handler = () => {
       queryClient.invalidateQueries({
         queryKey: ["read-chats-room", roomId],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["unread-chat", roomId],
         refetchType: "all",
       });
     };
