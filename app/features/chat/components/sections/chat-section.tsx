@@ -17,7 +17,7 @@ interface ChatSectionProps {
   reactionsData: { reaction: ReactionType; user: AliasType }[];
   readerChatsData: { readChat: ReadChatType; alias: AliasType }[];
   deletedChatsData: DeletedChatType[];
-  roomData: { room: RoomType; alias: FriendType | UserType | null };
+  roomData: { room: RoomType; user: AliasType | null };
   currentUserId: string;
 }
 

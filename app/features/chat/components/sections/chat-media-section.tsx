@@ -21,7 +21,7 @@ export default function ChatMediaSection({
   return (
     <section
       onClick={handleClick}
-      className="relative w-full max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40"
+      className="relative w-full max-h-[300px] sm:max-h-[400px] rounded-sm overflow-hidden bg-gray-500/40"
     >
       {mediaType === "image" ? (
         <img src={mediaUrl} alt="yaya" className="w-full h-auto object-cover" />

@@ -33,7 +33,10 @@ interface ChatDetailPageProps {
 }
 
 export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
+  // Instance
   const queryClient = useQueryClient();
+
+  // Query
   const { data: roomInfoResponse } = useGetRoomById({ roomId });
   const { data: chatResponse } = useGetChats({ roomId });
   const { data: memberResponse } = useGetRoomMember({ roomId });
@@ -41,8 +44,11 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: media } = useGetNonFileMedia({ roomId });
   const { data: reactionsResponse } = useGetChatReactionsByRoomId({ roomId });
   const { data: readChatsResponse } = useGetReadChatsByRoomId({ roomId });
+
+  // Store
   const { user } = useUserStore();
 
+  // Params
   const params = {
     roomData: roomInfoResponse?.data!,
     chatsData: chatResponse?.data as [],
@@ -52,6 +58,17 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     currentUserId: user?.userId || "",
   };
 
+  // Handler Event
+  React.useEffect(() => {
+    const handler = async () => {
+      queryClient.invalidateQueries({ queryKey: ["room", roomId] });
+    };
+
+    socket.on(`room:refresh-${roomId}`, handler);
+    return () => {
+      socket.off(`room:refresh-${roomId}`, handler);
+    };
+  });
 
   React.useEffect(() => {
     const handler = async (newChat: ChatType) => {
@@ -128,7 +145,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       <ChatMediaForm />
       <ChatNavbar
         currentUserId={user?.userId || ""}
-        roomInfo={roomInfoResponse?.data as { room:RoomType, alias: UserType | FriendType }}
+        roomInfo={roomInfoResponse?.data!}
         memberInfo={memberResponse?.data as []}
         media={media?.data as []}
       />
