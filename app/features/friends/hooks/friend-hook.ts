@@ -32,6 +32,7 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
 
             queryClient.invalidateQueries({ queryKey: ['friend'], type: "all" })
             queryClient.invalidateQueries({ queryKey: ['user-room'], type: "all" })
+            queryClient.invalidateQueries({ queryKey: ['current-room'], type: "all" })
             queryClient.invalidateQueries({ queryKey: ['room'], type: "all" })
             queryClient.refetchQueries({ queryKey: ['non-friends'], type: "all" })
         },
@@ -41,7 +42,7 @@ export const useAddFriendMutation = (setIsOpen: (value: boolean) => void) => {
     })
 }
 
-export const useUpdateFriendAlias = (onSuccess: () => void, roomId:string) => {
+export const useUpdateFriendAlias = (onSuccess: () => void, roomId: string) => {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 
