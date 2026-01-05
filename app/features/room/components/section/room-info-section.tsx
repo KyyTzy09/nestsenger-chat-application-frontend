@@ -71,7 +71,7 @@ export default function RoomInfoSection({
             </button>
             <div className="flex flex-col items-center justify-center w-full text-white">
               <p className="font-bold text-xl text-center">
-                {user ? user?.alias : ""}
+                {user ? (user?.alias ? user.alias : user.email) : ""}
               </p>
               {user && user?.isOnline ? (
                 <Label className="flex items-center justify-center text-sm text-gray-300 font-normal gap-1">

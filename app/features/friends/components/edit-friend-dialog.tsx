@@ -12,8 +12,6 @@ import { Dialog, DialogContent, DialogTitle } from "shared/shadcn/dialog";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
 import type { AliasType } from "shared/types/alias-type";
-import type { FriendType } from "shared/types/friend-type";
-import type { UserType } from "shared/types/user-type";
 import { useUpdateFriendAlias } from "../hooks/friend-hook";
 import { useParams } from "react-router";
 
@@ -60,7 +58,9 @@ export default function EditFriendDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="flex flex-col w-[300px] h-auto p-3 gap-5 text-white bg-[#252525]">
-        <DialogTitle>Perbarui Teman</DialogTitle>
+        <DialogTitle>
+          {data ? (data.alias ? "Perbarui Teman" : "Tambahkan Teman") : ""}
+        </DialogTitle>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full h-full gap-2"
@@ -68,11 +68,7 @@ export default function EditFriendDialog({
           <div className="flex items-center justify-center w-full">
             <img
               className="flex w-24 h-24 object-cover rounded-full"
-              src={
-                data
-                  ? data?.avatar
-                  : defaultImage
-              }
+              src={data ? data?.avatar : defaultImage}
               alt="profile"
             />
           </div>
@@ -88,11 +84,7 @@ export default function EditFriendDialog({
             <Label htmlFor="email">Email</Label>
             <Input
               disabled
-              value={
-                data
-                  ? ''
-                  : ""
-              }
+              value={data ? data.email : ""}
               id="email"
               className="flex w-full h-10 p-2"
             />

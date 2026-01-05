@@ -97,7 +97,11 @@ export default function RoomNavbar({
             <Label className="">
               {roomInfo?.room?.type === RoomTypeEnum.GROUP
                 ? roomInfo?.room?.roomName
-                : roomInfo?.user?.alias}
+                : roomInfo?.user
+                  ? roomInfo.user.alias
+                    ? roomInfo.user.alias
+                    : roomInfo.user.email
+                  : ""}
             </Label>
             {roomInfo?.user && roomInfo?.user?.isOnline ? (
               <Label className="flex items-center justify-center text-[10px] text-gray-300 font-normal gap-1">
