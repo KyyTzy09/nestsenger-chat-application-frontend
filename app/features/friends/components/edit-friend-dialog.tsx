@@ -12,7 +12,10 @@ import { Dialog, DialogContent, DialogTitle } from "shared/shadcn/dialog";
 import { Input } from "shared/shadcn/input";
 import { Label } from "shared/shadcn/label";
 import type { AliasType } from "shared/types/alias-type";
-import { useUpdateFriendAlias } from "../hooks/friend-hook";
+import {
+  useAddFriendMutation,
+  useUpdateFriendAlias,
+} from "../hooks/friend-hook";
 import { useParams } from "react-router";
 
 interface EditFriendDialogProps {
@@ -27,10 +30,12 @@ export default function EditFriendDialog({
   setIsOpen,
 }: EditFriendDialogProps) {
   const { roomId } = useParams<{ roomId: string }>();
-  const { mutate: updateAlias, isPending } = useUpdateFriendAlias(
-    () => setIsOpen(false),
-    roomId!
-  );
+  const { mutate: updateAlias, isPending: updateFriendLoading } =
+    useUpdateFriendAlias(() => setIsOpen(false), roomId!);
+  const { mutate: addFriend, isPending: addFriendLoading } =
+    useAddFriendMutation(setIsOpen);
+  const isLoading = data?.alias ? updateFriendLoading : addFriendLoading;
+
   const {
     register,
     resetField,
@@ -45,10 +50,14 @@ export default function EditFriendDialog({
   });
 
   const onSubmit = (state: updateFriendType) => {
-    updateAlias({
-      alias: state?.alias,
-      friendId: data ? data.userId : "",
-    });
+    if (data?.alias) {
+      updateAlias({
+        alias: state?.alias,
+        friendId: data ? data.userId : "",
+      });
+    } else {
+      addFriend({ alias: state.alias, friendId: data?.userId || "" });
+    }
   };
 
   React.useEffect(() => {
@@ -99,7 +108,7 @@ export default function EditFriendDialog({
               className="flex items-center justify-center w-full"
               type="submit"
             >
-              {isPending ? (
+              {isLoading ? (
                 <LoaderIcon className="w-5 h-5 animate-spin" />
               ) : (
                 "Simpan"
