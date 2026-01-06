@@ -28,14 +28,15 @@ export default function MemberCard({ data, currentUserId }: MemberCardData) {
 
   return (
     <div className="flex flex-col w-full h-full gap-1">
-      {data?.map(({ member: { userId }, alias }) => {
+      {data?.map(({ member: { userId, role }, alias }) => {
         return (
           <button
             disabled={currentUserId === userId}
             onClick={() => getOrCreateRoomMutation({ userIdB: userId })}
             key={userId}
-            className={`flex items-center justify-start w-full h-full max-h-[60px] rounded-sm p-2 gap-2 hover:bg-[#45494f]`}
+            className={`relative flex items-center justify-start w-full h-full max-h-[60px] rounded-sm p-2 gap-2 hover:bg-[#45494f]`}
           >
+            <p className="absolute right-1 top-1 text-[10px] px-2 bg-black/30 backdrop-blur rounded-sm">{role.toLowerCase()}</p>
             <section className="w-[58px] h-full">
               <img
                 src={

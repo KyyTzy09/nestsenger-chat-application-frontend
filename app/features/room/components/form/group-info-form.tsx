@@ -161,7 +161,7 @@ export default function GroupInfoForm({
             <p className="text-gray-300">Deskripsi :</p>
             <div className="flex flex-col items-end justify-end w-full gap-2">
               <div className="flex items-center justify-between w-full text-white gap-2">
-                {showInput && showInput === "desc" ? (
+                {showInput && isAdmin && showInput === "desc" ? (
                   <Textarea
                     ref={inputRefDesc}
                     id="bio"
@@ -173,7 +173,7 @@ export default function GroupInfoForm({
                 ) : (
                   <p className="text-white">{description}</p>
                 )}
-                {showInput !== "desc" && isAdmin && (
+                {showInput !== "desc" && (
                   <Button
                     onClick={() => {
                       setShowInput("desc");
