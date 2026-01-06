@@ -13,7 +13,6 @@ export const useGetMemberRole = (roomId: string) => {
     return useQuery({
         queryKey: ['member-role', roomId],
         queryFn: async () => await MemberService.getMemberRole({ roomId }),
-        enabled: !!roomId,
         staleTime: Infinity
     })
 }

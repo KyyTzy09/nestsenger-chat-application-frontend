@@ -8,6 +8,8 @@ import { Textarea } from "shared/shadcn/textarea";
 import type { RoomType } from "shared/types/room-type";
 import { useUpdateRoomDesc, useUpdateRoomName } from "../../hooks/room-hooks";
 import type { AliasType } from "shared/types/alias-type";
+import { useGetMemberRole } from "~/features/member/hooks/member-hook";
+import { MemberRole } from "shared/enums/member-role";
 
 interface GroupInfoFormProps {
   roomData: { room: RoomType; user: AliasType | null };
@@ -30,6 +32,11 @@ export default function GroupInfoForm({
   const [showInput, setShowInput] = React.useState<"name" | "desc" | null>(
     null
   );
+
+  // Check Role
+  const { data: roleResponse } = useGetMemberRole(roomId);
+  const isAdmin =
+    roleResponse?.data && roleResponse.data?.role === MemberRole.ADMIN;
 
   // Form Handle
   const [name, setName] = React.useState<string>(roomName);
@@ -107,7 +114,7 @@ export default function GroupInfoForm({
             ) : (
               <p className="font-bold text-xl text-center">{roomName}</p>
             )}
-            {showInput !== "name" && (
+            {showInput !== "name" && isAdmin && (
               <Button
                 onClick={() => {
                   setShowInput("name");
@@ -166,7 +173,7 @@ export default function GroupInfoForm({
                 ) : (
                   <p className="text-white">{description}</p>
                 )}
-                {showInput !== "desc" && (
+                {showInput !== "desc" && isAdmin && (
                   <Button
                     onClick={() => {
                       setShowInput("desc");
