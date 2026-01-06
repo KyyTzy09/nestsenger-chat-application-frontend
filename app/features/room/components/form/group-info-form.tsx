@@ -1,4 +1,4 @@
-import { LoaderIcon, PencilIcon } from "lucide-react";
+import { LoaderIcon, PencilIcon, UserPlus2Icon } from "lucide-react";
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
 import { Button } from "shared/shadcn/button";
@@ -147,6 +147,14 @@ export default function GroupInfoForm({
             </button>
           )}
         </div>
+        {/* Add Member Trigger Button */}
+        <Button
+          type="button"
+          className="flex flex-col items-center justify-center w-auto h-auto p-2 gap-1 bg-[#252525]"
+        >
+          <UserPlus2Icon className="w-5 h-5" />
+          Tambah
+        </Button>
         <Separator />
         <div className="flex flex-col w-full text-[14px] gap-2">
           <section className="flex flex-col items-start justify-center w-full">
