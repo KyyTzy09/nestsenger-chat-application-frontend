@@ -92,6 +92,7 @@ export const useOutGroup = () => {
         onSuccess: () => {
             toast.success("Berhasil keluar dari grup")
             queryClient.invalidateQueries({ queryKey: ['room'], refetchType: "all" })
+            queryClient.invalidateQueries({ queryKey: ['current-room'], refetchType: "all" })
             navigate('/chat')
         },
         onError: (err) => {
