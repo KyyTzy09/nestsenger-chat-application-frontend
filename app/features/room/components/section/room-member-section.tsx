@@ -1,4 +1,5 @@
 import React from "react";
+import { MemberRole } from "shared/enums/member-role";
 import { Separator } from "shared/shadcn/separator";
 import type { FriendType } from "shared/types/friend-type";
 import type { MemberType } from "shared/types/member-type";
@@ -18,7 +19,7 @@ export default function RoomMemberSection({
   currentUserId,
 }: RoomMemberSectionProps) {
   const sortedMemberData = data?.sort((a, b) => {
-    const isA = a?.member?.userId === currentUserId;
+    const isA = a?.member?.role === MemberRole.ADMIN;
     const isB = b?.member?.userId === currentUserId;
     if (isA && !isB) return -1;
     if (!isA && isB) return 1;

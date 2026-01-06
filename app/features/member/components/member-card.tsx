@@ -1,5 +1,6 @@
 import React from "react";
 import { defaultImage } from "shared/constants/image-default";
+import { MemberRole } from "shared/enums/member-role";
 import type { FriendType } from "shared/types/friend-type";
 import type { MemberType } from "shared/types/member-type";
 import type { UserType } from "shared/types/user-type";
@@ -36,7 +37,11 @@ export default function MemberCard({ data, currentUserId }: MemberCardData) {
             key={userId}
             className={`relative flex items-center justify-start w-full h-full max-h-[60px] rounded-sm p-2 gap-2 hover:bg-[#45494f]`}
           >
-            <p className="absolute right-1 top-1 text-[10px] px-2 bg-black/30 backdrop-blur rounded-sm">{role.toLowerCase()}</p>
+            {role === MemberRole.ADMIN && (
+              <p className="absolute right-1 top-1 text-[10px] px-2 bg-black/30 backdrop-blur rounded-sm">
+                {role.toLowerCase()}
+              </p>
+            )}
             <section className="w-[58px] h-full">
               <img
                 src={
