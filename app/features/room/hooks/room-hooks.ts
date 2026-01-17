@@ -83,6 +83,14 @@ export const useGetRoomById = (data: { roomId: string }) => {
     })
 }
 
+export const useGetFriendsWithJoinStatus = (data: { roomId: string }) => {
+    return useQuery({
+        queryKey: ['room-friend', data.roomId],
+        queryFn: async () => await RoomService.getFriendWithJoinStatus(data),
+        staleTime: 1000 * 60 * 2
+    })
+}
+
 export const useOutGroup = () => {
     const navigate = useNavigate()
     const queryClient = useQueryClient()

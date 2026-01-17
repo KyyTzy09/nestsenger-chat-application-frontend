@@ -19,11 +19,14 @@ export default function RoomMemberSection({
   currentUserId,
 }: RoomMemberSectionProps) {
   const sortedMemberData = data?.sort((a, b) => {
-    const isA = a?.member?.role === MemberRole.ADMIN;
-    const isB = b?.member?.userId === currentUserId;
-    if (isA && !isB) return -1;
-    if (!isA && isB) return 1;
-    return 0;
+    const getPriority = (
+      item: { member: MemberType, alias: FriendType | UserType | null }) => {
+      if (item?.member?.userId === currentUserId) return 0;
+      if (item?.member?.role === MemberRole.ADMIN) return 1;
+      return 2;
+    };
+
+    return getPriority(a) - getPriority(b);
   });
 
   return (

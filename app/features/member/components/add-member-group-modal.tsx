@@ -5,6 +5,8 @@ import PickMemberSection from "./pick-member-section";
 import { Button } from "shared/shadcn/button";
 import { XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { useGetFriendsWithJoinStatus } from "~/features/room/hooks/room-hooks";
+import { useParams } from "react-router";
 
 interface AddMemberGroupProps {
   onOpen: boolean;
@@ -15,7 +17,10 @@ export default function AddMemberGroup({
   onOpen,
   onClose,
 }: AddMemberGroupProps) {
-  const { data: userFriendsResponse } = useGetUserFriends();
+  const roomId = useParams<{ roomId: string }>().roomId;
+  const { data: userFriendsResponse } = useGetFriendsWithJoinStatus({
+    roomId: roomId || "",
+  });
 
   return (
     <AnimatePresence>

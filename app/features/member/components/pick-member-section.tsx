@@ -10,13 +10,14 @@ import { useParams } from "react-router";
 import AlertModal from "shared/components/modals/alert-modal";
 
 interface PickMemberSectionProps {
-  data: FriendType[];
+  data: { user: FriendType; isJoined: boolean }[];
 }
 
 export default function PickMemberSection({ data }: PickMemberSectionProps) {
   const roomId = useParams<{ roomId: string }>().roomId;
   const [search, setSearch] = React.useState<string>("");
-  const [filteredFriends, setFilteredFriends] = React.useState<FriendType[]>();
+  const [filteredFriends, setFilteredFriends] =
+    React.useState<{ user: FriendType; isJoined: boolean }[]>();
   const [selectedUsers, setSelectedUsers] = React.useState<
     { userId: string; alias: string; avatar: string }[] | []
   >([]);
@@ -56,7 +57,7 @@ export default function PickMemberSection({ data }: PickMemberSectionProps) {
   // Search Friend
   React.useEffect(() => {
     const keyword = search.toLowerCase();
-    const filtered = data?.filter(({ alias }) => {
+    const filtered = data?.filter(({ user: { alias } }) => {
       return alias?.toLowerCase().includes(keyword);
     });
     setFilteredFriends(filtered);
@@ -120,12 +121,22 @@ export default function PickMemberSection({ data }: PickMemberSectionProps) {
           </p>
           <div className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll custom-scrollbar gap-1">
             {filteredFriends?.map(
-              ({ id, alias, friend: { userId: friendId, avatar, bio } }, i) => {
+              (
+                {
+                  user: {
+                    id,
+                    alias,
+                    friend: { userId: friendId, avatar, bio },
+                  },
+                  isJoined,
+                },
+                i
+              ) => {
                 return (
                   <Label
                     htmlFor={`cb-${i}`}
                     key={id}
-                    className={`flex items-center justify-between w-full h-full max-h-[60px] rounded-sm p-2 gap-2 hover:bg-[#45494f]`}
+                    className={`flex items-center justify-between w-full h-full max-h-[60px] rounded-sm p-2 gap-2 ${isJoined ? "bg-[#45494f]" : "bg-transparent"} hover:bg-[#45494f]`}
                   >
                     <section className="w-[55px] h-full">
                       <img
@@ -137,14 +148,24 @@ export default function PickMemberSection({ data }: PickMemberSectionProps) {
                     <section className="flex flex-col items-center justify-start w-[90%] h-full p-1">
                       <div className="flex flex-col items-start justify-start w-full text-sm text-white">
                         <p className="text-start line-clamp-1">{alias}</p>
+                        <p className="text-start line-clamp-1 font-normal text-[12px]">
+                          {!isJoined ? (
+                            bio
+                          ) : (
+                            <span className="italic text-gray-400">
+                              Sudah ditambahkan ke grup
+                            </span>
+                          )}
+                        </p>
                       </div>
                     </section>
                     <Input
                       id={`cb-${i}`}
-                      checked={isSelectedUserId(friendId)}
-                      onChange={() =>
-                        handleSelectUsers(friendId, alias, avatar)
-                      }
+                      checked={isJoined || isSelectedUserId(friendId)}
+                      onChange={() => {
+                        if (!isJoined)
+                          handleSelectUsers(friendId, alias, avatar);
+                      }}
                       type="checkbox"
                       className="w-5 h-5"
                     />

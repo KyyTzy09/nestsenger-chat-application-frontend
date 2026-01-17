@@ -150,14 +150,16 @@ export default function GroupInfoForm({
           )}
         </div>
         {/* Add Member Trigger Button */}
-        <Button
-          onClick={() => showAddMemberModal(true)}
-          type="button"
-          className="flex flex-col items-center justify-center w-auto h-auto p-2 gap-1 bg-[#252525]"
-        >
-          <UserPlus2Icon className="w-5 h-5" />
-          Tambah
-        </Button>
+        {isAdmin && (
+          <Button
+            onClick={() => showAddMemberModal(true)}
+            type="button"
+            className="flex flex-col items-center justify-center w-auto h-auto p-2 gap-1 bg-[#252525]"
+          >
+            <UserPlus2Icon className="w-5 h-5" />
+            Tambah
+          </Button>
+        )}
         <Separator />
         <div className="flex flex-col w-full text-[14px] gap-2">
           <section className="flex flex-col items-start justify-center w-full">
