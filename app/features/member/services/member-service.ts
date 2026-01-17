@@ -11,6 +11,6 @@ export const MemberService = {
         return await apiClient<{ data: MemberType }>({ url: `/member/${data.roomId}/room/role/get`, withCredentials: true })
     },
     async addGroupMembers(data: { roomId: string, userIds: string[] }) {
-        return await apiClient<{ message: string, }>({ url: `/member/${data.roomId}/add-group/post`, data, withCredentials: true })
+        return await apiClient<{ message: string, }>({ url: `/member/${data.roomId}/add-group/post`, data, method: "post", withCredentials: true })
     }
 }

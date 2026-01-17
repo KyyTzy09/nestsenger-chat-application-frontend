@@ -11,7 +11,7 @@ import EditFriendDialog from "~/features/friends/components/edit-friend-dialog";
 import GroupInfoForm from "../form/group-info-form";
 import type { AliasType } from "shared/types/alias-type";
 import { Label } from "@radix-ui/react-label";
-import AddMemberGroup from "~/features/member/components/add-member-group";
+import AddMemberGroup from "~/features/member/components/add-member-group-modal";
 
 interface RoomInfoSectionProps {
   data: {
