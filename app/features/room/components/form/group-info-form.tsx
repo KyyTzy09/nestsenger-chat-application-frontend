@@ -14,12 +14,14 @@ import { MemberRole } from "shared/enums/member-role";
 interface GroupInfoFormProps {
   roomData: { room: RoomType; user: AliasType | null };
   showImagePreview: React.Dispatch<React.SetStateAction<boolean>>;
+  showAddMemberModal: React.Dispatch<React.SetStateAction<boolean>>;
   showDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function GroupInfoForm({
   roomData,
   showImagePreview,
+  showAddMemberModal,
   showDeleteModal,
 }: GroupInfoFormProps) {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
@@ -149,6 +151,7 @@ export default function GroupInfoForm({
         </div>
         {/* Add Member Trigger Button */}
         <Button
+          onClick={() => showAddMemberModal(true)}
           type="button"
           className="flex flex-col items-center justify-center w-auto h-auto p-2 gap-1 bg-[#252525]"
         >
@@ -197,8 +200,6 @@ export default function GroupInfoForm({
                 <button
                   onClick={() => updateDescMutation(desc)}
                   type="button"
-                  // disabled={patchNamePending}
-                  // onClick={() => onPatchName({ userName: name })}
                   className="group flex items-center justify-center w-1/5 text-[13px] bg-blue-600 text-white p-1 px-4 rounded-sm hover:bg-blue-700"
                 >
                   {updateDescLoading ? (

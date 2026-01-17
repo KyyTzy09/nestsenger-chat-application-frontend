@@ -11,6 +11,7 @@ import EditFriendDialog from "~/features/friends/components/edit-friend-dialog";
 import GroupInfoForm from "../form/group-info-form";
 import type { AliasType } from "shared/types/alias-type";
 import { Label } from "@radix-ui/react-label";
+import AddMemberGroup from "~/features/member/components/add-member-group";
 
 interface RoomInfoSectionProps {
   data: {
@@ -32,6 +33,8 @@ export default function RoomInfoSection({
   // Out group handle
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [editAlias, setEditAlias] = React.useState<boolean>(false);
+  const [addMember, setAddMember] = React.useState<boolean>(false);
+
   const { mutate: outGroupMutate, isPending: onOutGroupLoad } = useOutGroup();
   return (
     <>
@@ -41,6 +44,10 @@ export default function RoomInfoSection({
         onOpen={showModal}
         setOnOpen={setShowModal}
         onConfirm={() => outGroupMutate({ roomId: roomId })}
+      />
+      <AddMemberGroup
+        onOpen={addMember}
+        onClose={() => setAddMember(false)}
       />
       <EditFriendDialog
         isOpen={editAlias}
@@ -101,6 +108,7 @@ export default function RoomInfoSection({
           <GroupInfoForm
             roomData={data}
             showDeleteModal={setShowModal}
+            showAddMemberModal={setAddMember}
             showImagePreview={showImagePreviewChange}
           />
         )}
