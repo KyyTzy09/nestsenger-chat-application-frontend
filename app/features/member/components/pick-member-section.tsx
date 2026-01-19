@@ -34,6 +34,7 @@ export default function PickMemberSection({ data }: PickMemberSectionProps) {
     setShowModal(true);
   };
 
+  // userID Selector
   const isSelectedUserId = (userId: string) => {
     return selectedUsers.some(({ userId: selectedUserId }) => {
       return userId === selectedUserId;
@@ -51,7 +52,7 @@ export default function PickMemberSection({ data }: PickMemberSectionProps) {
   };
 
   const handleAddMembers = () => {
-    addMemberMutation(selectedUsers as []);
+    addMemberMutation(selectedUsers.map(({ userId }) => {return userId} ) as []);
   };
 
   // Search Friend
