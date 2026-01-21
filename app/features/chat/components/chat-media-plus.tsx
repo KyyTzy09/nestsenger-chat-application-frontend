@@ -27,7 +27,7 @@ export default function ChatMediaPlusInput() {
         <Label
             htmlFor='input-media'
             onClick={() => { }}
-            className={`w-12 h-12 rounded-sm overflow-hidden bg-black/80`}
+            className="w-12 h-12 rounded-sm overflow-hidden bg-[#232323] border-white border hover:bg-[#303030] cursor-pointer"
         >
             <div className="flex items-center justify-center w-full h-full p-1">
                 <PlusIcon
