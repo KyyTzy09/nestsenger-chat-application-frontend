@@ -32,11 +32,13 @@ export const useCreateGroupRoom = () => {
 }
 
 export const useUpdateRoomName = (roomId: string, onSuccess: () => void) => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['update-room-name', roomId],
         mutationFn: async (roomName: string) => await RoomService.updateRoomName({ roomId, roomName }),
         onSuccess: () => {
             onSuccess()
+            queryClient.invalidateQueries({ queryKey: ["room", roomId], type: "all" })
         },
         onError: (err) => {
             toast.error(err.message || "Gagal mengubah nama grup")
@@ -45,11 +47,13 @@ export const useUpdateRoomName = (roomId: string, onSuccess: () => void) => {
 }
 
 export const useUpdateRoomDesc = (roomId: string, onSuccess: () => void) => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['update-room-desc', roomId],
         mutationFn: async (description: string) => await RoomService.updateRoomDesc({ roomId, description }),
         onSuccess: () => {
             onSuccess()
+            queryClient.invalidateQueries({ queryKey: ["room", roomId], type: "all" })
         },
         onError: (err) => {
             toast.error(err.message || "Gagal mengubah deskripsi grup")
