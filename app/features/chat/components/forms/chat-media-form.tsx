@@ -2,6 +2,7 @@ import {
   CropIcon,
   Loader2Icon,
   Music2Icon,
+  PlusIcon,
   RedoDotIcon,
   SendIcon,
   SmileIcon,
@@ -19,6 +20,7 @@ import { useParams } from "react-router";
 import ChatEmojiPicker from "../chat-emoji";
 import { useChatParentDataStore } from "../../stores/chat-store";
 import AlertModal from "shared/components/modals/alert-modal";
+import ChatMediaPlusInput from "../chat-media-plus";
 
 export default function ChatMediaForm() {
   const { roomId } = useParams<{ roomId: string }>();
@@ -55,13 +57,13 @@ export default function ChatMediaForm() {
     {
       title: "Potong",
       Icon: CropIcon,
-      action: () => {},
+      action: () => { },
       enable: selectedMedia?.fileType === "image",
     },
     {
       title: "Putar",
       Icon: RedoDotIcon,
-      action: () => {},
+      action: () => { },
       enable: selectedMedia?.fileType === "image",
     },
     {
@@ -72,9 +74,6 @@ export default function ChatMediaForm() {
     },
   ];
 
-  console.log(deletedMediaUrl);
-  console.log(selectedIndex);
-
   // Handler
   const handleDelete = (mediaUrl: string) => {
     if (mediaUrl !== "") {
@@ -82,7 +81,6 @@ export default function ChatMediaForm() {
         setDeletedMediaUrl((prev) => [...prev]);
       } else {
         setDeletedMediaUrl((prev) => [...prev, mediaUrl]);
-        console.log("ini sukses", filteredMedia?.length! - 1);
       }
       setSelectedIndex(filteredMedia?.length! - 2);
     }
@@ -149,9 +147,9 @@ export default function ChatMediaForm() {
                 prev.map((item, i) =>
                   i === selectedIndex
                     ? {
-                        ...item,
-                        message: item.message + emoji,
-                      }
+                      ...item,
+                      message: item.message + emoji,
+                    }
                     : item
                 )
               )
@@ -279,6 +277,7 @@ export default function ChatMediaForm() {
                       </div>
                     );
                   })}
+                <ChatMediaPlusInput />
               </div>
             </section>
           </motion.form>
