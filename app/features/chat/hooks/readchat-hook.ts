@@ -21,7 +21,7 @@ export const useCountRoomUnreadChats = (data: { roomId: string }) => {
     return useQuery({
         queryKey: ['unread-chat', data.roomId],
         queryFn: async () => await ReadChatService.countRoomUnreadChats(data),
-        staleTime: 1000 * 60 * 2,
+        staleTime: 0,
     })
 }
 

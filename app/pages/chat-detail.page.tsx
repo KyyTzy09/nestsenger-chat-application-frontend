@@ -20,6 +20,8 @@ import { useUserStore } from "~/features/user/stores/user-store";
 import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
 import { useGetChatReactionsByRoomId } from "~/features/reaction/hooks/reaction-hook";
 import { useGetReadChatsByRoomId } from "~/features/chat/hooks/readchat-hook";
+import type { AliasType } from "shared/types/alias-type";
+import type { RoomType } from "shared/types/room-type";
 
 interface ChatDetailPageProps {
   roomId: string;
@@ -61,7 +63,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     return () => {
       socket.off(`room:refresh-${roomId}`, handler);
     };
-  });
+  }, [queryClient]);
 
   React.useEffect(() => {
     const handler = async (newChat: ChatType) => {
@@ -84,7 +86,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
     return () => {
       socket.off("chat:new", handler);
     };
-  }, [queryClient]);
+  }, [queryClient, roomId, user?.userId]);
 
   React.useEffect(() => {
     const handler = (reaction: ReactionType) => {
@@ -143,7 +145,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
       <ChatMediaForm />
       <ChatNavbar
         currentUserId={user?.userId || ""}
-        roomInfo={roomInfoResponse?.data!}
+        roomInfo={roomInfoResponse?.data as { room: RoomType, user: AliasType | null }}
         memberInfo={memberResponse?.data as []}
         media={media?.data as []}
       />
