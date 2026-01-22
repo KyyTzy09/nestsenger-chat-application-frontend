@@ -18,6 +18,9 @@ export const ReadChatService = {
             return;
         }
     },
+    async countAllRoomUnreadChats() {
+        return await apiClient<{ data: number }>({ url: "/readchat/unread/get", withCredentials: true })
+    },
     async countRoomUnreadChats(data: { roomId: string }) {
         return await apiClient<{ data: number }>({ url: `/readchat/${data.roomId}/unread/get`, withCredentials: true })
     },

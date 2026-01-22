@@ -17,6 +17,13 @@ export const useGetReadChatsByRoomId = (data: { roomId: string }) => {
     })
 }
 
+export const useCountAllRoomUnreadChats = () => {
+    return useQuery({
+        queryKey: ['unread-chats'],
+        queryFn: async () => await ReadChatService.countAllRoomUnreadChats(),
+    })
+}
+
 export const useCountRoomUnreadChats = (data: { roomId: string }) => {
     return useQuery({
         queryKey: ['unread-chat', data.roomId],
