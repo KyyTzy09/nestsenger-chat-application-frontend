@@ -10,6 +10,7 @@ import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
 import { FaWhatsapp } from "react-icons/fa";
 import { RoomTypeEnum } from "shared/enums/room-type";
+import { useCountAllRoomUnreadChats } from "../hooks/readchat-hook";
 
 
 export default function ChatSidebar() {
@@ -20,6 +21,7 @@ export default function ChatSidebar() {
   const queryClient = useQueryClient();
   const { data: currentUserRoomResponse } = useGetCurrentUserRoom();
   const { data: userFriendsResponse } = useGetUserFriends();
+  const { data: countAllrooms } = useCountAllRoomUnreadChats()
 
   const filteredRooms = currentUserRoomResponse?.data?.filter(
     ({ room: { roomName, type }, user }) => {

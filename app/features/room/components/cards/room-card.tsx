@@ -1,10 +1,7 @@
-import React from "react";
 import { Link, useParams } from "react-router";
 import { defaultImage } from "shared/constants/image-default";
 import { RoomTypeEnum } from "shared/enums/room-type";
-import type { FriendType } from "shared/types/friend-type";
 import type { RoomType } from "shared/types/room-type";
-import type { UserType } from "shared/types/user-type";
 import RoomLastChatSection from "../section/room-lastchat-section";
 import { motion } from "motion/react";
 import type { AliasType } from "shared/types/alias-type";
