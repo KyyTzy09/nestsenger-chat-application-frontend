@@ -9,6 +9,7 @@ import { FaComment } from "react-icons/fa";
 import { Link, useLocation, useNavigation } from "react-router";
 import { defaultImage } from "shared/constants/image-default";
 import { Button } from "shared/shadcn/button";
+import { Label } from "shared/shadcn/label";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +17,7 @@ import {
   SidebarGroupLabel,
 } from "shared/shadcn/sidebar";
 import type { UserType } from "shared/types/user-type";
+import { useCountAllRoomUnreadChats } from "~/features/chat/hooks/readchat-hook";
 import ProfileDropDown from "~/features/profile/components/interaction/profile-dropdown";
 import { useGetProfile } from "~/features/profile/hooks/profile-hook";
 
@@ -34,6 +36,7 @@ export default function DefaultSideBar() {
       route: "/status",
     },
   ];
+  const { data: unreadChats, isLoading } = useCountAllRoomUnreadChats()
 
   return (
     <Sidebar side="left" className="border-none block">
@@ -47,9 +50,14 @@ export default function DefaultSideBar() {
               <Link
                 to={route}
                 key={i}
-                className={`${location.pathname.startsWith(route) ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
+                className={`relative ${location.pathname.startsWith(route) ? "bg-[#45494f]" : "bg-transparent"} flex items-center justify-center w-full hover:bg-[#45494f] rounded-sm p-2`}
               >
                 <Icon className={`text-white w-5 h-5`} />
+                {name === "Pesan" && !isLoading && (
+                  <p className="absolute top-0 right-0 translate-x-2 -translate-y-2 flex items-center justify-center bg-blue-500 px-2 rounded-md text-white text-[12px]">
+                    {unreadChats?.data}
+                  </p>
+                )}
               </Link>
             );
           })}

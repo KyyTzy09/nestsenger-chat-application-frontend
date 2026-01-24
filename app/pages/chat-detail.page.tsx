@@ -79,6 +79,10 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
           queryKey: ["media-non-file", newChat.roomId],
           refetchType: "all",
         });
+        queryClient.invalidateQueries({
+          queryKey: ["unread-chat", newChat.roomId],
+          refetchType: "all"
+        });
       }
     };
 

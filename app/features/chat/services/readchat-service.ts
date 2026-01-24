@@ -13,7 +13,7 @@ export const ReadChatService = {
     },
     async readChat(data: { roomId: string }) {
         try {
-            return await axios<{ data: { data: ReadChatType } }>({ url: `${baseUrl}/readchat/${data.roomId}/patch`, method: "patch", withCredentials: true })
+            return await apiClient<{ data: { data: ReadChatType } }>({ url: `/readchat/${data.roomId}/patch`, method: "patch", withCredentials: true })
         } catch (error) {
             return;
         }

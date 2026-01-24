@@ -21,7 +21,6 @@ export default function ChatSidebar() {
   const queryClient = useQueryClient();
   const { data: currentUserRoomResponse } = useGetCurrentUserRoom();
   const { data: userFriendsResponse } = useGetUserFriends();
-  const { data: countAllrooms } = useCountAllRoomUnreadChats()
 
   const filteredRooms = currentUserRoomResponse?.data?.filter(
     ({ room: { roomName, type }, user }) => {
@@ -41,15 +40,14 @@ export default function ChatSidebar() {
         queryKey: ["current-room"],
         type: "all",
       });
-
       if (roomId) {
         queryClient.invalidateQueries({
           queryKey: ["room", roomId],
           type: "all",
         });
-        queryClient.invalidateQueries({
+        queryClient.refetchQueries({
           queryKey: ["unread-chat", roomId],
-          refetchType: "all",
+          type: "active"
         });
       }
     };
@@ -58,7 +56,7 @@ export default function ChatSidebar() {
     return () => {
       socket.off("room:refresh", handler);
     };
-  }, [queryClient]);
+  }, [currentUserRoomResponse?.data, queryClient]);
 
   return (
     <aside className="relative z-0 flex flex-col w-full h-full bg-[#252525] pt-10 text-white gap-3">
