@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ReadChatService } from "../services/readchat-service"
 
 export const useGetReadChats = (data: { chatId: string }) => {
@@ -21,6 +21,24 @@ export const useCountAllRoomUnreadChats = () => {
     return useQuery({
         queryKey: ['unread-chats'],
         queryFn: async () => await ReadChatService.countAllRoomUnreadChats(),
+    })
+}
+
+export const useUpdateReadChat = (roomId: string) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationKey: ["update-unread-chat"],
+        mutationFn: async () => await ReadChatService.readChat({ roomId }),
+        onSuccess: () => {
+            queryClient.refetchQueries({
+                queryKey: ["unread-chat", roomId],
+                type: "active"
+            });
+            queryClient.refetchQueries({
+                queryKey: ["unread-chats"],
+                type: "active"
+            });
+        }
     })
 }
 

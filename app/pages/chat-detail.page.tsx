@@ -39,6 +39,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: media } = useGetNonFileMedia({ roomId });
   const { data: reactionsResponse } = useGetChatReactionsByRoomId({ roomId });
   const { data: readChatsResponse } = useGetReadChatsByRoomId({ roomId });
+  
 
   // Store
   const { user } = useUserStore();
@@ -78,10 +79,6 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
         queryClient.invalidateQueries({
           queryKey: ["media-non-file", newChat.roomId],
           refetchType: "all",
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["unread-chat", newChat.roomId],
-          refetchType: "all"
         });
       }
     };

@@ -8,10 +8,9 @@ interface ChatDetailProps {
   params: { roomId: string };
 }
 
-export const clientLoader = async ({ params }: Route.ClientLoaderArgs) => {
+export const clientLoader = ({ params }: Route.ClientLoaderArgs) => {
   const roomId = (params as { roomId: string }).roomId;
   socket.emit("room:join", { roomId });
-  await ReadChatService.readChat({ roomId });
 };
 
 export default function ChatDetail({ params }: ChatDetailProps) {

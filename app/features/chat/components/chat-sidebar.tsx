@@ -10,8 +10,6 @@ import { socket } from "shared/configs/socket";
 import { useQueryClient } from "@tanstack/react-query";
 import { FaWhatsapp } from "react-icons/fa";
 import { RoomTypeEnum } from "shared/enums/room-type";
-import { useCountAllRoomUnreadChats } from "../hooks/readchat-hook";
-
 
 export default function ChatSidebar() {
   // State
@@ -44,10 +42,6 @@ export default function ChatSidebar() {
         queryClient.invalidateQueries({
           queryKey: ["room", roomId],
           type: "all",
-        });
-        queryClient.refetchQueries({
-          queryKey: ["unread-chat", roomId],
-          type: "active"
         });
       }
     };
