@@ -19,7 +19,7 @@ import ChatMediaForm from "~/features/chat/components/forms/chat-media-form";
 import { useUserStore } from "~/features/user/stores/user-store";
 import { useGetNonFileMedia } from "~/features/chat/hooks/chat-media-hook";
 import { useGetChatReactionsByRoomId } from "~/features/reaction/hooks/reaction-hook";
-import { useGetReadChatsByRoomId } from "~/features/chat/hooks/readchat-hook";
+import { useGetReadChatsByRoomId, useUpdateReadChat } from "~/features/chat/hooks/readchat-hook";
 import type { AliasType } from "shared/types/alias-type";
 import type { RoomType } from "shared/types/room-type";
 
@@ -39,7 +39,7 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   const { data: media } = useGetNonFileMedia({ roomId });
   const { data: reactionsResponse } = useGetChatReactionsByRoomId({ roomId });
   const { data: readChatsResponse } = useGetReadChatsByRoomId({ roomId });
-  
+  const { mutate: updateReadchatMutation } = useUpdateReadChat(roomId)
 
   // Store
   const { user } = useUserStore();
@@ -55,6 +55,10 @@ export default function ChatDetailPage({ roomId }: ChatDetailPageProps) {
   };
 
   // Handler Event
+  React.useEffect(() => {
+    updateReadchatMutation()
+  }, [roomId])
+
   React.useEffect(() => {
     const handler = async () => {
       queryClient.invalidateQueries({ queryKey: ["room", roomId] });

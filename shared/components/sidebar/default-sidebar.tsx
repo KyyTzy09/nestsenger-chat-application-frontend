@@ -1,15 +1,10 @@
 import {
   CircleDotDashedIcon,
   Menu,
-  Settings2Icon,
   SettingsIcon,
 } from "lucide-react";
-import React from "react";
 import { FaComment } from "react-icons/fa";
-import { Link, useLocation, useNavigation } from "react-router";
-import { defaultImage } from "shared/constants/image-default";
-import { Button } from "shared/shadcn/button";
-import { Label } from "shared/shadcn/label";
+import { Link, useLocation } from "react-router";
 import {
   Sidebar,
   SidebarContent,
